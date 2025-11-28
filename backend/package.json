@@ -9,7 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": ["gym", "backend", "express", "nodejs"],
-  "author": "Tu Nombre",
+  "author": "Nexus",
   "license": "MIT",
   "dependencies": {
     "express": "^4.18.2",

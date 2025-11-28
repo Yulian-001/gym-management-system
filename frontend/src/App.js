@@ -2,7 +2,17 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
 
-const API_URL = 'http://localhost:5000/api';
+// Detectar si estamos en desarrollo o producción y en qué host
+const getApiUrl = () => {
+  // Si el backend está en el mismo host que el frontend
+  // usamos localhost, de lo contrario usamos el nombre del contenedor
+  if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
+    return 'http://localhost:3000';
+  }
+  return 'http://gym-backend:3000';
+};
+
+const API_URL = getApiUrl();
 
 function App() {
   const [health, setHealth] = useState(null);
@@ -15,7 +25,7 @@ function App() {
 
   const checkBackendHealth = async () => {
     try {
-      const response = await axios.get(`${API_URL}/health`);
+      const response = await axios.get(`${API_URL}/Api/health`);
       setHealth(response.data);
       setError(null);
     } catch (err) {

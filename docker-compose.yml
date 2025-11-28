@@ -1,0 +1,59 @@
+
+
+services:
+  database:
+    build: ./database/docker
+    container_name: gym-db
+    environment:
+      POSTGRES_DB: gymdb
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - gym-network
+
+  backend:
+    build: ./backend
+    container_name: gym-backend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - DB_HOST=database
+      - DB_PORT=5432
+      - DB_NAME=gymdb
+      - DB_USER=admin
+      - DB_PASSWORD=password
+    depends_on:
+      - database
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    networks:
+      - gym-network
+
+  frontend:
+    build: ./frontend
+    container_name: gym-frontend
+    ports:
+      - "3001:3000"
+    environment:
+      - DANGEROUSLY_DISABLE_HOST_CHECK=true
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - gym-network
+
+volumes:
+  postgres_data:
+
+networks:
+  gym-network:
+    driver: bridge
