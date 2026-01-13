@@ -1,5 +1,5 @@
 import React from 'react';
-import style from './ClientTable'
+import style from './ClientTableStyle.css'
 
 
 
@@ -62,7 +62,7 @@ function ClientTable() {
       {/* Tabla */}
       <div>
         <table>
-          <thead className='theadTitle'>
+          <thead >
             <tr className='theadTitle'>
               <th className='idTable'>id</th>
               <th>Cédula</th>

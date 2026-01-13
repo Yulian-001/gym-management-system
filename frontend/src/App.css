@@ -1,214 +1,62 @@
-/* .App {
-  text-align: center;
-}
-
-.App-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 40px 20px;
-  color: white;
-  min-height: 100vh;
-}
-
-.App-header h1 {
-  font-size: 2.5rem;
-  margin-bottom: 10px;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-}
-
-.App-header p {
-  font-size: 1.2rem;
-  opacity: 0.9;
-  margin-bottom: 30px;
-}
-
-/* Sección de estado */
-/* .status-section {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 25px;
-  border-radius: 15px;
-  margin: 30px auto;
-  max-width: 500px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.health-status {
-  text-align: left;
-  display: inline-block;
-}
-
-.status-item {
-  margin: 12px 0;
-  font-size: 1.1rem;
-  display: flex;
-  justify-content: space-between;
-}
-
-.status-ok {
-  color: #4CAF50;
-  font-weight: bold;
-}
-
-.loading {
-  font-size: 1.2rem;
-  color: #FFD700;
-  font-weight: bold;
-}
-
-.error {
-  font-size: 1.2rem;
-  color: #FF6B6B;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 15px;
-  border-radius: 8px;
-  font-weight: bold;
-}
-
-/* Funcionalidades */
-/*
-.features {
-  margin-top: 50px;
-}
-
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 25px;
-  margin-top: 30px;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.feature-card {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 25px;
-  border-radius: 12px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.feature-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-}
-
-.feature-card h4 {
-  margin: 0 0 15px 0;
-  font-size: 1.3rem;
-  color: #FFD700;
-}
-
-.feature-card p {
+/* src/App.css */
+* {
   margin: 0;
-  opacity: 0.9;
-  line-height: 1.5;
-} */ 
-
-.App {
-  text-align: center;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.App-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 40px 20px;
-  color: white;
-  min-height: 100vh;
+body {
+  background-color: #1071f2;
 }
 
-.App-header h1 {
-  font-size: 2.5rem;
-  margin-bottom: 10px;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+
+ header thead{
+    color: rgba(58, 57, 57, 0.704);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family:Arial ;
+    font-size: 12px;
+    margin: 1vh 27vh 0vh 27vh;
+    padding:0vh 0vh 1vh 0vh;
+    border-radius: 40px 40px 0px 0px;
+
 }
 
-.App-header p {
-  font-size: 1.2rem;
-  opacity: 0.9;
-  margin-bottom: 30px;
+header h2 {
+transition: 0.2s;
+background-color: #eefaff;
+padding: 1vh 12vh;
+margin: 0vh ch 0vh 5ch;
+cursor: pointer;
+border-right: none;
+border-bottom: 4px solid #2881ff;
+transition: 0.4s
+
 }
 
-/* Sección de estado */
-.status-section {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 25px;
-  border-radius: 15px;
-  margin: 30px auto;
-  max-width: 500px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+header h2:hover {
+border-bottom: 4px solid #2881ff;
+background-color: rgb(127, 212, 236);
+border-bottom: 4px solid whitesmoke;
+padding: 0vh 22vh 2vh 22vh;
+
 }
 
-.health-status {
-  text-align: left;
-  display: inline-block;
+.AdminTitle{
+
+padding: 1vh 21vh 1vh 21vh;
+border-radius: 4vh 0vh 0vh 0vh;
+
+
+}
+.ContTitle{
+
+padding: 1vh 21vh 1vh 21vh;
 }
 
-.status-item {
-  margin: 12px 0;
-  font-size: 1.1rem;
-  display: flex;
-  justify-content: space-between;
-}
-
-.status-ok {
-  color: #4CAF50;
-  font-weight: bold;
-}
-
-.loading {
-  font-size: 1.2rem;
-  color: #FFD700;
-  font-weight: bold;
-}
-
-.error {
-  font-size: 1.2rem;
-  color: #FF6B6B;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 15px;
-  border-radius: 8px;
-  font-weight: bold;
-}
-
-/* Funcionalidades */
-.features {
-  margin-top: 50px;
-}
-
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 25px;
-  margin-top: 30px;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.feature-card {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 25px;
-  border-radius: 12px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.feature-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-}
-
-.feature-card h4 {
-  margin: 0 0 15px 0;
-  font-size: 1.3rem;
-  color: #FFD700;
-}
-
-.feature-card p {
-  margin: 0;
-  opacity: 0.9;
-  line-height: 1.5;
+.ReportTitle{
+padding: 1vh 21vh 1vh 21vh;
+border-radius: 0vh 4vh 0vh 0vh;
 }
