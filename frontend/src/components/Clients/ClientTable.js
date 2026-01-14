@@ -94,7 +94,7 @@ function ClientTable() {
       Plan: 'Mensualidad',
       Inicio: '2024/05/01',
       vence: '2024/06/03',
-      Estado: 'Cancelado',
+      Estado: 'Vencido',
       Dias: '18'
     },
     {
@@ -116,11 +116,11 @@ function ClientTable() {
       Nombre: 'Agustin Rojas',
       Telefono: '3202552456',
       Eps: 'Capital Salud',
-      Rh: ' O-',
+      Rh: 'O-',
       Plan: 'Mensualidad',
       Inicio: '2024/05/01',
       vence: '2024/06/03',
-      Estado: 'Cancelado',
+      Estado: 'Pendiente',
       Dias: '18'
     }
     ,{
@@ -133,17 +133,17 @@ function ClientTable() {
       Plan: 'Mensualidad',
       Inicio: '2024/05/01',
       vence: '2024/06/03',
-      Estado: 'Cancelado',
+      Estado: 'Activo',
       Dias: '18'
     }
 
   ];
   const getEstadoColor = (Estado) => {
     switch(Estado.toLowerCase()) {
-      case 'Cancelado': return 'red';
-      case 'Activo': return '#0ae08d';
-      case 'Pendiente': return '#f39c12';
-      case 'Vencido': return '#95a5a6';
+      case 'cancelado': return 'red';
+      case 'activo': return '#37e167';
+      case 'pendiente': return '#f39d12da';
+      case 'vencido': return '#e275bc';
       default: return '#3498db';
     }
   };

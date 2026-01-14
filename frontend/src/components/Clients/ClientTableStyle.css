@@ -154,11 +154,8 @@
   min-width: 100%;
   white-space: nowrap; /* Permite que el texto se ajuste */
     word-wrap: break-word;
+}
 
-}
-tbody{
-  margin-top:0.5rem;
-}
 
 .filaTable:hover td {
   background-color: #f0f7ff;
