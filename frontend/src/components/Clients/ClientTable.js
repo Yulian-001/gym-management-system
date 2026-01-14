@@ -33,6 +33,45 @@ function ClientTable() {
       Dias: '18'
     },
     {
+      id: 3,
+      Cédula: '112212132',
+      Nombre: 'Agustin Rojas',
+      Telefono: '3202552456',
+      Eps: 'Capital Salud',
+      Rh: ' O-',
+      Plan: 'Mensualidad',
+      Inicio: '2024/05/01',
+      vence: '2024/06/03',
+      Estado: 'Cancelado',
+      Dias: '18'
+    },
+    {
+      id: 4,
+      Cédula: '112212132',
+      Nombre: 'Agustin Rojas',
+      Telefono: '3202552456',
+      Eps: 'Capital Salud',
+      Rh: ' O-',
+      Plan: 'Mensualidad',
+      Inicio: '2024/05/01',
+      vence: '2024/06/03',
+      Estado: 'Cancelado',
+      Dias: '18'
+    }
+    ,{
+      id: 5,
+      Cédula: '112212132',
+      Nombre: 'Agustin Rojas',
+      Telefono: '3202552456',
+      Eps: 'Capital Salud',
+      Rh: ' O-',
+      Plan: 'Mensualidad',
+      Inicio: '2024/05/01',
+      vence: '2024/06/03',
+      Estado: 'Cancelado',
+      Dias: '18'
+    },
+     {
       id: 1,
       Cédula: '112212132',
       Nombre: 'Agustin Rojas',
@@ -46,7 +85,33 @@ function ClientTable() {
       Dias: '18'
     },
     {
-      id: 1,
+      id: 2,
+      Cédula: '112212132',
+      Nombre: 'Agustin Rojas',
+      Telefono: '3202552456',
+      Eps: 'Capital Salud',
+      Rh: ' O-',
+      Plan: 'Mensualidad',
+      Inicio: '2024/05/01',
+      vence: '2024/06/03',
+      Estado: 'Cancelado',
+      Dias: '18'
+    },
+    {
+      id: 3,
+      Cédula: '112212132',
+      Nombre: 'Agustin Rojas',
+      Telefono: '3202552456',
+      Eps: 'Capital Salud',
+      Rh: ' O-',
+      Plan: 'Mensualidad',
+      Inicio: '2024/05/01',
+      vence: '2024/06/03',
+      Estado: 'Cancelado',
+      Dias: '18'
+    },
+    {
+      id: 4,
       Cédula: '112212132',
       Nombre: 'Agustin Rojas',
       Telefono: '3202552456',
@@ -59,7 +124,7 @@ function ClientTable() {
       Dias: '18'
     }
     ,{
-      id: 1,
+      id: 5,
       Cédula: '112212132',
       Nombre: 'Agustin Rojas',
       Telefono: '3202552456',
@@ -136,32 +201,33 @@ function ClientTable() {
               <th className='accionTable'>Accion</th>
             </tr>
           </thead>
-          <body>
+          <tbody>
             {clients.map((client, index) => (
               <tr key={index} className='filaTable' style={{
                 borderBottom: '11px solid #fff',
                 transition: 'background 0.2s',
               }}>
-                <td style={{ padding: '12px 15px' }}>{client.id}</td>
-                <td style={{ padding: '12px 15px' }}>{client.Cédula}</td>
-                <td style={{ padding: '12px 15px' }}>{client.Nombre}</td>
-                <td style={{ padding: '12px 15px' }}>{client.Telefono}</td>
-                <td style={{ padding: '12px 15px' }}>{client.Eps}</td>
-                <td style={{ padding: '8px 10px' }}>{client.Rh}</td>
-                <td style={{ padding: '12px 15px' }}>{client.Plan}</td>
-                <td style={{ padding: '12px 15px' }}>{client.Inicio}</td>
-                <td style={{ padding: '12px 15px' }}>{client.vence}</td>
-                <td style={{ padding: '12px 15px' }}>{client.Dias}</td>
+                <td style={{ width:'5%' }}>{client.id}</td>
+                <td style={{ width:'10%' }}>{client.Cédula}</td>
+                <td style={{  width:'15%'}}>{client.Nombre}</td>
+                <td style={{  width:'10%' }}>{client.Telefono}</td>
+                <td style={{  width:'12%' }}>{client.Eps}</td>
+                <td style={{  width:'5%' }}>{client.Rh}</td>
+                <td style={{  width:'10%' }}>{client.Plan}</td>
+                <td style={{ width:'10%'  }}>{client.Inicio}</td>
+                <td style={{ width:'10%' }}>{client.vence}</td>
+                <td style={{ width:'5%' }}>{client.Dias}</td>
           
-                <td style={{ padding: '2px 1px' }}>
+                <td style={{width:'8%'}}>
                   <span style={{
                     backgroundColor: getEstadoColor(client.Estado),
-                    marginBottom:'23px',
+
                     color: '#f5f7fa',                    
                     padding: '0.2rem 0.3rem',
                     borderRadius: '20px',
                     fontSize: '13px',
-                    fontWeight: '550'
+                    fontWeight: '550',
+                    display:'inline-block'
                   }}>
                     {client.Estado}
                   </span>
@@ -184,7 +250,7 @@ function ClientTable() {
                     Eliminar
                   </button>
                 </td>
-                <td >
+                <td style={{ width:'10%' }} >
                   <button style={{
                     backgroundColor: '#3498db',
                     color: 'white',
@@ -204,7 +270,7 @@ function ClientTable() {
                  {client.Accion}</td>
               </tr>
             ))}
-          </body>
+          </tbody>
         </table>
       </div>
     </div>
