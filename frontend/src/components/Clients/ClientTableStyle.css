@@ -1,38 +1,155 @@
 
-.theadTitle {
-  background-color: #33acf7;
-  color: white;
-  text-align: center;
-}
-
-.idTable {
-  border-radius: 30px 0px 0px 0px;
-
+.headBorder{
+  display: flex;
+  justify-content: space-between;
+  margin: 0.8rem 3rem;
+  max-width: 100%;
 }
 
 
+.AddClient {
+  max-width: 100%;
+   font-weight:700;
+   border:none;
+   border-radius: 0.45em;
+   color:whitesmoke;
+   padding: 0.6em 1.9em;
+   cursor: pointer;
+   background-color: #27cf8e;
+   transition: 0.2s;
+}
+.AddClient:hover {
 
+  background-color: #0cc47d;
+
+}
 
 
 .searchClient{
 
-  margin-top: 4vh;
   display: flex;
   align-items: center;
+  max-width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  margin: 0.8rem 3rem;
+
+}
+.searchC{
+  background-color: whitesmoke;
+  border-radius: 1rem;
+  border: 1px solid grey;
+  padding: 0.5rem ;
+  width: 100%; /* Ocupa todo el ancho disponible */
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+.searchC:focus {
+  outline: none;
+  border:none;
+  border-color: #3a7dd5;
+  box-shadow: 0 0 4px 2px rgba(51, 131, 236, 0.908);
+}
+
+/* Tablet en portrait (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .searchC {
+    /* Aumentar tamaño para tablet */
+    padding: 0.5rem 1.2rem;
+    font-size: 1.05rem;
+    border-radius: 0.9rem;
+  }
+  
+  .searchC:focus {
+    box-shadow: 0 0 4px 2px rgba(51, 131, 236, 0.908);
+
+  }
+}
+
+/* Tablet pequeña o móvil grande (600px - 768px) */
+@media (min-width: 600px) and (max-width: 768px) {
+  .searchC {
+    padding: 0.3rem 1.1rem;
+    font-size: 1rem;
+    border-radius: 0.85rem;
+  }
+}
+
+/* Móvil (480px - 600px) */
+@media (max-width: 600px) {
+  .searchC {
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
+    border-radius: 0.75rem;
+  }
+}
+
+/* Móvil pequeño (< 480px) */
+@media (max-width: 480px) {
+  .searchC {
+    padding: 0.3rem 0.9rem;
+    font-size: 0.9rem;
+    border-radius: 0.7rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .searchC {
+    max-width: 100%; /* Limitar ancho máximo */
+    display: block;
+  }
+}
+
+.theadHeader th{
+
+  background-color: #2683ff;
+  color:white;
+}
+
+
+/* Contenedor de la tabla con scroll */
+.TableScroll {
   width: 100%;
-  padding: 1vh 112vh 1vh 4vh ;
-}
-/*responsividad table: 768 - 1024*/
-@media (max-width: 1024px){
-    .searchClient{
-        padding:  1vh 65vh 1vh 4vh;
-    }
+  border-collapse: collapse;
+  min-width: 800px; /* Ancho mínimo para evitar que se comprima demasiado */
 }
 
-/*Móvil: 768*/
+/* Contenedor principal con scroll vertical */
+.ContainerTable {
+  max-height: 300px; /* Altura máxima antes de mostrar scroll */
+  overflow-y: auto; /* Scroll vertical */
+  overflow-x: auto; /* Scroll horizontal si es necesario */
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin:1rem 3rem;
+}
 
-@media (max-width: 768) {
-    .searchClient{
-        padding: 1vh 30vh 1vh 3vh  ;
-    }
+/* Cabecera fija */
+.ContainerTable thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* Encabezados de tabla que se ajusten al contenido */
+.theadHeader th {
+  background-color: #2683ff;
+  color: white;
+  justify-content: center;
+  padding: 0.6rem 0.5rem;
+  white-space: nowrap;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+  min-width: fit-content;
+}
+
+/* Celdas de la tabla */
+.filaTable td {
+  padding: 0rem 0rem;
+  min-width: fit-content;
+}
+
+.filaTable:hover td {
+  background-color: #f0f7ff;
 }
