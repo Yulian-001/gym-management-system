@@ -1,62 +1,11 @@
-/* src/App.css */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-body {
-  background-color: #1071f2;
-}
-
-
- header thead{
-    color: rgba(58, 57, 57, 0.704);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family:Arial ;
-    font-size: 12px;
-    margin: 1vh 27vh 0vh 27vh;
-    padding:0vh 0vh 1vh 0vh;
-    border-radius: 40px 40px 0px 0px;
-
-}
-
-header h2 {
-transition: 0.2s;
-background-color: #eefaff;
-padding: 1vh 12vh;
-margin: 0vh ch 0vh 5ch;
-cursor: pointer;
-border-right: none;
-border-bottom: 4px solid #2881ff;
-transition: 0.4s
-
-}
-
-header h2:hover {
-border-bottom: 4px solid #2881ff;
-background-color: rgb(127, 212, 236);
-border-bottom: 4px solid whitesmoke;
-padding: 0vh 22vh 2vh 22vh;
-
-}
-
-.AdminTitle{
-
-padding: 1vh 21vh 1vh 21vh;
-border-radius: 4vh 0vh 0vh 0vh;
-
-
-}
-.ContTitle{
-
-padding: 1vh 21vh 1vh 21vh;
-}
-
-.ReportTitle{
-padding: 1vh 21vh 1vh 21vh;
-border-radius: 0vh 4vh 0vh 0vh;
+body, html {
+  height: 100%;
+  width: 100%;
+  background-color: #2683ff; /* Mismo color que App */
 }

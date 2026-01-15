@@ -1,31 +1,19 @@
 import React from 'react';
 import './App.css';
-import Header from './components/layout/Header';
+import Header from './components/layout/Header.jsx';
 import ClientTable from './components//Clients/ClientTable.js';
-
+import ModulesSystem from './modules/ModuleSystem.jsx';
 
 function App() {
   return (
-    <div className="App">
-         <thead>
-            <div className='AdminModule'>
-            <h2 className='AdminTitle' style={{ fontWeight:'400'}}> Adiministración</h2>
-            
-            </div>
-
-            <div className='ContModule'>
-            <h2 className='ContTitle' style={{ fontWeight:'400'}}>Contabilidad </h2>  
-            </div>
-
-            <div className='ReportModule'>
-                <h2 className='ReportTitle' style={{ fontWeight:'400'}}>Reportes</h2>
-            </div>
-        </thead>
+    <div className='App' style={{ background:'#2683ff',}} >
       <Header />
-      <main style={{ padding: '30px' }}>
-        <ClientTable />
-        
-      </main>
+      <ModulesSystem/>
+      <div style={{padding:'2rem'}}
+      ><ClientTable />
+
+      </div>
+
     </div>
 
   );

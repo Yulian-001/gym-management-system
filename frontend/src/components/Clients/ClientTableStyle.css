@@ -125,6 +125,8 @@
   margin:1rem 3rem;
 }
 
+
+
 /* Cabecera fija */
 .ContainerTable thead {
   position: sticky;
@@ -153,7 +155,7 @@
   padding: 0rem 0.4rem;
   min-width: 100%;
   white-space: nowrap; /* Permite que el texto se ajuste */
-    word-wrap: break-word;
+  word-wrap: break-word;
 }
 
 

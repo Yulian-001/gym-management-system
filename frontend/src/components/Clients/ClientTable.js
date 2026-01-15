@@ -151,7 +151,7 @@ function ClientTable() {
     <div style={{ backgroundColor: 'whiteSmoke',
     borderRadius: '0em 0em 1em 1em',
      padding: '1em',
-     margin:'5em 8em 0em 8em' }}>
+     margin:'0em 8em 0em 8em' }}>
 
     <div className='headBorder'>
 

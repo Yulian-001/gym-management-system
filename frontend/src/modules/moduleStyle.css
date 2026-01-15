@@ -1,0 +1,154 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+/*?contenedor principal*/
+.modulesContainer{
+    width: 100%;
+    max-width: 590px;
+    margin: 2rem auto;
+    padding: 0 0.3rem;
+    box-sizing: border-box;
+}
+ 
+/*? Header: en movil se vuelv columna*/
+
+.modules-header {
+    display: flex;
+    flex-direction: column;
+    background-color: #eefaff;
+    border-radius: 15px 15px 0 0;
+    overflow: hidden;
+    width: 100%;
+    font-size: 14px;
+    color:#173a6bb3;
+}
+
+.module-tab{
+    flex:1;
+    text-align:center;
+    cursor:pointer;
+    transition: all 0.5s ease;
+    border-bottom: 2px solid transparens;
+    background-color: #d2e6ee;
+}
+
+.module.title{
+    font-family: 'Arial', sans-serif;
+    font-size:0.9rem;
+    font-weight: 500;
+    margin: 0;
+    white-space: nowrap;
+}
+
+.module-tab.active{
+
+    background-color: #ffffffcd;
+    border-bottom: 3px solid #2865ff;
+    margin-bottom: 0.1rem;
+
+}
+
+.module-tab.active .module-title{
+    color:#33acf7;  
+    font-weight: 700;
+    font-size: 22px;
+}
+
+@media (hover:hover) {
+    .module-tab:hover:not(.active){
+        background-color: rgb(220, 241, 254);
+        border-bottom: 4px solid #2865ff;
+    }
+ 
+}
+
+.module-panel h3{
+
+    margin-bottom: 0.5rem;
+    font-size:1.3rem;
+}
+@media(min-width: 768px) {
+    .modules-header{
+        flex-direction: row;        
+    }
+
+    .modulesContainer{
+        max-width: 100%;
+        width: 640px;
+    }
+    .module-tab{
+        padding: 0.5rem 0.5rem;
+    }
+    .module.title{
+        font-size:1rem;
+        padding:0.5rem 0.2rem;
+        
+      
+    }
+    .modules-header .module-tab:first-child{
+        border-radius:15px 0 0 0;
+    }
+    .modules-header .module-tab:last-child{
+        border-radius: 0 15px  0 0;
+    }
+    .modules-content{
+        padding:0.5rem;
+    }
+    .module-panel h3{
+        font-size:1.5rem;
+    }
+    
+}
+@media(min-width: 500px) and (max-width: 900px){
+    .modulesContainer{
+        padding: 0 0.5rem;
+        max-width: 100%;
+        min-width: 10%;
+        width: 560px;
+
+  }
+
+    
+
+    .module-tab{
+        padding:1.2rem 1.5rem;
+        
+    }
+  
+       .module-title{
+        margin:-1.5rem auto;
+         font-size:1.1rem;
+
+    }
+}
+
+
+/* Desktop grande (1200px+) */
+@media (min-width: 1200px ) {
+  .module-tab {
+    
+    padding: 0.20rem 2rem;
+  }
+ 
+ 
+  .module-title {
+    font-size: 1.2rem;
+    padding: 0.5rem 2rem;
+  }
+  .modulesContainer{
+    max-width: 100%;
+    width: 1210px;
+  }
+ 
+}
+
+ @media (min-width:200) and (max-width:450px){
+    .modules-header{
+        width: 100%;
+        display: flex;
+        gap:3px;
+    }
+ }
