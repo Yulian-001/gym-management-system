@@ -103,14 +103,13 @@
     
 }
 @media(min-width: 500px) and (max-width: 900px){
-    .modulesContainer{
-        padding: 0 0.5rem;
-        max-width: 100%;
-        min-width: 10%;
-        width: 560px;
+    .module-title{
+        min-width: 90%;
+        width: 40px;
+        padding: auto;
 
   }
-
+ 
     
 
     .module-tab{
@@ -145,10 +144,75 @@
  
 }
 
- @media (min-width:200) and (max-width:450px){
-    .modules-header{
-        width: 100%;
-        display: flex;
-        gap:3px;
+.Container-option{
+    display: flex;
+    flex-direction: row;
+    gap:30px;
+    justify-content: center;
+
+}
+
+
+.container-icons{
+    padding: 1.4rem 1rem;
+    border-radius: 10px;
+    color: whiteSmoke;
+    font-weight: 500;
+    display: flex ;
+    flex-direction: column-reverse;
+    gap:3px;
+    align-items: center;    
+   cursor: pointer;
+    background-color: #33baed;
+
+}
+
+
+
+.container-icons.active{
+
+    background-color: whitesmoke;
+    color: #2865ff;
+
+}
+
+ .module-options-container{
+display: flex;
+background-color:#8ac9f0 ;
+flex-direction:  column;
+align-items: center;
+font-weight: 500;
+border-radius: 0.9rem;
+padding: 0.6rem 0.4rem ;
+}
+
+.module-options-container.active{
+    background-color: red;
+}
+
+
+
+
+@media (hover:hover) {
+    .container-icons:hover:not(.active){
+        background-color: rgb(68, 165, 225);
+        border-bottom: 4px solid #2865ff;
+        
     }
- }
+
+
+
+}
+
+@media (min-width:1000px) and (max-width:1600px){
+ .module-options-container{
+
+    
+    width: 70px;
+    display: flex;
+    align-items:  center;
+    
+}
+
+
+}

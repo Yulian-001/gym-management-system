@@ -148,10 +148,10 @@ function ClientTable() {
     }
   };
   return (
-    <div style={{ backgroundColor: 'whiteSmoke',
+    <div className='head-container' style={{ backgroundColor: 'whiteSmoke',
     borderRadius: '0em 0em 1em 1em',
      padding: '1em',
-     margin:'0em 8em 0em 8em' }}>
+     margin:'-3em 8em 0em 8em' }}>
 
     <div className='headBorder'>
 
@@ -185,8 +185,9 @@ function ClientTable() {
       {/* Tabla */}
       <div className='ContainerTable'>
         <table className='TableScroll'>
+              
           <thead className='theadHeader' >
-            <tr>
+            <tr >
               <th className='idTable'>id</th>
               <th >Cédula</th>
               <th>Nombre</th>
