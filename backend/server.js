@@ -1,55 +1,55 @@
- //* Servidor
+const express = require('express');
+const cors = require('cors');
+const app = express();
+require('dotenv').config();
 
- const express = require('express');
- const cors = require('cors');
- require('dotenv').config();
+// IMPORTAR BASE DE DATOS
+const db = require('./src/config/db');
 
+app.use(cors());
+app.use(express.json());
 
- const app = express();
- const PORT = process.env.PORT || 3000;
+// ======= LAS RUTAS VAN AQUÍ =======
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Api del Gym funcionando',
+    version: '1.0.0',
+    timestamp: new Date().toISOString()
+  });
+});
 
-
- //? puente
-
- app.use(cors());
- app.use(express.json());
-
- //? Rutas de prueba
-
- app.get('/',(req, res) => {
+// ------- AÑADIR AQUÍ EL TEST --------
+app.get('/Api/test-db', async (req, res) => {
+  try {
+    const result = await db.query('SELECT NOW()');
     res.json({
-        message: ' Api del Gym funcionando',
-        version: '1.0.0',
-        timestamp: new Date().toISOString()
-
+      connected: true,
+      timestamp: result.rows[0].now
     });
- });
-
- //? Ruta de verificacion de estado
-
- app.get('/Api/health', (req,res)=> {
+  } catch (error) {
     res.json({
-        status: 'Todo bien',
-        database: 'PostgreSQL',
-        environment: process.env.NODE_ENV
-    })
- });
+      connected: false,
+      error: error.message
+    });
+  }
+});
+// ----------- FIN TEST ---------------
 
- 
- //? Manejo de errores
+const plansRoutes = require('./src/modules/plans/plans.routes');
+app.use('/Api/plans', plansRoutes);
 
- app.use((err, req, res, next)=>{
-    console.error(err.stack);
-    res.status(500).json({error: 'Algo salio mal en el servidor'});
- });
+const clientsRoutes = require('./src/modules/clients/clients.routes');
+app.use('/Api/clients', clientsRoutes);
 
- //? Ruta 404
 
- app.use('*',(req,res)=>{
-    res.status(404).json({ error: 'Ruta no encontrada'});
- });
+// ❌ Esto DEBE quedar al final: manejador de rutas inexistentes
+app.use((req, res) => {
+  res.status(404).json({ error: 'Ruta no encontrada' });
+});
 
- app.listen(PORT, '0.0.0.0', ()=>{
-    console.log(`Servidor backend corriendo en puerto: ${PORT}`);
-    console.log(`Environment: ${process.env.NODE_ENV}`);
- });
+// Servidor
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Servidor backend corriendo en puerto: ${PORT}`);
+  console.log(`Environment: ${process.env.NODE_ENV}`);
+});
