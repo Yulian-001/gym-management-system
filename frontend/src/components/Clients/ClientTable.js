@@ -148,11 +148,13 @@ function ClientTable() {
     }
   };
   return (
-    <div className='head-container' style={{ backgroundColor: 'whiteSmoke',
+    <div className='head-container' style={{ 
     borderRadius: '0em 0em 1em 1em',
-     padding: '1em',
-     margin:'-3em 8em 0em 8em' }}>
+     padding: '0.4rem',
+    
+    }}>
 
+<div className='header-button'>
     <div className='headBorder'>
 
        <h2 className='TableTitle' style={{
@@ -179,13 +181,17 @@ function ClientTable() {
         />
     
       </div>
-
-
+</div>
       
       {/* Tabla */}
       <div className='ContainerTable'>
+
+
+
+
+
         <table className='TableScroll'>
-              
+                  
           <thead className='theadHeader' >
             <tr >
               <th className='idTable'>id</th>
@@ -208,18 +214,18 @@ function ClientTable() {
                 borderBottom: '11px solid #fff',
                 transition: 'background 0.2s',
               }}>
-                <td style={{ width:'5%' }}>{client.id}</td>
-                <td style={{ width:'10%' }}>{client.Cédula}</td>
-                <td style={{  width:'15%'}}>{client.Nombre}</td>
-                <td style={{  width:'10%' }}>{client.Telefono}</td>
-                <td style={{  width:'12%' }}>{client.Eps}</td>
-                <td style={{  width:'5%' }}>{client.Rh}</td>
-                <td style={{  width:'10%' }}>{client.Plan}</td>
+                <td style={{ width:'2%' }}>{client.id}</td>
+                <td style={{ width:'5%' }}>{client.Cédula}</td>
+                <td style={{  width:'7%'}}>{client.Nombre}</td>
+                <td style={{  width:'7%' }}>{client.Telefono}</td>
+                <td style={{  width:'7%' }}>{client.Eps}</td>
+                <td style={{  width:'2%' }}>{client.Rh}</td>
+                <td style={{  width:'5%' }}>{client.Plan}</td>
                 <td style={{ width:'10%'  }}>{client.Inicio}</td>
                 <td style={{ width:'10%' }}>{client.vence}</td>
                 <td style={{ width:'5%' }}>{client.Dias}</td>
           
-                <td style={{width:'8%'}}>
+                <td style={{ width:'5%' }}>
                   <span style={{
                     backgroundColor: getEstadoColor(client.Estado),
 
@@ -233,25 +239,27 @@ function ClientTable() {
                     {client.Estado}
                   </span>
                 </td>
-                <td> <span><td>
-                  <button style={{
-                    backgroundColor: '#fe5221',
+
+                
+                <td > <span><td style={{ width:'5%'}}>
+                  <button style={{ 
+                    backgroundColor:'red',
                     color: 'white',
                     border: 'none',
                     padding: '0.45rem 0.66rem',
                     borderRadius: '6px',
                     cursor:'pointer',
-                    marginRight:'0.40rem',
-                    marginLeft:'0.30rem',
                     fontSize:'12px',
                     transition: 'background-color 0.3s'
                   }}
-                  onMouseEnter={(e) => e.target.style.backgroundColor = 'red'}
-                  onMouseLeave={(e) => e.target.style.backgroundColor = '#fe5221'}>
+                  onMouseEnter={(e) => e.target.style.backgroundColor = '#dd3b3b'}
+                  onMouseLeave={(e) => e.target.style.backgroundColor = '#ed1c1c'}>
                     Eliminar
                   </button>
                 </td>
-                <td style={{ width:'10%' }} >
+
+
+                <td style={{ width:'10px' }} >
                   <button style={{
                     backgroundColor: '#3498db',
                     color: 'white',
@@ -267,7 +275,7 @@ function ClientTable() {
                     Editar
                   </button>
                 </td>
-                </span>
+                </span> 
                  {client.Accion}</td>
               </tr>
             ))}

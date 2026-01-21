@@ -70,7 +70,7 @@
     margin-bottom: 0.5rem;
     font-size:1.3rem;
 }
-@media(min-width: 768px) {
+@media(min-width: 708px) {
     .modules-header{
         flex-direction: row;        
     }
@@ -156,6 +156,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px,1fr));
     gap:20px;
+    justify-content: center;
     width: 100%;
     max-width: 1400px;
     margin: 0 auto;
@@ -225,23 +226,19 @@ padding: 0.6rem 0.4rem ;
 /*?Tables (481px - 758px)*/
 @media (min-width: 481px){
     .Container-option{
-        grid-template-columns: repeat(3.1fr);
-        gap:14px;
     }
 }
 
 /*? Laptos (769px - 1024px)*/
 @media (min-width: 769px){
     .Container-option{
-        grid-template-columns:repeat(4,1fr);
-        gap:18px;
+       
     }
 }
 
 /*? Desktop (1025px - 1440px)*/
 @media (min-width:1025px){
     .Container-option{
-        grid-template-columns:repeat(6,1fr);
-        gap:22px;
+        
     }
 }

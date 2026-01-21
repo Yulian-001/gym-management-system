@@ -1,11 +1,17 @@
 import React, { useState} from 'react';
 import styles from './moduleStyle.css'
-import { FaUsersLine } from "react-icons/fa6";
-import { CgEnter } from "react-icons/cg";
 import ClientTble from '../components/Clients/ClientTable';
-import { FaMoneyCheck, FaDollarSign  } from "react-icons/fa";
-import { TbBrandDaysCounter } from "react-icons/tb";
-import { MdSevereCold } from "react-icons/md";
+
+//? rutas de iconos
+import { 
+  UsersIcon, 
+  EnterIcon, 
+  MoneyIcon, 
+  DollarIcon, 
+  CounterIcon, 
+  ColdIcon 
+} from '../icons'; 
+
 
 
 function ModulesSystem() { 
@@ -48,7 +54,7 @@ function ModulesSystem() {
           onClick={() =>SetActiveAdminOption('entrada')} >
                  <span>Entrada</span>
           <div className={`module-options-container`}>
-            <CgEnter className= 'options-icon' size={40} style={{color: activeAcdminOption === 'entrada' ? ' #1a86a2' : ' whiteSmoke'}} />
+            <EnterIcon className= 'options-icon' size={40} style={{color: activeAcdminOption === 'entrada' ? ' #1a86a2' : ' whiteSmoke'}} />
        
           </div>
           </div>
@@ -62,7 +68,7 @@ function ModulesSystem() {
           onClick={() =>SetActiveAdminOption('clientes')} >
                  <span>Clientes</span>
           <div className={`module-options-container`}>
-            <FaUsersLine className= 'options-icon' size={40} style={{color: activeAcdminOption === 'clientes' ? ' #1a86a2' : ' whiteSmoke'}} />
+            <UsersIcon className= 'options-icon' size={40} style={{color: activeAcdminOption === 'clientes' ? ' #1a86a2' : ' whiteSmoke'}} />
           </div>
           </div>
 
@@ -71,7 +77,7 @@ function ModulesSystem() {
           onClick={() =>SetActiveAdminOption('planes')} >
                  <span>Planes</span>
           <div className={`module-options-container`}>
-            <FaMoneyCheck className= 'options-icon' size={40} style={{color: activeAcdminOption === 'planes' ? ' #1a86a2' : ' whiteSmoke'}} />
+            <MoneyIcon className= 'options-icon' size={40} style={{color: activeAcdminOption === 'planes' ? ' #1a86a2' : ' whiteSmoke'}} />
           </div>
           </div>
 
@@ -80,7 +86,7 @@ function ModulesSystem() {
           onClick={() =>SetActiveAdminOption('ventas')} >
                  <span>Ventas</span>
           <div className={`module-options-container`}>
-            <FaDollarSign className= 'options-icon' size={40} style={{color: activeAcdminOption === 'clientes' ? ' #1a86a2' : ' whiteSmoke'}} />
+            <DollarIcon className= 'options-icon' size={40} style={{color: activeAcdminOption === 'clientes' ? ' #1a86a2' : ' whiteSmoke'}} />
           </div>
           </div>
 
@@ -90,7 +96,7 @@ function ModulesSystem() {
           onClick={() =>SetActiveAdminOption('dia')} >
                  <span>Día</span>
           <div className={`module-options-container`}>
-            <TbBrandDaysCounter className= 'options-icon' size={40} style={{color: activeAcdminOption === 'dia' ? ' #1a86a2' : ' whiteSmoke'}} />
+            <CounterIcon className= 'options-icon' size={40} style={{color: activeAcdminOption === 'dia' ? ' #1a86a2' : ' whiteSmoke'}} />
           </div>
           </div>
 
@@ -101,7 +107,7 @@ function ModulesSystem() {
           onClick={() =>SetActiveAdminOption('Estado')} >
                  <span>Estado</span>
           <div className={`module-options-container`}>
-            <MdSevereCold  className= 'options-icon' size={40} style={{color: activeAcdminOption === 'Estado' ? ' #1a86a2' : ' whiteSmoke'}} />
+            <ColdIcon  className= 'options-icon' size={40} style={{color: activeAcdminOption === 'Estado' ? ' #1a86a2' : ' whiteSmoke'}} />
           </div>
           </div>
 

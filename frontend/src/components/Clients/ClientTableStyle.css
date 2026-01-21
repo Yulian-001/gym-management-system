@@ -1,8 +1,20 @@
+.head-container{
+  background-color: whitesmoke;
+display: block;
+ margin:'-3rem 0 0 0'
+}
+
+@media  (max-width:768px){
+  .head-container{
+    margin: 0 1rem;
+    padding: 0.5rem;
+  }
+}
 
 .headBorder{
   display: flex;
   justify-content: space-between;
-  margin: 0.8rem 3rem;
+  margin: 0.8rem rem;
   max-width: 100%;
   
 }
@@ -105,27 +117,29 @@
   background-color: #2683ff;
   color:white;
 
-
+  
 }
-
-
 /* Contenedor de la tabla con scroll */
 .TableScroll {
   width: 100%;
+  min-width: 1200px;
   border-collapse: collapse;
-  table-layout:auto;
-  
+  font-size: 14px;
+table-layout:initial;
+
+
+
 }
 
 /* Contenedor principal con scroll vertical */
 .ContainerTable {
-  max-height: 300px; /* Altura máxima antes de mostrar scroll */
+  max-height: 300px; 
   overflow-y: auto; /* Scroll vertical */
-  overflow-x: visible; /* Scroll horizontal si es necesario */
+  overflow-x: visible; /* Scroll horizontal  */
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   margin:1rem 3rem;
-  
+
 }
 
 
@@ -138,31 +152,97 @@
   
 }
 
-/* Encabezados de tabla que se ajusten al contenido */
 .theadHeader th {
   background-color: #2683ff;
   color: white;
+  
   justify-content: center;
-  padding: 0.6rem 0.5rem;
+  padding: 0.6rem 0.3rem;
   white-space: nowrap;
   text-align: center;
   font-weight: 600;
   font-size: 0.9rem;
   min-width: fit-content;
-    white-space: nowrap; /* Permite que el texto se ajuste */
     word-wrap: break-word;
     
 }
 
-/* Celdas de la tabla */
 .filaTable td {
-  padding: 0rem 0.4rem;
+  padding: 0.2rem 1rem;
   min-width: 100%;
-  white-space: nowrap; /* Permite que el texto se ajuste */
+  white-space: nowrap;
   word-wrap: break-word;
+  
 }
 
 
 .filaTable:hover td {
   background-color: #f0f7ff;
+}
+
+
+/* Responsive Design */
+@media (min-width:730px) and (max-width: 1500px) {
+  .head-container{
+    margin: -3.2rem 2rem auto ;
+  }
+  .TableScroll {
+    font-size: 15px;
+  }
+
+.header-button{
+  margin:0.4rem 3rem
+}
+
+}
+@media (min-width:1500px){
+  .head-container{
+    margin: -3rem 8rem;
+  }
+  .header-button{
+    margin: 0.4rem 2.3rem;
+  }
+  
+}
+
+
+@media (max-width: 728px) {
+  .headBorder {
+    align-items: flex-start;
+    margin: 0 2rem auto;
+    gap: 8px;
+  }
+.header-button{
+  margin: 0.4rem 2rem;
+}
+  .head-container{
+    margin-top: -3.4rem;
+  }
+  .TableScroll {
+    min-width: 1000px; /* Reduce un poco para móviles */
+  }
+  
+  .estado-badge {
+    font-size: 11px;
+    padding: 0.2rem 0.5rem;
+  }
+  
+}
+
+/* Para pantallas muy pequeñas */
+@media (max-width: 480px) {
+  .head-container {
+    margin: 0 0.5rem !important;
+    padding: 0.5rem !important;
+  }
+  
+  .TableTitle {
+    font-size: 1.2rem !important;
+  }
+  
+  
+  .AddClient {
+    padding: 0.4rem 1rem !important;
+    font-size: 13px !important;
+  }
 }
