@@ -1,157 +1,49 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import style from './ClientTableStyle.css'
+import {
+  handleAddClient,
+  handleEditClient,
+  handleDeleteClient,
+  handleSearch,
+} from '../functions/buttonFunctions';
+import { clientFunctions } from '../functions/clientFunctions';
+
 
 
 
 
 function ClientTable() {
-  const clients = [
-    {
-      id: 1,
-      Cédula: '112212132',
-      Nombre: 'Agustin Rojas',
-      Telefono: '3202552456',
-      Eps: 'Capital Salud',
-      Rh: ' O-',
-      Plan: 'Mensualidad',
-      Inicio: '2024/05/01',
-      vence: '2024/06/03',
-      Estado: 'Cancelado',
-      Dias: '18'
-    },
-    {
-      id: 2,
-      Cédula: '112212132',
-      Nombre: 'Agustin Rojas',
-      Telefono: '3202552456',
-      Eps: 'Capital Salud',
-      Rh: ' O-',
-      Plan: 'Mensualidad',
-      Inicio: '2024/05/01',
-      vence: '2024/06/03',
-      Estado: 'Cancelado',
-      Dias: '18'
-    },
-    {
-      id: 3,
-      Cédula: '112212132',
-      Nombre: 'Agustin Rojas',
-      Telefono: '3202552456',
-      Eps: 'Capital Salud',
-      Rh: ' O-',
-      Plan: 'Mensualidad',
-      Inicio: '2024/05/01',
-      vence: '2024/06/03',
-      Estado: 'Cancelado',
-      Dias: '18'
-    },
-    {
-      id: 4,
-      Cédula: '112212132',
-      Nombre: 'Agustin Rojas',
-      Telefono: '3202552456',
-      Eps: 'Capital Salud',
-      Rh: ' O-',
-      Plan: 'Mensualidad',
-      Inicio: '2024/05/01',
-      vence: '2024/06/03',
-      Estado: 'Cancelado',
-      Dias: '18'
-    }
-    ,{
-      id: 5,
-      Cédula: '112212132',
-      Nombre: 'Agustin Rojas',
-      Telefono: '3202552456',
-      Eps: 'Capital Salud',
-      Rh: ' O-',
-      Plan: 'Mensualidad',
-      Inicio: '2024/05/01',
-      vence: '2024/06/03',
-      Estado: 'Cancelado',
-      Dias: '18'
-    },
-     {
-      id: 1,
-      Cédula: '112212132',
-      Nombre: 'Agustin Rojas',
-      Telefono: '3202552456',
-      Eps: 'Capital Salud',
-      Rh: ' O-',
-      Plan: 'Mensualidad',
-      Inicio: '2024/05/01',
-      vence: '2024/06/03',
-      Estado: 'Cancelado',
-      Dias: '18'
-    },
-    {
-      id: 2,
-      Cédula: '112212132',
-      Nombre: 'Agustin Rojas',
-      Telefono: '3202552456',
-      Eps: 'Capital Salud',
-      Rh: ' O-',
-      Plan: 'Mensualidad',
-      Inicio: '2024/05/01',
-      vence: '2024/06/03',
-      Estado: 'Vencido',
-      Dias: '18'
-    },
-    {
-      id: 3,
-      Cédula: '112212132',
-      Nombre: 'Agustin Rojas',
-      Telefono: '3202552456',
-      Eps: 'Capital Salud',
-      Rh: ' O-',
-      Plan: 'Mensualidad',
-      Inicio: '2024/05/01',
-      vence: '2024/06/03',
-      Estado: 'Cancelado',
-      Dias: '18'
-    },
-    {
-      id: 4,
-      Cédula: '112212132',
-      Nombre: 'Agustin Rojas',
-      Telefono: '3202552456',
-      Eps: 'Capital Salud',
-      Rh: 'O-',
-      Plan: 'Mensualidad',
-      Inicio: '2024/05/01',
-      vence: '2024/06/03',
-      Estado: 'Pendiente',
-      Dias: '18'
-    }
-    ,{
-      id: 5,
-      Cédula: '112212132',
-      Nombre: 'Agustin Rojas',
-      Telefono: '3202552456',
-      Eps: 'Capital Salud',
-      Rh: ' O-',
-      Plan: 'Mensualidad',
-      Inicio: '2024/05/01',
-      vence: '2024/06/03',
-      Estado: 'Activo',
-      Dias: '18'
-    }
 
-  ];
+  //?Estado para clientes
+ const [clients, setClients] = useState([]);
+ const [searchTerm, setSearchTerm] = useState('');
+  
+
+ //? cargar clientes
+
+ useEffect (() =>{
+  const initialClients = clientFunctions.getAllClients();
+  setClients(initialClients);
+ },[]);
+
+ 
+  // Función para obtener color según estado
   const getEstadoColor = (Estado) => {
-    switch(Estado.toLowerCase()) {
-      case 'cancelado': return 'red';
+    switch(Estado?.toLowerCase()) {
+      case 'cancelado': return '#ff4757';
       case 'activo': return '#37e167';
-      case 'pendiente': return '#f39d12da';
+      case 'pendiente': return '#f39d12';
       case 'vencido': return '#e275bc';
       default: return '#3498db';
-    }
+      
+    };
   };
+
   return (
     <div className='head-container' style={{ 
     borderRadius: '0em 0em 1em 1em',
      padding: '0.4rem',
-    
+  
     }}>
 
 <div className='header-button'>
@@ -168,7 +60,8 @@ function ClientTable() {
       }}>Gestión de Clientes</h2>
 
       {/*Botón Añadir cliente */}
-      <button className='AddClient' >+  Añadir</button>
+      <button className='AddClient' 
+      onClick={() => handleAddClient(setClients,clients)}>+  Añadir</button>
 
 
     </div>
@@ -178,6 +71,11 @@ function ClientTable() {
    <div className='searchClient' >
         <input type='text'
           className='searchC' placeholder='🔍  Buscar cliente...' 
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') handleSearch();
+          }}
         />
     
       </div>
@@ -235,7 +133,8 @@ function ClientTable() {
                     fontSize: '13px',
                     fontWeight: '550',
                     display:'inline-block'
-                  }}>
+                  }}
+   >
                     {client.Estado}
                   </span>
                 </td>
@@ -243,7 +142,7 @@ function ClientTable() {
                 
                 <td > <span><td style={{ width:'5%'}}>
                   <button style={{ 
-                    backgroundColor:'red',
+                    backgroundColor:'#d72727',
                     color: 'white',
                     border: 'none',
                     padding: '0.45rem 0.66rem',
@@ -252,8 +151,9 @@ function ClientTable() {
                     fontSize:'12px',
                     transition: 'background-color 0.3s'
                   }}
-                  onMouseEnter={(e) => e.target.style.backgroundColor = '#dd3b3b'}
-                  onMouseLeave={(e) => e.target.style.backgroundColor = '#ed1c1c'}>
+                  onMouseEnter={(e) => e.target.style.backgroundColor = 'red'}
+                  onMouseLeave={(e) => e.target.style.backgroundColor = '#d72727'}
+                  onClick={() => handleDeleteClient(client.id, setClients, clients)}>
                     Eliminar
                   </button>
                 </td>
@@ -271,12 +171,14 @@ function ClientTable() {
                     transition: 'background-color 0.3s' 
                   }}
                   onMouseEnter={(e) => e.target.style.backgroundColor = '#2750F5'}
-                  onMouseLeave={(e) => e.target.style.backgroundColor = '#3498db'}>
+                  onMouseLeave={(e) => e.target.style.backgroundColor = '#3498db'}
+                  onClick={() => handleEditClient(client, setClients, clients)}>
                     Editar
                   </button>
                 </td>
                 </span> 
-                 {client.Accion}</td>
+                 {client.Accion}
+               </td>
               </tr>
             ))}
           </tbody>
@@ -285,5 +187,4 @@ function ClientTable() {
     </div>
   );
 }
-
 export default ClientTable;
