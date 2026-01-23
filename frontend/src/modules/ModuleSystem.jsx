@@ -1,7 +1,6 @@
 import React, { useState} from 'react';
 import styles from './moduleStyle.css'
 import ClientTble from '../components/Clients/ClientTable';
-
 //? rutas de iconos
 import { 
   UsersIcon, 
@@ -13,24 +12,36 @@ import {
 } from '../icons'; 
 
 
-
 function ModulesSystem() { 
 
-  {/* */}
   const[activeTab, setActiveTab]= useState('admin'); 
-  const[activeAcdminOption,SetActiveAdminOption]= useState('clientes')
+  const[activeAcdminOption,setActiveAdminOption]= useState('null');
+
+  //? funcion para manejar  click en opcion
+  const handleOptionClick = (option) => {
+    if (activeAcdminOption === option){
+      setActiveAdminOption(null);
+    } else {
+      setActiveAdminOption(option);
+    }
+  };
   return (
     <div className="modulesContainer">
 
       <div className='modules-header' >
 
         <div className={`module-tab ${activeTab === 'admin' ? 'active':''}`}
-        onClick={() => setActiveTab('admin')}
-        >
+        onClick= {() => 
+        setActiveTab('admin')}>
+
           <h2 className='module-title'>Administración</h2>
         </div>
+
+
         <div className={`module-tab ${activeTab === 'contabilidad' ? 'active':''}`}
-        onClick={() =>setActiveTab('contabilidad')}>
+        onClick={() => 
+          setActiveTab('contabilidad')
+        }>
           <h2 className='module-title'>Contabilidad</h2>  
         </div>
 
@@ -51,7 +62,7 @@ function ModulesSystem() {
           <div className='Container-option'>
               {/*Entrada*/}
            <div className= {`container-icons  ${activeAcdminOption === 'entrada' ? 'active': ''}`}
-          onClick={() =>SetActiveAdminOption('entrada')} >
+          onClick={() =>setActiveAdminOption('entrada')} >
                  <span>Entrada</span>
           <div className={`module-options-container`}>
             <EnterIcon className= 'options-icon' size={40} style={{color: activeAcdminOption === 'entrada' ? ' #1a86a2' : ' whiteSmoke'}} />
@@ -65,16 +76,17 @@ function ModulesSystem() {
 
                {/*Clientes*/}
                <div className= {`container-icons  ${activeAcdminOption === 'clientes' ? 'active': ''}`}
-          onClick={() =>SetActiveAdminOption('clientes')} >
+          onClick={() =>setActiveAdminOption('clientes')} >
                  <span>Clientes</span>
           <div className={`module-options-container`}>
             <UsersIcon className= 'options-icon' size={40} style={{color: activeAcdminOption === 'clientes' ? ' #1a86a2' : ' whiteSmoke'}} />
           </div>
           </div>
 
+
                {/*planes*/}
               <div className= {`container-icons  ${activeAcdminOption === 'planes' ? 'active': ''}`}
-          onClick={() =>SetActiveAdminOption('planes')} >
+          onClick={() =>setActiveAdminOption('planes')} >
                  <span>Planes</span>
           <div className={`module-options-container`}>
             <MoneyIcon className= 'options-icon' size={40} style={{color: activeAcdminOption === 'planes' ? ' #1a86a2' : ' whiteSmoke'}} />
@@ -83,7 +95,7 @@ function ModulesSystem() {
 
            {/*Ventas*/}
            <div className= {`container-icons  ${activeAcdminOption === 'ventas' ? 'active': ''}`}
-          onClick={() =>SetActiveAdminOption('ventas')} >
+          onClick={() =>setActiveAdminOption('ventas')} >
                  <span>Ventas</span>
           <div className={`module-options-container`}>
             <DollarIcon className= 'options-icon' size={40} style={{color: activeAcdminOption === 'clientes' ? ' #1a86a2' : ' whiteSmoke'}} />
@@ -93,7 +105,7 @@ function ModulesSystem() {
 
            {/*Día*/}
               <div className= {`container-icons  ${activeAcdminOption === 'dia' ? 'active': ''}`}
-          onClick={() =>SetActiveAdminOption('dia')} >
+          onClick={() =>setActiveAdminOption('dia')} >
                  <span>Día</span>
           <div className={`module-options-container`}>
             <CounterIcon className= 'options-icon' size={40} style={{color: activeAcdminOption === 'dia' ? ' #1a86a2' : ' whiteSmoke'}} />
@@ -104,12 +116,15 @@ function ModulesSystem() {
 
             {/*Estado*/}
               <div className= {`container-icons  ${activeAcdminOption === 'Estado' ? 'active': ''}`}
-          onClick={() =>SetActiveAdminOption('Estado')} >
+          onClick={() =>setActiveAdminOption('Estado')} >
                  <span>Estado</span>
           <div className={`module-options-container`}>
             <ColdIcon  className= 'options-icon' size={40} style={{color: activeAcdminOption === 'Estado' ? ' #1a86a2' : ' whiteSmoke'}} />
           </div>
           </div>
+
+         
+
 
 
           </div>
