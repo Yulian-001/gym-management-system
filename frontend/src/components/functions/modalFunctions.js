@@ -172,6 +172,9 @@ export const showConfirmModal = ({ message, onConfirm, onCancel }) => {
               fontSize: '14px',
               fontWeight: '500',
             }}
+           onMouseEnter={(e) => e.target.style.backgroundColor = '#d4d6dd'}
+           onMouseLeave={(e) => e.target.style.backgroundColor = '#c3c7d6'}
+
           >
             Cancelar
           </button>
@@ -193,6 +196,9 @@ export const showConfirmModal = ({ message, onConfirm, onCancel }) => {
               fontSize: '14px',
               fontWeight: '500',
             }}
+           onMouseEnter={(e) => e.target.style.backgroundColor = '#ff0015'}
+           onMouseLeave={(e) => e.target.style.backgroundColor = '#ff4757'}
+
           >
             Confirmar
           </button>

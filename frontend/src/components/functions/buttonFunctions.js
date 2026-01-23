@@ -122,18 +122,43 @@ const ClientForm = ({ client, onSubmit, onCancel }) => {
         </select>
       </div>
 
-      <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '20px' }}>
+      <div style={{ marginBottom:'15px' }}>
+        <label style={{ display:'block',marginBottom:'5px', fontWeight:'600'}}>
+        Tipo Plan
+        </label>
+        <select 
+        name='plan'
+        value={formData.plan}
+        onChange={handleChange}
+        style={{
+           width: '100%',
+            padding: '10px',
+            border: '1px solid #ddd',
+            borderRadius: '6px',
+            fontSize: '14px'
+        }}>
+          <option value="Mensualidad">Mensualidad</option>
+          <option value="Ticketera">Ticketera</option>
+          <option value="Día">Día</option>
+        </select>
+      </div>
+
+      <div style={{ display: 'flex', gap: '40px',justifyContent: 'flex-end', marginTop: '20px' }}>
         <button
           type="button"
           onClick={onCancel}
           style={{
             padding: '10px 20px',
-            background: '#f1f2f6',
+            background: '#e5e8f3',
             border: 'none',
             borderRadius: '6px',
             cursor: 'pointer',
-            fontSize: '14px'
+            fontSize: '14px',
+            marginTop:'2rem'
           }}
+           onMouseEnter={(e) => e.target.style.backgroundColor = '#d4d6dd'}
+           onMouseLeave={(e) => e.target.style.backgroundColor = '#e5e8f3'}
+
         >
           Cancelar
         </button>
@@ -146,8 +171,12 @@ const ClientForm = ({ client, onSubmit, onCancel }) => {
             border: 'none',
             borderRadius: '6px',
             cursor: 'pointer',
-            fontSize: '14px'
+            fontSize: '14px',
+            marginTop:'2rem',
+            transition:' easy  4s'
           }}
+           onMouseEnter={(e) => e.target.style.backgroundColor = '#27cf8e'}
+           onMouseLeave={(e) => e.target.style.backgroundColor = '#38eda8'}
         >
           {client ? 'Actualizar' : 'Crear Cliente'}
         </button>

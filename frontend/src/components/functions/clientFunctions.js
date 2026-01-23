@@ -43,6 +43,21 @@ let clientsDB = [
   }
 ];
 
+
+const getNextId = () => {
+  if (clientsDB.length === 0) return 1;
+  const maxId = Math.max(...clientsDB.map(client => client.id));
+  return maxId + 1;
+};
+
+//? funcion para ajustar ids despues de eliminar 
+const reindexIds = () => {
+  clientsDB = clientsDB.map((client, index) => ({
+    ...client,
+    id: index + 1
+  }));
+  return clientsDB;
+}
 // Funciones CRUD para clientes
 export const clientFunctions = {
   // Obtener todos los clientes
@@ -58,7 +73,7 @@ export const clientFunctions = {
   // Crear nuevo cliente
   createClient: (clientData) => {
     const newClient = {
-      id: Date.now(), // ID único basado en timestamp
+      id: getNextId(), // ID único basado en timestamp, autoincrement
       ...clientData,
       Dias: clientData.Dias || '0',
       Estado: clientData.Estado || 'Pendiente',
@@ -79,22 +94,28 @@ export const clientFunctions = {
     return null;
   },
 
-  // Eliminar cliente
+  //? Eliminar cliente  y reindexar ids
   deleteClient: (id) => {
     const initialLength = clientsDB.length;
     clientsDB = clientsDB.filter(client => client.id !== id);
-    return clientsDB.length < initialLength;
+    
+    if (clientsDB.length < initialLength){
+      reindexIds();
+      return true;
+    }
+    return false;
   },
 
   // Buscar clientes
   searchClients: (searchTerm) => {
-    if (!searchTerm.trim()) return clientsDB;
+    if (!searchTerm || searchTerm.trim() === '') return clientsDB;
+    const term = searchTerm.toLowerCase().trim();
     
     return clientsDB.filter(client => 
-      client.Nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      client.Cédula.includes(searchTerm) ||
-      client.Telefono.includes(searchTerm) ||
-      client.Eps.toLowerCase().includes(searchTerm.toLowerCase())
+      client.Nombre.toLowerCase().includes(term) ||
+      client.Cédula.includes(term) ||
+      client.Telefono.includes(term) ||
+      client.Eps.toLowerCase().includes(term)
     );
   },
 
