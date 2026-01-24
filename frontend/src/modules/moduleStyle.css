@@ -31,7 +31,6 @@
     text-align:center;
     cursor:pointer;
     transition: all 0.5s ease;
-    border-bottom: 2px solid transparens;
     background-color: #d2e6ee;
 }
 
@@ -49,6 +48,9 @@
     border-bottom: 3px solid #2865ff;
     margin-bottom: 0.1rem;
 
+}
+.container-icons{
+    border-bottom: 4px  solid transparent;
 }
 
 .module-tab.active .module-title{
@@ -101,9 +103,7 @@
     .module-panel h3{
         font-size:1.5rem;
     }
-    .modules-header{
-         
-    }
+   
     
 }
 @media(min-width: 500px) and (max-width: 900px){
@@ -209,12 +209,8 @@ padding: 0.6rem 0.4rem ;
 @media (hover:hover) {
     .container-icons:hover:not(.active){
         background-color: rgb(68, 165, 225);
-        border-bottom: 4px solid #2865ff;
-        
+            border-bottom: 4px solid rgb(94, 94, 209);
     }
-
-
-
 }
 
 @media (min-width:1000px) and (max-width:1600px){

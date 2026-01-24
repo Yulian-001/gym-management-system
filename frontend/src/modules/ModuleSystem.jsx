@@ -25,6 +25,8 @@ function ModulesSystem() {
       setActiveAdminOption(option);
     }
   };
+  
+
   return (
     <div className="modulesContainer">
 
@@ -98,7 +100,7 @@ function ModulesSystem() {
           onClick={() =>setActiveAdminOption('ventas')} >
                  <span>Ventas</span>
           <div className={`module-options-container`}>
-            <DollarIcon className= 'options-icon' size={40} style={{color: activeAcdminOption === 'clientes' ? ' #1a86a2' : ' whiteSmoke'}} />
+            <DollarIcon className= 'options-icon' size={40} style={{color: activeAcdminOption === 'ventas' ? ' #1a86a2' : ' whiteSmoke'}} />
           </div>
           </div>
 
