@@ -1,158 +1,52 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import style from './ClientTableStyle.css'
+import {
+  handleAddClient,
+  handleEditClient,
+  handleDeleteClient,
+  handleSearch,
+} from '../functions/buttonFunctions';
+import { clientFunctions } from '../functions/clientFunctions';
+
 
 
 
 
 function ClientTable() {
-  const clients = [
-    {
-      id: 1,
-      Cédula: '112212132',
-      Nombre: 'Agustin Rojas',
-      Telefono: '3202552456',
-      Eps: 'Capital Salud',
-      Rh: ' O-',
-      Plan: 'Mensualidad',
-      Inicio: '2024/05/01',
-      vence: '2024/06/03',
-      Estado: 'Cancelado',
-      Dias: '18'
-    },
-    {
-      id: 2,
-      Cédula: '112212132',
-      Nombre: 'Agustin Rojas',
-      Telefono: '3202552456',
-      Eps: 'Capital Salud',
-      Rh: ' O-',
-      Plan: 'Mensualidad',
-      Inicio: '2024/05/01',
-      vence: '2024/06/03',
-      Estado: 'Cancelado',
-      Dias: '18'
-    },
-    {
-      id: 3,
-      Cédula: '112212132',
-      Nombre: 'Agustin Rojas',
-      Telefono: '3202552456',
-      Eps: 'Capital Salud',
-      Rh: ' O-',
-      Plan: 'Mensualidad',
-      Inicio: '2024/05/01',
-      vence: '2024/06/03',
-      Estado: 'Cancelado',
-      Dias: '18'
-    },
-    {
-      id: 4,
-      Cédula: '112212132',
-      Nombre: 'Agustin Rojas',
-      Telefono: '3202552456',
-      Eps: 'Capital Salud',
-      Rh: ' O-',
-      Plan: 'Mensualidad',
-      Inicio: '2024/05/01',
-      vence: '2024/06/03',
-      Estado: 'Cancelado',
-      Dias: '18'
-    }
-    ,{
-      id: 5,
-      Cédula: '112212132',
-      Nombre: 'Agustin Rojas',
-      Telefono: '3202552456',
-      Eps: 'Capital Salud',
-      Rh: ' O-',
-      Plan: 'Mensualidad',
-      Inicio: '2024/05/01',
-      vence: '2024/06/03',
-      Estado: 'Cancelado',
-      Dias: '18'
-    },
-     {
-      id: 1,
-      Cédula: '112212132',
-      Nombre: 'Agustin Rojas',
-      Telefono: '3202552456',
-      Eps: 'Capital Salud',
-      Rh: ' O-',
-      Plan: 'Mensualidad',
-      Inicio: '2024/05/01',
-      vence: '2024/06/03',
-      Estado: 'Cancelado',
-      Dias: '18'
-    },
-    {
-      id: 2,
-      Cédula: '112212132',
-      Nombre: 'Agustin Rojas',
-      Telefono: '3202552456',
-      Eps: 'Capital Salud',
-      Rh: ' O-',
-      Plan: 'Mensualidad',
-      Inicio: '2024/05/01',
-      vence: '2024/06/03',
-      Estado: 'Vencido',
-      Dias: '18'
-    },
-    {
-      id: 3,
-      Cédula: '112212132',
-      Nombre: 'Agustin Rojas',
-      Telefono: '3202552456',
-      Eps: 'Capital Salud',
-      Rh: ' O-',
-      Plan: 'Mensualidad',
-      Inicio: '2024/05/01',
-      vence: '2024/06/03',
-      Estado: 'Cancelado',
-      Dias: '18'
-    },
-    {
-      id: 4,
-      Cédula: '112212132',
-      Nombre: 'Agustin Rojas',
-      Telefono: '3202552456',
-      Eps: 'Capital Salud',
-      Rh: 'O-',
-      Plan: 'Mensualidad',
-      Inicio: '2024/05/01',
-      vence: '2024/06/03',
-      Estado: 'Pendiente',
-      Dias: '18'
-    }
-    ,{
-      id: 5,
-      Cédula: '112212132',
-      Nombre: 'Agustin Rojas',
-      Telefono: '3202552456',
-      Eps: 'Capital Salud',
-      Rh: ' O-',
-      Plan: 'Mensualidad',
-      Inicio: '2024/05/01',
-      vence: '2024/06/03',
-      Estado: 'Activo',
-      Dias: '18'
-    }
 
-  ];
+  //?Estado para clientes
+ const [clients, setClients] = useState([]);
+ const [searchTerm, setSearchTerm] = useState('');
+  
+
+ //? cargar clientes
+
+ useEffect (() =>{
+  const initialClients = clientFunctions.getAllClients();
+  setClients(initialClients);
+ },[]);
+
+ 
+  // Función para obtener color según estado
   const getEstadoColor = (Estado) => {
-    switch(Estado.toLowerCase()) {
-      case 'cancelado': return 'red';
+    switch(Estado?.toLowerCase()) {
+      case 'cancelado': return '#ff4757';
       case 'activo': return '#37e167';
-      case 'pendiente': return '#f39d12da';
+      case 'pendiente': return '#f39d12';
       case 'vencido': return '#e275bc';
       default: return '#3498db';
-    }
+      
+    };
   };
-  return (
-    <div className='head-container' style={{ backgroundColor: 'whiteSmoke',
-    borderRadius: '0em 0em 1em 1em',
-     padding: '1em',
-     margin:'-3em 8em 0em 8em' }}>
 
+  return (
+    <div className='head-container' style={{ 
+    borderRadius: '0em 0em 1em 1em',
+     padding: '0.4rem',
+  
+    }}>
+
+<div className='header-button'>
     <div className='headBorder'>
 
        <h2 className='TableTitle' style={{
@@ -166,7 +60,8 @@ function ClientTable() {
       }}>Gestión de Clientes</h2>
 
       {/*Botón Añadir cliente */}
-      <button className='AddClient' >+  Añadir</button>
+      <button className='AddClient' 
+      onClick={() => handleAddClient(setClients,clients)}>+  Añadir</button>
 
 
     </div>
@@ -176,16 +71,25 @@ function ClientTable() {
    <div className='searchClient' >
         <input type='text'
           className='searchC' placeholder='🔍  Buscar cliente...' 
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') handleSearch();
+          }}
         />
     
       </div>
-
-
+</div>
       
       {/* Tabla */}
       <div className='ContainerTable'>
+
+
+
+
+
         <table className='TableScroll'>
-              
+                  
           <thead className='theadHeader' >
             <tr >
               <th className='idTable'>id</th>
@@ -208,18 +112,18 @@ function ClientTable() {
                 borderBottom: '11px solid #fff',
                 transition: 'background 0.2s',
               }}>
-                <td style={{ width:'5%' }}>{client.id}</td>
-                <td style={{ width:'10%' }}>{client.Cédula}</td>
-                <td style={{  width:'15%'}}>{client.Nombre}</td>
-                <td style={{  width:'10%' }}>{client.Telefono}</td>
-                <td style={{  width:'12%' }}>{client.Eps}</td>
-                <td style={{  width:'5%' }}>{client.Rh}</td>
-                <td style={{  width:'10%' }}>{client.Plan}</td>
+                <td style={{ width:'2%' }}>{client.id}</td>
+                <td style={{ width:'5%' }}>{client.Cédula}</td>
+                <td style={{  width:'7%'}}>{client.Nombre}</td>
+                <td style={{  width:'7%' }}>{client.Telefono}</td>
+                <td style={{  width:'7%' }}>{client.Eps}</td>
+                <td style={{  width:'2%' }}>{client.Rh}</td>
+                <td style={{  width:'5%' }}>{client.Plan}</td>
                 <td style={{ width:'10%'  }}>{client.Inicio}</td>
                 <td style={{ width:'10%' }}>{client.vence}</td>
                 <td style={{ width:'5%' }}>{client.Dias}</td>
           
-                <td style={{width:'8%'}}>
+                <td style={{ width:'5%' }}>
                   <span style={{
                     backgroundColor: getEstadoColor(client.Estado),
 
@@ -229,29 +133,33 @@ function ClientTable() {
                     fontSize: '13px',
                     fontWeight: '550',
                     display:'inline-block'
-                  }}>
+                  }}
+   >
                     {client.Estado}
                   </span>
                 </td>
-                <td> <span><td>
-                  <button style={{
-                    backgroundColor: '#fe5221',
+
+                
+                <td > <span><td style={{ width:'5%'}}>
+                  <button style={{ 
+                    backgroundColor:'#d72727',
                     color: 'white',
                     border: 'none',
                     padding: '0.45rem 0.66rem',
                     borderRadius: '6px',
                     cursor:'pointer',
-                    marginRight:'0.40rem',
-                    marginLeft:'0.30rem',
                     fontSize:'12px',
                     transition: 'background-color 0.3s'
                   }}
                   onMouseEnter={(e) => e.target.style.backgroundColor = 'red'}
-                  onMouseLeave={(e) => e.target.style.backgroundColor = '#fe5221'}>
+                  onMouseLeave={(e) => e.target.style.backgroundColor = '#d72727'}
+                  onClick={() => handleDeleteClient(client.id, setClients, clients)}>
                     Eliminar
                   </button>
                 </td>
-                <td style={{ width:'10%' }} >
+
+
+                <td style={{ width:'10px' }} >
                   <button style={{
                     backgroundColor: '#3498db',
                     color: 'white',
@@ -263,12 +171,14 @@ function ClientTable() {
                     transition: 'background-color 0.3s' 
                   }}
                   onMouseEnter={(e) => e.target.style.backgroundColor = '#2750F5'}
-                  onMouseLeave={(e) => e.target.style.backgroundColor = '#3498db'}>
+                  onMouseLeave={(e) => e.target.style.backgroundColor = '#3498db'}
+                  onClick={() => handleEditClient(client, setClients, clients)}>
                     Editar
                   </button>
                 </td>
-                </span>
-                 {client.Accion}</td>
+                </span> 
+                 {client.Accion}
+               </td>
               </tr>
             ))}
           </tbody>
@@ -277,5 +187,4 @@ function ClientTable() {
     </div>
   );
 }
-
 export default ClientTable;

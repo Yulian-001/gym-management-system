@@ -18,12 +18,12 @@
 .modules-header {
     display: flex;
     flex-direction: column;
-    background-color: #eefaff;
     border-radius: 15px 15px 0 0;
     overflow: hidden;
     width: 100%;
     font-size: 14px;
     color:#173a6bb3;
+    margin-bottom: 0.5rem;
 }
 
 .module-tab{
@@ -70,7 +70,7 @@
     margin-bottom: 0.5rem;
     font-size:1.3rem;
 }
-@media(min-width: 768px) {
+@media(min-width: 708px) {
     .modules-header{
         flex-direction: row;        
     }
@@ -96,9 +96,13 @@
     }
     .modules-content{
         padding:0.5rem;
-    }
+
+        }
     .module-panel h3{
         font-size:1.5rem;
+    }
+    .modules-header{
+         
     }
     
 }
@@ -141,15 +145,27 @@
     max-width: 100%;
     width: 1210px;
   }
+
+ 
+}
+.modules-content{
+   box-shadow:   
+    5px 0 5px -5px rgba(0,0,0,0.2), /* Sombra izquierda */
+    -5px 0 5px -5px rgba(0,0,0,0.2);
  
 }
 
-.Container-option{
-    display: flex;
-    flex-direction: row;
-    gap:30px;
-    justify-content: center;
 
+
+.Container-option{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px,1fr));
+    gap:20px;
+    
+    justify-content: center;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
 
@@ -186,9 +202,6 @@ border-radius: 0.9rem;
 padding: 0.6rem 0.4rem ;
 }
 
-.module-options-container.active{
-    background-color: red;
-}
 
 
 
@@ -213,6 +226,24 @@ padding: 0.6rem 0.4rem ;
     align-items:  center;
     
 }
+}
 
+/*?Tables (481px - 758px)*/
+@media (min-width: 481px){
+    .Container-option{
+    }
+}
 
+/*? Laptos (769px - 1024px)*/
+@media (min-width: 769px){
+    .Container-option{
+       
+    }
+}
+
+/*? Desktop (1025px - 1440px)*/
+@media (min-width:1025px){
+    .Container-option{
+        
+    }
 }

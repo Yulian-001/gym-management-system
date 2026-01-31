@@ -1,30 +1,47 @@
 import React, { useState} from 'react';
 import styles from './moduleStyle.css'
-import { FaUsersLine } from "react-icons/fa6";
-import { CgEnter } from "react-icons/cg";
 import ClientTble from '../components/Clients/ClientTable';
-import { FaMoneyCheck, FaDollarSign  } from "react-icons/fa";
-import { TbBrandDaysCounter } from "react-icons/tb";
-
+//? rutas de iconos
+import { 
+  UsersIcon, 
+  EnterIcon, 
+  MoneyIcon, 
+  DollarIcon, 
+  CounterIcon, 
+  ColdIcon 
+} from '../icons'; 
 
 
 function ModulesSystem() { 
 
-  {/* */}
   const[activeTab, setActiveTab]= useState('admin'); 
-  const[activeAcdminOption,SetActiveAdminOption]= useState('clientes')
+  const[activeAcdminOption,setActiveAdminOption]= useState('null');
+
+  //? funcion para manejar  click en opcion
+  const handleOptionClick = (option) => {
+    if (activeAcdminOption === option){
+      setActiveAdminOption(null);
+    } else {
+      setActiveAdminOption(option);
+    }
+  };
   return (
     <div className="modulesContainer">
 
       <div className='modules-header' >
 
         <div className={`module-tab ${activeTab === 'admin' ? 'active':''}`}
-        onClick={() => setActiveTab('admin')}
-        >
+        onClick= {() => 
+        setActiveTab('admin')}>
+
           <h2 className='module-title'>Administración</h2>
         </div>
+
+
         <div className={`module-tab ${activeTab === 'contabilidad' ? 'active':''}`}
-        onClick={() =>setActiveTab('contabilidad')}>
+        onClick={() => 
+          setActiveTab('contabilidad')
+        }>
           <h2 className='module-title'>Contabilidad</h2>  
         </div>
 
@@ -45,10 +62,10 @@ function ModulesSystem() {
           <div className='Container-option'>
               {/*Entrada*/}
            <div className= {`container-icons  ${activeAcdminOption === 'entrada' ? 'active': ''}`}
-          onClick={() =>SetActiveAdminOption('entrada')} >
+          onClick={() =>setActiveAdminOption('entrada')} >
                  <span>Entrada</span>
           <div className={`module-options-container`}>
-            <CgEnter className= 'options-icon' size={40} style={{color: activeAcdminOption === 'entrada' ? ' #1a86a2' : ' whiteSmoke'}} />
+            <EnterIcon className= 'options-icon' size={40} style={{color: activeAcdminOption === 'entrada' ? ' #1a86a2' : ' whiteSmoke'}} />
        
           </div>
           </div>
@@ -59,43 +76,59 @@ function ModulesSystem() {
 
                {/*Clientes*/}
                <div className= {`container-icons  ${activeAcdminOption === 'clientes' ? 'active': ''}`}
-          onClick={() =>SetActiveAdminOption('clientes')} >
+          onClick={() =>setActiveAdminOption('clientes')} >
                  <span>Clientes</span>
           <div className={`module-options-container`}>
-            <FaUsersLine className= 'options-icon' size={40} style={{color: activeAcdminOption === 'clientes' ? ' #1a86a2' : ' whiteSmoke'}} />
+            <UsersIcon className= 'options-icon' size={40} style={{color: activeAcdminOption === 'clientes' ? ' #1a86a2' : ' whiteSmoke'}} />
           </div>
           </div>
 
+
                {/*planes*/}
               <div className= {`container-icons  ${activeAcdminOption === 'planes' ? 'active': ''}`}
-          onClick={() =>SetActiveAdminOption('planes')} >
-                 <span>Clientes</span>
+          onClick={() =>setActiveAdminOption('planes')} >
+                 <span>Planes</span>
           <div className={`module-options-container`}>
-            <FaMoneyCheck className= 'options-icon' size={40} style={{color: activeAcdminOption === 'planes' ? ' #1a86a2' : ' whiteSmoke'}} />
+            <MoneyIcon className= 'options-icon' size={40} style={{color: activeAcdminOption === 'planes' ? ' #1a86a2' : ' whiteSmoke'}} />
           </div>
           </div>
 
            {/*Ventas*/}
            <div className= {`container-icons  ${activeAcdminOption === 'ventas' ? 'active': ''}`}
-          onClick={() =>SetActiveAdminOption('ventas')} >
-                 <span>Clientes</span>
+          onClick={() =>setActiveAdminOption('ventas')} >
+                 <span>Ventas</span>
           <div className={`module-options-container`}>
-            <FaDollarSign className= 'options-icon' size={40} style={{color: activeAcdminOption === 'clientes' ? ' #1a86a2' : ' whiteSmoke'}} />
+            <DollarIcon className= 'options-icon' size={40} style={{color: activeAcdminOption === 'clientes' ? ' #1a86a2' : ' whiteSmoke'}} />
           </div>
           </div>
 
 
            {/*Día*/}
               <div className= {`container-icons  ${activeAcdminOption === 'dia' ? 'active': ''}`}
-          onClick={() =>SetActiveAdminOption('dia')} >
+          onClick={() =>setActiveAdminOption('dia')} >
                  <span>Día</span>
           <div className={`module-options-container`}>
-            <TbBrandDaysCounter className= 'options-icon' size={40} style={{color: activeAcdminOption === 'dia' ? ' #1a86a2' : ' whiteSmoke'}} />
+            <CounterIcon className= 'options-icon' size={40} style={{color: activeAcdminOption === 'dia' ? ' #1a86a2' : ' whiteSmoke'}} />
           </div>
           </div>
 
           
+
+            {/*Estado*/}
+              <div className= {`container-icons  ${activeAcdminOption === 'Estado' ? 'active': ''}`}
+          onClick={() =>setActiveAdminOption('Estado')} >
+                 <span>Estado</span>
+          <div className={`module-options-container`}>
+            <ColdIcon  className= 'options-icon' size={40} style={{color: activeAcdminOption === 'Estado' ? ' #1a86a2' : ' whiteSmoke'}} />
           </div>
+          </div>
+
+         
+
+
+
+          </div>
+          
 
         )}
        
