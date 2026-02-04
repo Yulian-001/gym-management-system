@@ -26,6 +26,28 @@ function ClientTable() {
   setClients(initialClients);
  },[]);
 
+
+ const handleSearch = () =>{
+  if(searchTerm  || searchTerm.trim() === ''){
+    //* si esta vacio mostrar todo
+    const initialClients = clientFunctions.getAllClients();
+      setClients(initialClients);
+  }else {
+    //? buscar clientes
+    const result = clientFunctions.searchClients(searchTerm);
+      setClients(result);
+  }
+ };
+ //? busqueda timpo real
+  useEffect(() => {
+    if(searchTerm.trim() === ''){
+      const initialClients = clientFunctions.getAllClients();
+        setClients(initialClients);
+    } else {
+      const results = clientFunctions.searchClients(searchTerm);
+        setClients(results);
+    }
+  }, [searchTerm]);
  
   // Función para obtener color según estado
   const getEstadoColor = (Estado) => {

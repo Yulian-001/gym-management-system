@@ -12,6 +12,7 @@
     padding: 0 0.3rem;
     box-sizing: border-box;
 }
+
  
 /*? Header: en movil se vuelv columna*/
 
@@ -20,6 +21,7 @@
     flex-direction: column;
     border-radius: 15px 15px 0 0;
     overflow: hidden;
+    
     width: 100%;
     font-size: 14px;
     color:#173a6bb3;
@@ -31,39 +33,35 @@
     text-align:center;
     cursor:pointer;
     transition: all 0.5s ease;
-    background-color: #d2e6ee;
+    border-bottom: 2px solid transparens;
+    background-color: #eee9d2;
 }
 
 .module.title{
     font-family: 'Arial', sans-serif;
     font-size:0.9rem;
     font-weight: 500;
-    margin: 0;
     white-space: nowrap;
 }
 
 .module-tab.active{
 
     background-color: #ffffffcd;
-    border-bottom: 3px solid #2865ff;
-    margin-bottom: 0.1rem;
-
-}
-.container-icons{
-    border-bottom: 4px  solid transparent;
+    border-bottom: 4px solid #2865ff;
 }
 
 .module-tab.active .module-title{
     color:#33acf7;  
     font-weight: 700;
-    font-size: 22px;
+    font-size: 20px;
 }
 
 @media (hover:hover) {
     .module-tab:hover:not(.active){
-        background-color: rgb(220, 241, 254);
-        border-bottom: 4px solid #2865ff;
+        background-color: rgb(223, 254, 220);
+    
     }
+
  
 }
 
@@ -170,15 +168,16 @@
 
 
 .container-icons{
-    padding: 1.4rem 1rem;
+    padding: 1.6rem 1rem;
     border-radius: 10px;
     color: whiteSmoke;
     font-weight: 500;
     display: flex ;
     flex-direction: column-reverse;
-    gap:3px;
+    gap:3px;   
+     border-bottom: 4px transparent solid ;
     align-items: center;    
-   cursor: pointer;
+    cursor: pointer;
     background-color: #33baed;
 
 }
@@ -186,10 +185,9 @@
 
 
 .container-icons.active{
-
-    background-color: whitesmoke;
+    border-bottom: 4px solid #a0bafc;
+    background-color: rgb(247, 242, 242);
     color: #2865ff;
-
 }
 
  .module-options-container{
@@ -204,13 +202,16 @@ padding: 0.6rem 0.4rem ;
 
 
 
-
-
 @media (hover:hover) {
     .container-icons:hover:not(.active){
         background-color: rgb(68, 165, 225);
-            border-bottom: 4px solid rgb(94, 94, 209);
+        border-bottom: 4px solid #2865ff;
+        transform: scale(1.);
+        transition: transform 0.3s ease;
     }
+
+
+
 }
 
 @media (min-width:1000px) and (max-width:1600px){
@@ -226,20 +227,15 @@ padding: 0.6rem 0.4rem ;
 
 /*?Tables (481px - 758px)*/
 @media (min-width: 481px){
-    .Container-option{
-    }
+    
 }
 
 /*? Laptos (769px - 1024px)*/
 @media (min-width: 769px){
-    .Container-option{
-       
-    }
+    
 }
 
 /*? Desktop (1025px - 1440px)*/
 @media (min-width:1025px){
-    .Container-option{
-        
-    }
+    
 }
