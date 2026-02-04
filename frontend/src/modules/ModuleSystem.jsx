@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from './moduleStyle.css';
 import ClientTable from '../components/Clients/ClientTable';
+import EntranceForm from '../components/Entrance/EntranceForm';
 //? rutas de iconos
 import { 
   UsersIcon, 
@@ -48,12 +49,16 @@ function ModulesSystem() {
         </div>
       </div>
       
-      {/* Inicio de opciones de Modulos*/}
+      {/*//? === Inicio de opciones de Modulos ===*/}
+
       <main className="modules-content">
-        {/* Modulo Administracion */}
+
+        {/*//? ===  Modulo Administracion  === */}
         {activeTab === 'admin' && (
+          
+
           <div className='Container-option'>
-            {/*Entrada*/}
+            {/*//? ===  Entrada  === */}
             <div className={`container-icons ${activeAdminOption === 'entrada' ? 'active' : ''}`}
               onClick={() => setActiveAdminOption('entrada')}>
               <span>Entrada</span>
@@ -62,16 +67,16 @@ function ModulesSystem() {
               </div>
             </div>
 
-            {/*Clientes*/}
+            {/*//? === Clientes  === */}
             <div className={`container-icons ${activeAdminOption === 'clientes' ? 'active' : ''}`}
               onClick={() => setActiveAdminOption('clientes')}>
               <span>Clientes</span>
               <div className={`module-options-container`}>
                 <UsersIcon className='options-icon' size={40} style={{color: activeAdminOption === 'clientes' ? '#1a86a2' : 'whiteSmoke'}} />
               </div>
-            </div>
+            </div> 
 
-            {/*planes*/}
+            {/*//? === planes === */}
             <div className={`container-icons ${activeAdminOption === 'planes' ? 'active' : ''}`}
               onClick={() => setActiveAdminOption('planes')}>
               <span>Planes</span>
@@ -80,7 +85,7 @@ function ModulesSystem() {
               </div>
             </div>
 
-            {/*Ventas*/}
+            {/*//? === Ventas  === */}
             <div className={`container-icons ${activeAdminOption === 'ventas' ? 'active' : ''}`}
               onClick={() => setActiveAdminOption('ventas')}>
               <span>Ventas</span>
@@ -89,7 +94,7 @@ function ModulesSystem() {
               </div>
             </div>
 
-            {/*Día*/}
+            {/*//? === Día  === */}
             <div className={`container-icons ${activeAdminOption === 'dia' ? 'active' : ''}`}
               onClick={() => setActiveAdminOption('dia')}>
               <span>Día</span>
@@ -98,17 +103,49 @@ function ModulesSystem() {
               </div>
             </div>
 
-            {/*Estado*/}
+            {/* //? === Estado  === */}
             <div className={`container-icons ${activeAdminOption === 'Estado' ? 'active' : ''}`}
               onClick={() => setActiveAdminOption('Estado')}>
               <span>Estado</span>
               <div className={`module-options-container`}>
                 <ColdIcon className='options-icon' size={40} style={{color: activeAdminOption === 'Estado' ? '#1a86a2' : 'whiteSmoke'}} />
+
               </div>
             </div>
           </div>
+          
         )}
+          
+          
       </main>
+      
+        {/*//? Mostrar contenido según la opción seleccionada */}
+
+                {/*//todo === Clientes ===*/}
+            {activeAdminOption === 'clientes' && (
+              <div className='access-client' style={{ 
+              display:'flex',
+              width:'100%',
+              justifyContent:'center'
+              
+              }}>
+                <ClientTable />
+              </div>
+            )}
+
+            {/*//todo === Clientes ===*/}
+
+            {activeAdminOption === 'entrada'&& (
+              <div className='access-enter' style={{
+                display:'flex',
+                width:'100%',
+                justifyContent:'center'
+              }}>
+                <EntranceForm />
+              </div>
+            )}
+
+
     </div>
   );
 }

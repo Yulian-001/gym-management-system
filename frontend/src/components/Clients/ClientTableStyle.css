@@ -1,16 +1,18 @@
+
+
 .head-container{
   background-color: whitesmoke;
-display: block;
- margin:'-3rem 0 0 0'
+  padding-top: 1rem;
+  width: 100%;
+
 }
 
 @media  (max-width:768px){
   .head-container{
-    margin: 0 1rem;
-    padding: 0.5rem;
+    width: 100%;
+    background-color: whitesmoke;
   }
 }
-
 .headBorder{
   display: flex;
   justify-content: space-between;
@@ -184,7 +186,7 @@ table-layout:initial;
 /* Responsive Design */
 @media (min-width:730px) and (max-width: 1500px) {
   .head-container{
-    margin: -3.2rem 2rem auto ;
+    margin: 3.2rem 2rem auto ;
   }
   .TableScroll {
     font-size: 15px;

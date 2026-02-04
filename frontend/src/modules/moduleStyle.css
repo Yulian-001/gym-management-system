@@ -76,8 +76,9 @@
     }
 
     .modulesContainer{
-        max-width: 100%;
-        width: 640px;
+        max-width: 90%;
+        width: 790px;
+
     }
     .module-tab{
         padding: 0.5rem 0.5rem;
@@ -239,3 +240,7 @@ padding: 0.6rem 0.4rem ;
 @media (min-width:1025px){
     
 }
+
+
+
+
