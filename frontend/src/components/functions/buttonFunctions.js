@@ -38,10 +38,11 @@ const ClientForm = ({ client, onSubmit, onCancel }) => {
   };
 
   return (
+    
     <form onSubmit={handleSubmit}>
       <div style={{ marginBottom: '15px' }}>
         <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>
-          Cédula *
+          Cédula 
         </label>
         <input
           type="text"
@@ -58,10 +59,10 @@ const ClientForm = ({ client, onSubmit, onCancel }) => {
           }}
         />
       </div>
-
+          {/*  === Editar: Nombre  ===*/}
       <div style={{ marginBottom: '15px' }}>
         <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>
-          Nombre Completo *
+          Nombre Completo 
         </label>
         <input
           type="text"
@@ -78,10 +79,10 @@ const ClientForm = ({ client, onSubmit, onCancel }) => {
           }}
         />
       </div>
-
+          
       <div style={{ marginBottom: '15px' }}>
         <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>
-          Teléfono *
+          Teléfono 
         </label>
         <input
           type="tel"
@@ -98,12 +99,13 @@ const ClientForm = ({ client, onSubmit, onCancel }) => {
           }}
         />
       </div>
-
-      <div style={{ marginBottom: '15px' }}>
+         
+     <div style={{ marginBottom: '15px' }}>
         <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>
           EPS
         </label>
-        <select
+        <input
+          type="text"
           name="Eps"
           value={formData.Eps}
           onChange={handleChange}
@@ -114,21 +116,37 @@ const ClientForm = ({ client, onSubmit, onCancel }) => {
             borderRadius: '6px',
             fontSize: '14px'
           }}
-        >
-          <option value="Capital Salud">Capital Salud</option>
-          <option value="Sura">Sura</option>
-          <option value="Nueva EPS">Nueva EPS</option>
-          <option value="Sanitas">Sanitas</option>
-        </select>
+        />
+      </div>
+           
+      <div style={{ marginBottom: '15px' }}>
+        <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>
+          Rh
+        </label>
+        <input
+          type="text"
+          name="Rh"
+          value={formData.Rh}
+          onChange={handleChange}
+          required
+          style={{
+            width: '100%',
+            padding: '10px',
+            border: '1px solid #ddd',
+            borderRadius: '6px',
+            fontSize: '14px'
+          }}
+        />
       </div>
 
-      <div style={{ marginBottom:'15px' }}>
+           
+        <div style={{ marginBottom:'15px' }}>
         <label style={{ display:'block',marginBottom:'5px', fontWeight:'600'}}>
         Tipo Plan
         </label>
         <select 
-        name='plan'
-        value={formData.plan}
+        name='Plan'
+        value={formData.Plan}
         onChange={handleChange}
         style={{
            width: '100%',
@@ -141,6 +159,47 @@ const ClientForm = ({ client, onSubmit, onCancel }) => {
           <option value="Ticketera">Ticketera</option>
           <option value="Día">Día</option>
         </select>
+      </div>
+
+       
+      <div style={{ marginBottom: '15px' }}>
+        <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>
+          Inicio plan
+        </label>
+        <input
+          type="date"
+          name="Inicio"
+          value={formData.Inicio}
+          onChange={handleChange}
+          required
+          style={{
+            width: '100%',
+            padding: '10px',
+            border: '1px solid #ddd',
+            borderRadius: '6px',
+            fontSize: '14px'
+          }}
+        />
+      </div>
+
+            <div style={{ marginBottom: '15px' }}>
+        <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>
+          Fin plan
+        </label>
+        <input
+          type="date"
+          name="Fin"
+          value={formData.Vence}
+          onChange={handleChange}
+          required
+          style={{
+            width: '100%',
+            padding: '10px',
+            border: '1px solid #ddd',
+            borderRadius: '6px',
+            fontSize: '14px'
+          }}
+        />
       </div>
 
       <div style={{ display: 'flex', gap: '40px',justifyContent: 'flex-end', marginTop: '20px' }}>
@@ -200,11 +259,16 @@ export const handleAddClient = (setClients, currentClients) => {
           // Actualizar estado
           setClients([...currentClients, newClient]);
           
-          // Mensaje de éxito
-          alert('✅ Cliente creado exitosamente!');
+          //* cerrar modal
+          const modal = document.querySelector('[id^="dynamic-modal-"]');
+          if(modal) modal.remove();
+          alert('Cliente creado exitosamente!');
         }}
         onCancel={() => {
-          console.log('Modal cerrado');
+          const modal = document.querySelector('[id^="dynamic-modal-"]');
+          if(modal){
+            modal.remove();
+          }
         }}
       />
     )
@@ -231,15 +295,18 @@ export const handleEditClient = (client, setClients, currentClients) => {
           if (updated) {
             // Actualizar lista
             const updatedClients = currentClients.map(c => 
-              c.id === client.id ? updated : c
-            );
+              c.id === client.id ? updated : c);
             setClients(updatedClients);
-            
-            alert('✅ Cliente actualizado exitosamente!');
+            const modal = document.querySelector('[id^="dynamic-modal-"]');
+            if(modal) modal.remove();
+            alert(' Cliente actualizado exitosamente!');
           }
         }}
         onCancel={() => {
-          console.log('Edición cancelada');
+         const modal = document.querySelector('[id^="dynamic-modal-"]');
+         if(modal){
+          modal.remove();
+         }
         }}
       />
     )
@@ -265,9 +332,9 @@ export const handleDeleteClient = (clientId, setClients, currentClients) => {
         const updatedClients = currentClients.filter(c => c.id !== clientId);
         setClients(updatedClients);
         
-        alert('✅ Cliente eliminado exitosamente!');
+        alert(' Cliente eliminado exitosamente!');
       } else {
-        alert('❌ No se pudo eliminar el cliente');
+        alert(' No se pudo eliminar el cliente');
       }
     },
     onCancel: () => {

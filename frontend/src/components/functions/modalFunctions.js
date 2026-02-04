@@ -8,8 +8,9 @@ import { createRoot } from 'react-dom/client';
 export const showModal = ({ title, content, onClose }) => {
   // Crear elemento contenedor
   const modalContainer = document.createElement('div');
+
   modalContainer.id = 'dynamic-modal-' + Date.now();
-  
+
   // Estilos del overlay
   modalContainer.style.cssText = `
     position: fixed;
