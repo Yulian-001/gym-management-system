@@ -3,7 +3,8 @@ import './EntranceStyle.css';
 
 function EntranceForm(){
 
-
+//! CAMBIAR LOS NOMBRES DE LAS CLASSNAME PORQUE AFECTA A LOS DEMAS CSS
+//! ASI QUE AHORA DEBEN SER MÁS DESCRIPTIVOS Y CONSISOS, MANTENIENDO LA NOMENCLATURA
     return (
         <div className='head-container'
         style={{ 
