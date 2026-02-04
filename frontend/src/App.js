@@ -10,12 +10,6 @@ function App() {
     <div className='App' style={{ background:'#2683ff',}} >
       <Header />
       <ModulesSystem/>
-      
-      <div style={{padding:'2rem'}}
-      ><ClientTable />
-      </div>
-
-    
 
     </div>
 

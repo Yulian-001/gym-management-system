@@ -64,9 +64,9 @@ function ClientTable() {
   return (
     <div className='head-container' style={{ 
     borderRadius: '0em 0em 1em 1em',
-     padding: '0.4rem',
-  
-    }}>
+     marginTop:'0.5rem',
+
+    }}> 
 
 <div className='header-button'>
     <div className='headBorder'>
