@@ -1,0 +1,85 @@
+
+
+.head-C-entrance{
+    background-color: whitesmoke;
+    margin-top: 1.5rem;
+    border-radius: 0 0 15px 15px;
+    padding: 2rem;
+
+}
+
+.entrance-password{
+    margin: 3rem 0;
+    display: flex;
+    gap: 15px;
+}
+
+.entrance-label-pw{
+    font-size: 22px;
+
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.entrance-input-pw{
+    background-color: whitesmoke;
+    border-color: #33baed ;
+    padding: 0.5rem ;
+    border-radius: 12px;
+    margin-top: -0.5rem;
+    font-size: 17px;
+    color: black;
+}
+
+.entrance-input-pw:focus {
+  outline: none;
+  border:none;
+  border-color: #3a7dd5;
+  box-shadow: 0 0 4px 2px rgba(51, 131, 236, 0.908);
+}
+
+.entrance-biometry{
+    display: flex;
+    justify-content: space-around;
+    gap:30px;
+    font-size: 30px;
+}
+
+.container-biometry{
+    display: flex;
+    flex-direction: column;
+    gap:15px;
+    align-items: center;
+}
+
+
+.container-biometry-pf{
+    display: flex;
+    flex-direction: column;
+    gap:15px;
+    align-items: center;
+}
+
+@media(max-width: 500px) and (min-width: 100px) {
+    .entrance-biometry{
+    display: grid;
+    grid-template-columns: 100 100;
+
+    }
+
+    .entrance-password{
+         display: grid;
+         grid-gap: 23px;
+         padding: auto;
+
+    }
+    .entrance-input-pw{
+        padding: 1rem ;
+        font-size: 22px;
+        margin-right: auto;
+    }
+}
+
+h4{
+    font-weight: 300;
+    font-family: Arial, Helvetica, sans-serif;
+}

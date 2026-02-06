@@ -7,7 +7,7 @@ import ModulesSystem from './modules/ModuleSystem.jsx';
 
 function App() {
   return (
-    <div className='App' style={{ background:'#2683ff',}} >
+    <div className='App' style={{ background:'#2683ff'}} >
       <Header />
       <ModulesSystem/>
 
