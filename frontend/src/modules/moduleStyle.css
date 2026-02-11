@@ -1,6 +1,5 @@
 *{
     margin:0;
-    
     padding:0;
     box-sizing:border-box;
 }
@@ -22,7 +21,6 @@
     flex-direction: column;
     border-radius: 15px 15px 0 0;
     overflow: hidden;
-    
     width: 100%;
     font-size: 14px;
     color:#173a6bb3;
@@ -35,14 +33,14 @@
     cursor:pointer;
     transition: all 0.5s ease;
     border-bottom: 2px solid transparens;
-    background-color: #eee9d2;
+    background-color: whitesmoke;
 }
 
-.module.title{
-    font-family: 'Arial', sans-serif;
-    font-size:0.9rem;
-    font-weight: 500;
+.module-title{
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif ;
+    padding-top: 0.6rem;
     white-space: nowrap;
+    
 }
 
 .module-tab.active{
@@ -59,7 +57,7 @@
 
 @media (hover:hover) {
     .module-tab:hover:not(.active){
-        background-color: rgb(223, 254, 220);
+        background-color: rgb(158, 210, 247);
     
     }
 

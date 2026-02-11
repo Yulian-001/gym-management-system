@@ -6,7 +6,12 @@
   width: 100%;
 
 }
-
+@media (max-width:420px){
+  .headBorder{
+    display: flex;
+    flex-direction: column;
+  }
+}
 @media  (max-width:768px){
   .head-container{
     width: 100%;

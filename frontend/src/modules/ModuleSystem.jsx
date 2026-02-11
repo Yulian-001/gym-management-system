@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import styles from './moduleStyle.css';
+import './moduleStyle.css';
 import ClientTable from '../components/Clients/ClientTable';
 import EntranceForm from '../components/Entrance/EntranceForm';
+import PlanUsers from '../components/plans/PlansForm';
+
 //? rutas de iconos
 import { 
   UsersIcon, 
@@ -48,7 +50,7 @@ function ModulesSystem() {
           <h2 className='module-title'>Reportes</h2>
         </div>
       </div>
-      
+       
       {/*//? === Inicio de opciones de Modulos ===*/}
 
       <main className="modules-container-father">
@@ -141,6 +143,16 @@ function ModulesSystem() {
                           <EntranceForm />
                         </div>
                       )}
+
+
+                      {/*//todo === Planes ===*/}
+
+                      {activeAdminOption === 'planes' && (
+                        <div className='access-planes'>
+                          <PlanUsers />
+                        </div>
+                      )}
+
               </div>
     </div>  
   </main>

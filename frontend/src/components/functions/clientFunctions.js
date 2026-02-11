@@ -118,6 +118,19 @@ let clientsDB = [
     vence: '2024/08/15',
     Estado: 'vencido',
     Dias: '15'
+  },
+  {
+   id:10,
+   Cédula: '1122121261',
+    Nombre: 'Yulian Soracá',
+    Telefono: '3144533850',
+    Eps: 'Capital Salud',
+    Rh: 'O+',
+    Plan: 'Mensualidad',
+    Inicio: '2026/05/15',
+    vence: '2026/06/15',
+    Estado: 'activo',
+    Dias: '4'
   }
 ];
 

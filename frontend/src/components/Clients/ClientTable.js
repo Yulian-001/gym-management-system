@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import style from './ClientTableStyle.css'
+import  './ClientTableStyle.css'
 import {
   handleAddClient,
   handleEditClient,
   handleDeleteClient,
-  handleSearch,
 } from '../functions/buttonFunctions';
 import { clientFunctions } from '../functions/clientFunctions';
 
