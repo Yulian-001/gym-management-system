@@ -1,7 +1,3 @@
--- ============================================
--- AGREGAR 10 CLIENTES NUEVOS (SIN DUPLICADOS)
--- Script: 14/02/2026
--- ============================================
 
 -- Primero, eliminar duplicados si existen
 DELETE FROM clientes WHERE cedula IN (
@@ -26,9 +22,6 @@ VALUES
 ('Paola Valencia Reyes', '1008765432', 'F', '1992-10-20', '3256789012', 'paola.valencia@email.com', 'Medimás', 'AB-', 1, '2026-02-10', '2026-03-10', 'activo', 'ADM001', 'Cliente vip')
 ON CONFLICT (cedula) DO NOTHING;
 
--- ============================================
--- VERIFICACIÓN: Mostrar todos los clientes
--- ============================================
 SELECT 
   id,
   cedula,

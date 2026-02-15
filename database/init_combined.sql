@@ -1,15 +1,5 @@
--- ============================================
--- SISTEMA DE GESTIÓN DE GIMNASIO
--- Base de Datos: Combinada y Robusta
--- Versión: 2.0 (MEJORADA)
--- Fecha: 14/02/2026
--- ============================================
 
--- ============================================
--- 1. MÓDULO ADMINISTRATIVO - TABLAS PRINCIPALES
--- ============================================
-
--- Tabla de Planes (Mejorada)
+-- Tabla de Planes 
 CREATE TABLE IF NOT EXISTS plans (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL UNIQUE,
@@ -21,7 +11,7 @@ CREATE TABLE IF NOT EXISTS plans (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Tabla de Clientes (MEJORADA - Combinada con estructura existente)
+-- Tabla de Clientes 
 CREATE TABLE IF NOT EXISTS clientes (
   id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   
@@ -62,10 +52,6 @@ CREATE TABLE IF NOT EXISTS entradas (
   notas TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
--- ============================================
--- 2. MÓDULO CONTABILIDAD - TABLAS FINANCIERAS
--- ============================================
 
 -- Tabla de Ventas
 CREATE TABLE IF NOT EXISTS ventas (
@@ -109,10 +95,6 @@ CREATE TABLE IF NOT EXISTS transacciones (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- ============================================
--- 3. MÓDULO REPORTES - TABLAS ANALÍTICAS
--- ============================================
-
 -- Tabla de Asistencia (para reportes de frecuencia)
 CREATE TABLE IF NOT EXISTS asistencia (
   id SERIAL PRIMARY KEY,
@@ -139,9 +121,6 @@ CREATE TABLE IF NOT EXISTS resumen_ingresos (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- ============================================
--- ÍNDICES PARA OPTIMIZACIÓN
--- ============================================
 
 -- Índices en clientes
 CREATE INDEX IF NOT EXISTS idx_clientes_cedula ON clientes(cedula);
@@ -170,11 +149,8 @@ CREATE INDEX IF NOT EXISTS idx_transacciones_tipo ON transacciones(tipo);
 CREATE INDEX IF NOT EXISTS idx_asistencia_cliente_id ON asistencia(cliente_id);
 CREATE INDEX IF NOT EXISTS idx_asistencia_fecha ON asistencia(fecha_asistencia);
 
--- ============================================
--- DATOS DE EJEMPLO
--- ============================================
 
--- Insertar planes (FUNDAMENTALES)
+-- Insertar planes de ejemplo
 INSERT INTO plans (name, duration_days, price, description, status) VALUES
 ('Mensualidad', 30, 50000.00, 'Acceso ilimitado por 30 días', 'activo'),
 ('Trimestral', 90, 130000.00, 'Plan trimestral con descuento', 'activo'),
@@ -255,9 +231,6 @@ INSERT INTO resumen_ingresos (fecha_resumen, total_ventas, total_pagos, total_eg
 ('2026-02-01', 340000.00, 340000.00, 2000000.00, -1660000.00, 5, 2)
 ON CONFLICT DO NOTHING;
 
--- ============================================
--- VISTAS PARA REPORTES Y ANÁLISIS
--- ============================================
 
 -- Vista: Clientes Activos (para reportes)
 CREATE OR REPLACE VIEW vw_clientes_activos AS
@@ -325,6 +298,3 @@ INNER JOIN ventas v ON c.id = v.cliente_id
 WHERE v.estado = 'pendiente'
 ORDER BY v.fecha_venta ASC;
 
--- ============================================
--- FIN DEL SCRIPT
--- ============================================

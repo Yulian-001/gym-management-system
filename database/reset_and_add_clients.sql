@@ -1,7 +1,3 @@
--- ============================================
--- LIMPIAR Y AGREGAR CLIENTES NUEVOS
--- Script: 15/02/2026
--- ============================================
 
 -- PASO 1: Eliminar todas las referencias (CASCADE eliminará automáticamente)
 DELETE FROM clientes;
@@ -32,9 +28,7 @@ VALUES
 ('Nicolás Vargas Herrera', '1009876543', 'M', '1997-12-03', '3245678901', 'nicolas.vargas@email.com', 'Compensar', 'B+', 2, '2026-01-25', '2026-04-25', 'pendiente', 'ADM002', 'Pendiente confirmación'),
 ('Paola Valencia Reyes', '1008765432', 'F', '1992-10-20', '3256789012', 'paola.valencia@email.com', 'Medimás', 'AB-', 1, '2026-02-10', '2026-03-10', 'activo', 'ADM001', 'Cliente vip');
 
--- ============================================
--- VERIFICACIÓN
--- ============================================
+
 SELECT 
   COUNT(*) as total_clientes,
   SUM(CASE WHEN estado = 'activo' THEN 1 ELSE 0 END) as activos,
