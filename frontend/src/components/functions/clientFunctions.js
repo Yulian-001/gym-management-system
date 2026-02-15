@@ -40,6 +40,97 @@ let clientsDB = [
     vence: '2024/08/15',
     Estado: 'vencido',
     Dias: '15'
+  },
+  {
+    id: 4,
+    Cédula: '112212132',
+    Nombre: 'Agustin Rojas',
+    Telefono: '3202552456',
+    Eps: 'Capital Salud',
+    Rh: 'O-',
+    Plan: 'Mensualidad',
+    Inicio: '2024/05/01',
+    vence: '2024/06/03',
+    Estado: 'Cancelado',
+    Dias: '18'
+  },
+  {
+    id: 5,
+    Cédula: '112212133',
+    Nombre: 'María González',
+    Telefono: '3202552457',
+    Eps: 'Sura',
+    Rh: 'A+',
+    Plan: 'Trimestral',
+    Inicio: '2024/05/15',
+    vence: '2024/08/15',
+    Estado: 'Activo',
+    Dias: '15'
+  },
+  {
+   id: 6,
+    Cédula: '125405588',
+    Nombre: 'Jorge González',
+    Telefono: '3502458586',
+    Eps: 'saneitas',
+    Rh: 'A+',
+    Plan: 'tiketera',
+    Inicio: '2024/05/15',
+    vence: '2024/08/15',
+    Estado: 'vencido',
+    Dias: '15'
+  },
+  {
+    id: 7,
+    Cédula: '112212132',
+    Nombre: 'Agustin Rojas',
+    Telefono: '3202552456',
+    Eps: 'Capital Salud',
+    Rh: 'O-',
+    Plan: 'Mensualidad',
+    Inicio: '2024/05/01',
+    vence: '2024/06/03',
+    Estado: 'Cancelado',
+    Dias: '18'
+  },
+  {
+    id: 8,
+    Cédula: '112212133',
+    Nombre: 'María González',
+    Telefono: '3202552457',
+    Eps: 'Sura',
+    Rh: 'A+',
+    Plan: 'Trimestral',
+    Inicio: '2024/05/15',
+    vence: '2024/08/15',
+    Estado: 'Activo',
+    Dias: '15'
+  },
+  {
+   id: 9,
+    Cédula: '125405588',
+    Nombre: 'Jorge González',
+    Telefono: '3502458586',
+    Eps: 'saneitas',
+    Rh: 'A+',
+    Plan: 'tiketera',
+    Inicio: '2024/05/15',
+    vence: '2024/08/15',
+    Estado: 'vencido',
+    Dias: '15'
+  },
+  {
+   id:10,
+   Cédula: '1122121261',
+    Nombre: 'Yulian Soracá',
+    Telefono: '3144533850',
+    Eps: 'Capital Salud',
+    Rh: 'O+',
+    Plan: 'Mensualidad',
+    Inicio: '2026/05/15',
+    vence: '2026/06/15',
+    Estado: 'activo',
+    Dias: '4'
   }
 ];
 

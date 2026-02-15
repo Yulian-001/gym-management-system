@@ -1,0 +1,357 @@
+/* ========================================
+   ESTILO PARA GESTIÓN DE PLANES
+   Responsive y Atractivo
+   ======================================== */
+
+.head-container {
+  background-color: whitesmoke;
+  padding-top: 1rem;
+  border-radius: 0 0 1em 1em;
+  margin: 0;
+  padding: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .head-container {
+    width: 100%;
+    background-color: whitesmoke;
+    margin: 0 0.5rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .headBorder {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+/* Header Border */
+.headBorder {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.8rem 1.5rem;
+  max-width: calc(100% - 3rem);
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Botón Añadir Cliente/Plan */
+.AddClient {
+  max-width: 100%;
+  font-weight: 700;
+  border: none;
+  border-radius: 0.45em;
+  color: whitesmoke;
+  padding: 0.6em 1.9em;
+  cursor: pointer;
+  background-color: #27cf8e;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  font-size: 0.95rem;
+}
+
+.AddClient:hover {
+  background-color: #0cc47d;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(39, 207, 142, 0.3);
+}
+
+.AddClient:active {
+  transform: translateY(0);
+}
+
+/* Título */
+.TableTitle {
+  font-size: 1.4rem;
+  margin: 0;
+  font-weight: 600;
+  color: #2683ff;
+  white-space: nowrap;
+}
+
+/* Header Button Container */
+.header-button {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: whitesmoke;
+  padding: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .header-button {
+    padding: 0.5rem;
+  }
+}
+
+/* Search Client */
+.searchClient {
+  display: flex;
+  align-items: center;
+  max-width: calc(100% - 3rem);
+  justify-content: flex-start;
+  margin: 0.8rem 1.5rem;
+}
+
+.searchC {
+  background-color: white;
+  border-radius: 1rem;
+  border: 1px solid #ddd;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.searchC:focus {
+  outline: none;
+  border: 1px solid #2683ff;
+  box-shadow: 0 0 6px 2px rgba(38, 131, 255, 0.2);
+}
+
+.searchC::placeholder {
+  color: #999;
+}
+
+/* Responsive Search */
+@media (max-width: 768px) {
+  .searchClient {
+    margin: 0.8rem 1.5rem;
+  }
+
+  .searchC {
+    width: 100%;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .searchClient {
+    margin: 0.5rem 0.8rem;
+  }
+
+  .searchC {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+    border-radius: 0.7rem;
+  }
+}
+
+/* Contenedor de Tabla */
+.ContainerTable {
+  max-height: 400px;
+  overflow-y: auto;
+  overflow-x: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin: 1rem 1.5rem;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .ContainerTable {
+    margin: 1rem 1.5rem;
+    max-height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ContainerTable {
+    margin: 0.8rem 0.8rem;
+    max-height: 250px;
+    border-radius: 6px;
+  }
+}
+
+/* Tabla Principal */
+.TableScroll {
+  width: 100%;
+  min-width: 900px;
+  border-collapse: collapse;
+  font-size: 14px;
+  table-layout: auto;
+}
+
+/* Header de la Tabla */
+.theadHeader {
+  background-color: #2683ff;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.theadHeader th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 2px solid #1e5fa8;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+/* Filas de la Tabla */
+.TableScroll tbody tr {
+  border-bottom: 1px solid #e8e8e8;
+  transition: all 0.3s ease;
+}
+
+.table-row {
+  background-color: white;
+  transition: background-color 0.3s ease;
+}
+
+.TableScroll tbody tr:hover {
+  background-color: #f5f9ff;
+  box-shadow: 0 2px 4px rgba(38, 131, 255, 0.1);
+}
+
+/* Celdas de la Tabla */
+.TableScroll td {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid #e8e8e8;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.TableScroll td:last-child {
+  text-align: center;
+}
+
+/* Botones de Acción */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn-edit,
+.btn-delete {
+  border: none;
+  padding: 0.45rem 0.9rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  min-width: 80px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-edit {
+  background-color: #3498db;
+  color: white;
+  box-shadow: 0 2px 4px rgba(52, 152, 219, 0.2);
+}
+
+.btn-edit:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+}
+
+.btn-edit:active {
+  transform: translateY(0);
+}
+
+.btn-delete {
+  background-color: #e74c3c;
+  color: white;
+  box-shadow: 0 2px 4px rgba(231, 76, 60, 0.2);
+}
+
+.btn-delete:hover {
+  background-color: #c0392b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+}
+
+.btn-delete:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .btn-edit,
+  .btn-delete {
+    padding: 0.4rem 0.7rem;
+    font-size: 0.8rem;
+    min-width: 70px;
+  }
+
+  .action-buttons {
+    gap: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-edit,
+  .btn-delete {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.75rem;
+    min-width: 60px;
+  }
+
+  .action-buttons {
+    gap: 4px;
+  }
+
+  .TableScroll {
+    font-size: 13px;
+  }
+
+  .TableScroll td {
+    padding: 0.6rem 0.5rem;
+  }
+
+  .TableScroll th {
+    padding: 0.8rem 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Scroll Bar Personalizado */
+.ContainerTable::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.ContainerTable::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.ContainerTable::-webkit-scrollbar-thumb {
+  background: #2683ff;
+  border-radius: 10px;
+}
+
+.ContainerTable::-webkit-scrollbar-thumb:hover {
+  background: #1e5fa8;
+}
+
+/* Firefox Scroll Bar */
+.ContainerTable {
+  scrollbar-width: thin;
+  scrollbar-color: #2683ff #f1f1f1;
+}
+
+/* Sin datos */
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: #999;
+}
+
+.empty-state p {
+  font-size: 1rem;
+  margin: 0;
+}
