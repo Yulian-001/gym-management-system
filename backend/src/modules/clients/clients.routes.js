@@ -7,5 +7,6 @@ router.get('/:id', ClientsController.getClient);
 router.post('/', ClientsController.createClient);
 router.put('/:id', ClientsController.updateClient);
 router.delete('/:id', ClientsController.deleteClient);
+router.get('/:id/check', ClientsController.checkMembership);
 
 module.exports = router;

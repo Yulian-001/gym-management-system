@@ -24,22 +24,22 @@ module.exports = {
   createClient: async (req, res) => {
     try {
       const { name, email, phone, plan_id } = req.body;
-
       if (!name) return res.status(400).json({ error: 'El nombre es obligatorio' });
 
       let start_date = null;
       let end_date = null;
 
-      // Si asigna un plan, calculamos fechas
       if (plan_id) {
-        const plan = await db.query('SELECT duration_days FROM plans WHERE id = $1', [plan_id]);
+        const plan = await db.query(
+          'SELECT duration_days FROM plans WHERE id = $1',
+          [plan_id]
+        );
 
         if (plan.rows.length === 0) {
           return res.status(400).json({ error: 'El plan no existe' });
         }
 
         const duration = plan.rows[0].duration_days;
-
         start_date = new Date();
         end_date = new Date();
         end_date.setDate(end_date.getDate() + duration);
@@ -75,6 +75,37 @@ module.exports = {
       const deleted = await ClientsService.deleteClient(req.params.id);
       if (!deleted) return res.status(404).json({ error: 'Cliente no encontrado' });
       res.json({ message: 'Cliente eliminado' });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  },
+
+  checkMembership: async (req, res) => {
+    try {
+      const client = await ClientsService.checkMembershipStatus(req.params.id);
+
+      if (!client) {
+        return res.status(404).json({ error: 'Cliente no encontrado' });
+      }
+
+      if (!client.plan_id || !client.end_date) {
+        return res.json({
+          client_id: client.id,
+          active: false,
+          message: 'El cliente no tiene membresía activa'
+        });
+      }
+
+      const today = new Date();
+      const endDate = new Date(client.end_date);
+      const active = endDate >= today;
+
+      res.json({
+        client_id: client.id,
+        active,
+        end_date: client.end_date,
+        message: active ? 'Membresía activa' : 'Membresía vencida'
+      });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
