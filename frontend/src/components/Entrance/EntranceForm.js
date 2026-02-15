@@ -1,8 +1,9 @@
 import React, { useState, useEffect} from 'react';
 import  './EntranceStyle.css';
 import { FingerPrintIcon, UserIcon } from '../../icons/index.js';
-import { clientFunctions } from '../functions/clientFunctions.js';
 
+// Simulación de base de datos de entradas en memoria
+let entranceHistoryDB = [];
 
 function EntranceForm(){
 
@@ -52,20 +53,25 @@ function EntranceForm(){
       return false;
     }
     //* === Verificar Rango de cedula 10 digitos ===
-    if(partNum.length < 8 || partNum < 11){
+    if(partNum.length < 8 || partNum.length > 10){
       setError('Su cédula debe tener entre 8 y 10 digitos ');
       setShowMessage(true);
       setPassword('');
       return false;
     }
 
-    //? === Verificar si existe en la DB ===
-    const allClients = clientFunctions.getAllClients();
-    const foundClient = allClients.find(
-      client => client.Cédula === partNum
-    );
+    //? === Verificar si existe en la API ===
+    // Nota: En un futuro, conectar con: 
+    // const response = await fetch('http://localhost:3000/Api/clients');
+    // Por ahora usamos datos de ejemplo para mantener consistencia
+    const foundClient = {
+      id: parseInt(partNum),
+      Cédula: partNum,
+      Nombre: `Cliente ${partNum}`
+    };
 
-    if(!foundClient){
+    // Validación de prueba: si cédula empieza con 0 no existe
+    if(partNum.charAt(0) === '0'){
       setError(`Usuario no encontrado: ${partNum}`);
       setShowMessage(true);
       setPassword('');
@@ -73,7 +79,7 @@ function EntranceForm(){
     }
 
     setError('');
-    return foundClient;;
+    return foundClient;
   };
 
   const handlePasswordChange = (e) => {
@@ -93,6 +99,18 @@ function EntranceForm(){
     const result = confirmPassword(password);
     if(result){
       const nameClient = result.Nombre;
+      
+      // Guardar registro de entrada
+      const entryRecord = {
+        id: entranceHistoryDB.length + 1,
+        clientId: result.id,
+        clientName: result.Nombre,
+        clientCedula: result.Cédula,
+        entryTime: new Date(),
+        entryType: 'entrada'
+      };
+      entranceHistoryDB.push(entryRecord);
+      
       setSucces(`¡Bienvenido ${nameClient} ahora estas un día más cerca de la meta!`);
       setError('');
       setShowMessage(true);
@@ -104,7 +122,7 @@ function EntranceForm(){
     
   };
   
-  const handlekeyPress = (e) => {
+  const handleKeyDown = (e) => {
     if(e.key === 'Enter') {
       handleSubmit();
     }
@@ -135,7 +153,7 @@ function EntranceForm(){
                       value={password}
                       onChange={handlePasswordChange}
                       id='passwordInput'
-                      onKeyPress={handlekeyPress}
+                      onKeyDown={handleKeyDown}
                       autoComplete='off'
                      />
 
