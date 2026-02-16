@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './moduleStyle.css';
 import ClientTable from '../components/Clients/ClientTable';
 import EntranceForm from '../components/Entrance/EntranceForm';
-import PlanUsers from '../components/plans/PlansForm';
+import PlansForm from '../components/plans/PlansForm';
 
 //? rutas de iconos
 import { 
@@ -149,7 +149,7 @@ function ModulesSystem() {
 
                       {activeAdminOption === 'planes' && (
                         <div className='access-planes'>
-                          <PlanUsers />
+                          <PlansForm />
                         </div>
                       )}
 

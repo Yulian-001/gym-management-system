@@ -1,0 +1,12 @@
+@media (max-width: 768px) {
+  .container-header-header {
+   display: flex;
+   flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    
+  } 
+
+  
+  
+}

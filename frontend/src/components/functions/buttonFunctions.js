@@ -1,5 +1,5 @@
 // src/components/functions/buttonFunctions.js - VERSIÓN SIMPLIFICADA
-import React, { useState } from 'react';
+import React, {  useEffect, useState } from 'react';
 import { clientFunctions } from './clientFunctions';
 import { showModal, showConfirmModal } from './modalFunctions';
 
@@ -7,15 +7,38 @@ import { showModal, showConfirmModal } from './modalFunctions';
  * Componente de formulario para cliente - MÁS SIMPLE
  */
 const ClientForm = ({ client, onSubmit, onCancel }) => {
-  const [formData, setFormData] = useState(client || {
-    Cédula: '',
-    Nombre: '',
-    Telefono: '',
-    Eps: 'Capital Salud',
-    Rh: 'O+',
-    Plan: 'Mensualidad',
-    Estado: 'Pendiente'
-  });
+ const mapClientToForm = (clientData) => {
+  if(!clientData) return {
+      cedula: '',
+      nombre: '',
+      telefono: '',
+      eps: 'Capital Salud',
+      rh: 'O+',
+      plan_id: '1',
+      inicio: '',
+      vence: '',
+      estado: 'pendiente'
+  };
+
+   // Mapear según la estructura de tu API/DB
+    return {
+      Cédula: clientData.cedula || clientData.Cédula || '',
+      Nombre: clientData.nombre || clientData.Nombre || '',
+      Telefono: clientData.telefono || clientData.Telefono || '',
+      Email: clientData.email || clientData.Email || '',
+      Eps: clientData.eps || clientData.Eps || 'Capital Salud',
+      Rh: clientData.rh || clientData.Rh || 'O+',
+      plan_id: clientData.plan_id || clientData.Plan_id || '1',
+      Inicio: clientData.inicio ? new Date(clientData.inicio).toISOString().split('T')[0] : '',
+      Vence: clientData.vence ? new Date(clientData.vence).toISOString().split('T')[0] : '',
+      stado: clientData.estado || clientData.Estado || 'pendiente'
+    };
+  };
+
+  const [formData, setFormData] = useState(mapClientToForm(client));
+  useEffect(() => {
+    setFormData(mapClientToForm(client));
+  }, [client]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -49,7 +72,7 @@ const ClientForm = ({ client, onSubmit, onCancel }) => {
           name="Cédula"
           value={formData.Cédula}
           onChange={handleChange}
-          required
+          
           style={{
             width: '100%',
             padding: '10px',
@@ -69,7 +92,7 @@ const ClientForm = ({ client, onSubmit, onCancel }) => {
           name="Nombre"
           value={formData.Nombre}
           onChange={handleChange}
-          required
+          
           style={{
             width: '100%',
             padding: '10px',
@@ -89,7 +112,6 @@ const ClientForm = ({ client, onSubmit, onCancel }) => {
           name="Telefono"
           value={formData.Telefono}
           onChange={handleChange}
-          required
           style={{
             width: '100%',
             padding: '10px',
@@ -128,7 +150,6 @@ const ClientForm = ({ client, onSubmit, onCancel }) => {
           name="Rh"
           value={formData.Rh}
           onChange={handleChange}
-          required
           style={{
             width: '100%',
             padding: '10px',
@@ -171,7 +192,6 @@ const ClientForm = ({ client, onSubmit, onCancel }) => {
           name="Inicio"
           value={formData.Inicio}
           onChange={handleChange}
-          required
           style={{
             width: '100%',
             padding: '10px',
@@ -289,17 +309,50 @@ export const handleEditClient = (client, setClients, currentClients) => {
     content: (
       <ClientForm
         client={client}
-        onSubmit={(formData) => {
-          // Actualizar cliente
-          const updated = clientFunctions.updateClient(client.id, formData);
-          if (updated) {
-            // Actualizar lista
+        onSubmit={async (formData) => {
+          try {
+            // Mapear datos del formulario a la estructura de la API
+            const dataToSend = {
+              cedula: formData.Cédula || formData.cedula,
+              nombre: formData.Nombre || formData.nombre,
+              email: formData.Email || formData.email || '',
+              telefono: formData.Telefono || formData.telefono,
+              eps: formData.Eps || formData.eps,
+              rh: formData.Rh || formData.rh,
+              plan_id: formData.plan_id || formData.Plan_id,
+              vence: formData.Vence || formData.vence,
+              inicio: formData.Inicio || formData.inicio,
+              estado: formData.Estado || formData.estado || formData.stado
+            };
+
+            // Hacer llamada a la API para actualizar
+            const response = await fetch(`http://localhost:3001/Api/clients/${client.id}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(dataToSend)
+            });
+
+            if (!response.ok) {
+              throw new Error('Error al actualizar cliente en la API');
+            }
+
+            const updated = await response.json();
+            
+            // Actualizar la lista con los datos retornados por la API
             const updatedClients = currentClients.map(c => 
               c.id === client.id ? updated : c);
             setClients(updatedClients);
+            
+            // Cerrar modal
             const modal = document.querySelector('[id^="dynamic-modal-"]');
             if(modal) modal.remove();
-            alert(' Cliente actualizado exitosamente!');
+            
+            alert('Cliente actualizado exitosamente!');
+          } catch (error) {
+            console.error('Error actualizando cliente:', error);
+            alert('Error al actualizar cliente: ' + error.message);
           }
         }}
         onCancel={() => {

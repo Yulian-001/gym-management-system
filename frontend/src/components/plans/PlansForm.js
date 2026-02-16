@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './PlanStyle.css';
 
-function PlanUsers(){
+function PlansForm(){
 
     const [plans, setPlans] = useState([]);
     const [allPlans, setAllPlans] = useState([]);
@@ -66,7 +66,7 @@ function PlanUsers(){
         }}> 
 
             {/* Header con título y botón */}
-            <div className='header-button'>
+            <div className='header-container-plans'>
                 <div className='headBorder'>
                     <h2 className='TableTitle' style={{
                         fontSize: '1.4rem',
@@ -84,16 +84,7 @@ function PlanUsers(){
                     </button>
                 </div>
 
-                {/* Barra de búsqueda */}
-                <div className='searchClient'>
-                    <input 
-                        type='text'
-                        className='searchC' 
-                        placeholder='🔍 Buscar plan...' 
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                </div>
+               
             </div>
 
             {/* Tabla */}
@@ -161,4 +152,4 @@ function PlanUsers(){
     );
 }
 
-export default PlanUsers;
+export default PlansForm;

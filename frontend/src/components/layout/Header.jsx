@@ -1,21 +1,22 @@
 // src/components/layout/Header.jsx
 import React from 'react';
 import './headerStyle.css'
+import { UserIcon } from '../../icons';
 
 //? Módulos operativos - Administracion - Contabilidad - Reportes
 function Header() {
   return (
-    <header style={{
-      backgroundColor: '#2683ff',
+    <header className='container-header-header' style={{
+      backgroundColor: '#c9ced3',
       color: 'white',
       padding: '1rem 2rem',
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+      boxShadow: '0 6px 8px rgba(247, 238, 238, 0.9)',
       marginBottom: '1rem'
     }}>
-      <div style={{
+      <div className='groud-container-header' style={{
         display: 'flex',
         alignItems: 'center',
         gap: '1rem'
@@ -26,19 +27,24 @@ function Header() {
           margin: 0,
           letterSpacing: '0.5px'
         }}>
-          💪 GYM Management
+           GYM Management
         </h1>
         <span style={{
           fontSize: '0.9rem',
           opacity: 0.9,
           borderLeft: '2px solid rgba(255,255,255,0.3)',
-          paddingLeft: '1rem'
+          paddingLeft: '1rem',
+          display:'flex',
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
+          textOverflow: 'ellipsis',
+          margin:'0 0.5rem'
         }}>
-          Sistema de Gestión Deportiva
+          V 1.00.0
         </span>
       </div>
 
-      <div style={{
+      <div className='groud-two-container-header' style={{
         display: 'flex',
         alignItems: 'center',
         gap: '2rem',
@@ -78,7 +84,7 @@ function Header() {
             justifyContent: 'center',
             fontSize: '1.5rem'
           }}>
-            👤
+            <UserIcon />
           </div>
           <span style={{ fontSize: '0.9rem' }}>Admin</span>
         </div>
