@@ -1,0 +1,114 @@
+/* ============ EMPLOYEE REGISTRATION FORM (Modal) ============ */
+.employee-registration-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.employee-registration-form .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.employee-registration-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.employee-registration-form label {
+  color: #333;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.employee-registration-form input,
+.employee-registration-form select {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  color: #333;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+.employee-registration-form input:focus,
+.employee-registration-form select:focus {
+  outline: none;
+  border-color: #2683ff;
+  box-shadow: 0 0 0 3px rgba(38, 131, 255, 0.1);
+}
+
+.employee-registration-form input::placeholder {
+  color: #999;
+}
+
+.employee-registration-form .error-alert {
+  padding: 1rem;
+  background: #ffebee;
+  border: 1px solid #ef5350;
+  border-radius: 4px;
+  color: #c62828;
+  font-weight: 500;
+}
+
+.employee-registration-form .success-alert {
+  padding: 1rem;
+  background: #e8f5e9;
+  border: 1px solid #66bb6a;
+  border-radius: 4px;
+  color: #2e7d32;
+  font-weight: 500;
+}
+
+.employee-registration-form .form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  justify-content: center;
+}
+
+.employee-registration-form .btn-registrar {
+  padding: 0.9rem 2rem;
+  background: linear-gradient(135deg, #27cf8e 0%, #1a9f6b 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(39, 207, 142, 0.3);
+}
+
+.employee-registration-form .btn-registrar:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(39, 207, 142, 0.4);
+}
+
+.employee-registration-form .btn-registrar:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(39, 207, 142, 0.3);
+}
+
+.employee-registration-form .btn-registrar:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 768px) {
+  .employee-registration-form .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .employee-registration-form .form-actions {
+    flex-direction: column;
+  }
+
+  .employee-registration-form .btn-registrar {
+    width: 100%;
+  }
+}

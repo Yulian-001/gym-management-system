@@ -23,39 +23,30 @@ module.exports = {
 
   createClient: async (req, res) => {
     try {
-      const { name, email, phone, plan_id } = req.body;
+      const { nombre, cedula, email, telefono, eps, rh, plan_id, inicio, vence, estado } = req.body;
 
-      if (!name) return res.status(400).json({ error: 'El nombre es obligatorio' });
+      // Validaciones
+      if (!nombre) return res.status(400).json({ error: 'El nombre es obligatorio' });
+      if (!cedula) return res.status(400).json({ error: 'La cédula es obligatoria' });
+      if (!telefono) return res.status(400).json({ error: 'El teléfono es obligatorio' });
 
-      let start_date = null;
-      let end_date = null;
-
-      // Si asigna un plan, calculamos fechas
-      if (plan_id) {
-        const plan = await db.query('SELECT duration_days FROM plans WHERE id = $1', [plan_id]);
-
-        if (plan.rows.length === 0) {
-          return res.status(400).json({ error: 'El plan no existe' });
-        }
-
-        const duration = plan.rows[0].duration_days;
-
-        start_date = new Date();
-        end_date = new Date();
-        end_date.setDate(end_date.getDate() + duration);
-      }
-
+      // Crear cliente con los datos completos
       const newClient = await ClientsService.createClient({
-        name,
-        email,
-        phone,
-        plan_id,
-        start_date,
-        end_date
+        nombre,
+        cedula,
+        email: email || '',
+        telefono,
+        eps: eps || 'Capital Salud',
+        rh: rh || 'O+',
+        plan_id: plan_id || 1,
+        inicio: inicio || new Date().toISOString().split('T')[0],
+        vence: vence || null,
+        estado: estado || 'activo'
       });
 
       res.status(201).json(newClient);
     } catch (err) {
+      console.error('Error creating client:', err);
       res.status(500).json({ error: err.message });
     }
   },

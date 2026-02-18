@@ -41,6 +41,22 @@ app.use('/Api/plans', plansRoutes);
 const clientsRoutes = require('./src/modules/clients/clients.routes');
 app.use('/Api/clients', clientsRoutes);
 
+const salesRoutes = require('./src/modules/sales/sales.routes');
+app.use('/Api/sales', salesRoutes);
+
+const entradaDiaRoutes = require('./src/modules/entradaDia/entradaDia.routes');
+app.use('/Api/entrada-dia', entradaDiaRoutes);
+
+const estadoRoutes = require('./src/modules/estado/estado.routes');
+app.use('/Api/estado', estadoRoutes);
+
+const contabilidadRoutes = require('./src/modules/contabilidad/contabilidad.routes');
+app.use('/Api/contabilidad', contabilidadRoutes);
+
+// Asistencia (registro de entradas de clientes)
+const asistenciaRoutes = require('./src/modules/asistencia/asistencia.routes');
+app.use('/Api/asistencia', asistenciaRoutes);
+
 
 // ❌ Esto DEBE quedar al final: manejador de rutas inexistentes
 app.use((req, res) => {

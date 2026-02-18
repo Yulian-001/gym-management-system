@@ -18,8 +18,6 @@ CREATE TABLE IF NOT EXISTS clientes (
   -- Datos personales
   nombre VARCHAR(150) NOT NULL,
   cedula VARCHAR(20) NOT NULL UNIQUE,
-  sexo CHAR(1) CHECK (sexo IN ('M', 'F', 'O')),
-  fecha_nacimiento DATE,
   
   -- Contacto
   telefono VARCHAR(15),
@@ -161,13 +159,13 @@ INSERT INTO plans (name, duration_days, price, description, status) VALUES
 ON CONFLICT DO NOTHING;
 
 -- Insertar clientes de ejemplo
-INSERT INTO clientes (nombre, cedula, sexo, fecha_nacimiento, telefono, email, eps, rh, plan_id, inicio, vence, estado, registro_empleados) VALUES
-('Agustín Rojas', '112212132', 'M', '1990-05-15', '3202552456', 'agustin@email.com', 'Capital Salud', 'O-', 1, '2026-01-01', '2026-02-01', 'activo', 'ADM001'),
-('María González', '112212133', 'F', '1995-08-20', '3202552457', 'maria@email.com', 'Sura', 'A+', 2, '2026-01-15', '2026-04-15', 'activo', 'ADM001'),
-('Jorge González', '125405588', 'M', '1988-03-10', '3502458586', 'jorge@email.com', 'Sanitas', 'A+', 5, '2026-02-01', '2026-02-11', 'vencido', 'ADM002'),
-('Yulian Soracá', '1122121261', 'F', '2000-12-25', '3144533850', 'yulian@email.com', 'Capital Salud', 'O+', 1, '2026-02-01', '2026-03-01', 'activo', 'ADM001'),
-('Carlos Martínez', '987654321', 'M', '1992-07-08', '3001234567', 'carlos@email.com', 'Axa', 'B+', 3, '2025-12-01', '2026-06-01', 'activo', 'ADM003'),
-('Laura Pérez', '1098765432', 'F', '1998-11-14', '3109876543', 'laura@email.com', 'Coomeva', 'AB-', 4, '2025-11-01', '2026-11-01', 'activo', 'ADM002')
+INSERT INTO clientes (nombre, cedula, telefono, email, eps, rh, plan_id, inicio, vence, estado, registro_empleados) VALUES
+('Agustín Rojas', '112212132', '3202552456', 'agustin@email.com', 'Capital Salud', 'O-', 1, '2026-01-01', '2026-02-01', 'activo', 'ADM001'),
+('María González', '112212133', '3202552457', 'maria@email.com', 'Sura', 'A+', 2, '2026-01-15', '2026-04-15', 'activo', 'ADM001'),
+('Jorge González', '125405588', '3502458586', 'jorge@email.com', 'Sanitas', 'A+', 5, '2026-02-01', '2026-02-11', 'vencido', 'ADM002'),
+('Yulian Soracá', '1122121261', '3144533850', 'yulian@email.com', 'Capital Salud', 'O+', 1, '2026-02-01', '2026-03-01', 'activo', 'ADM001'),
+('Carlos Martínez', '987654321', '3001234567', 'carlos@email.com', 'Axa', 'B+', 3, '2025-12-01', '2026-06-01', 'activo', 'ADM003'),
+('Laura Pérez', '1098765432', '3109876543', 'laura@email.com', 'Coomeva', 'AB-', 4, '2025-11-01', '2026-11-01', 'activo', 'ADM002')
 ON CONFLICT DO NOTHING;
 
 -- Insertar entradas de ejemplo

@@ -66,8 +66,8 @@ function EntranceForm(){
     // Por ahora usamos datos de ejemplo para mantener consistencia
     const foundClient = {
       id: parseInt(partNum),
-      Cédula: partNum,
-      Nombre: `Cliente ${partNum}`
+      cedula: partNum,
+      nombre: `Cliente ${partNum}`
     };
 
     // Validación de prueba: si cédula empieza con 0 no existe
@@ -94,32 +94,68 @@ function EntranceForm(){
 
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
 
     const result = confirmPassword(password);
-    if(result){
-      const nameClient = result.Nombre;
-      
-      // Guardar registro de entrada
-      const entryRecord = {
-        id: entranceHistoryDB.length + 1,
-        clientId: result.id,
-        clientName: result.Nombre,
-        clientCedula: result.Cédula,
-        entryTime: new Date(),
-        entryType: 'entrada'
-      };
-      entranceHistoryDB.push(entryRecord);
-      
-      setSucces(`¡Bienvenido ${nameClient} ahora estas un día más cerca de la meta!`);
-      setError('');
+    if (!result) {
+      setShowMessage(true);
+      return;
+    }
+
+    // Intentar obtener el cliente real desde el backend por cédula
+    let found = null;
+    try {
+      const clientsResp = await fetch('http://localhost:3001/Api/clients');
+      if (clientsResp.ok) {
+        const clientsListRaw = await clientsResp.json();
+        const clientsList = Array.isArray(clientsListRaw)
+          ? clientsListRaw
+          : clientsListRaw && clientsListRaw.data ? clientsListRaw.data : [];
+        found = clientsList.find(c => String(c.cedula) === String(result.cedula || result.Cédula));
+      }
+    } catch (e) {
+      console.error('Error buscando cliente en backend:', e);
+    }
+
+    if (!found) {
+      // Mostrar error con la cédula si no existe el usuario
+      setError(`Usuario no encontrado: ${result.cedula || result.Cédula}`);
       setShowMessage(true);
       setPassword('');
-
-    }else {
-      setShowMessage(true);
+      return;
     }
-    
+
+    const nameClient = found.nombre || found.Nombre || (result.nombre || result.Nombre) || found.cedula;
+
+    // Guardar registro de entrada
+    const entryRecord = {
+      id: entranceHistoryDB.length + 1,
+      clientId: found.id,
+      clientName: nameClient,
+      clientCedula: found.cedula || result.cedula || result.Cédula,
+      entryTime: new Date(),
+      entryType: 'entrada'
+    };
+    entranceHistoryDB.push(entryRecord);
+
+    setSucces(`¡Bienvenido ${nameClient} ahora estas un día más cerca de la meta!`);
+    setError('');
+    setShowMessage(true);
+    setPassword('');
+
+    // Registrar asistencia permanente en backend
+    try {
+      const fecha = new Date().toISOString().split('T')[0];
+      const hora = new Date().toTimeString().split(' ')[0];
+      await fetch('http://localhost:3001/Api/asistencia', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cliente_id: found.id, fecha_asistencia: fecha, hora_entrada: hora })
+      });
+    } catch (e) {
+      console.error('No se pudo registrar asistencia en backend:', e);
+    }
+
   };
   
   const handleKeyDown = (e) => {

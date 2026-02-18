@@ -23,7 +23,7 @@ module.exports = {
 
   updateClient: async (id, fields) => {
     // Permitir actualización de campos específicos
-    const allowedFields = ['nombre', 'cedula', 'email', 'telefono', 'eps', 'rh', 'plan_id', 'vence', 'estado'];
+    const allowedFields = ['nombre', 'cedula', 'email', 'telefono', 'eps', 'rh', 'plan_id', 'vence', 'inicio', 'estado'];
     const keys = Object.keys(fields).filter(key => allowedFields.includes(key));
     
     if (keys.length === 0) {

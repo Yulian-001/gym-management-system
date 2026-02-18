@@ -5,6 +5,7 @@ import {
   handleEditClient,
   handleDeleteClient,
 } from '../functions/buttonFunctions';
+import { EditIcon, TrashIcon } from '../../icons';
 
 function ClientTable() {
 
@@ -13,6 +14,7 @@ function ClientTable() {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [visitasMap, setVisitasMap] = useState({});
   
   // Cargar clientes de la API
   useEffect(() => {
@@ -25,6 +27,18 @@ function ClientTable() {
         setAllClients(data);
         setClients(data);
         setError(null);
+        // Cargar conteos de asistencia y mapear
+        try {
+          const countsResp = await fetch('http://localhost:3001/Api/asistencia/counts');
+          if (countsResp.ok) {
+            const counts = await countsResp.json();
+            const map = {};
+            counts.forEach(r => { map[r.cliente_id] = r.total_visitas; });
+            setVisitasMap(map);
+          }
+        } catch (e) {
+          console.warn('No se pudo cargar conteos de asistencia:', e);
+        }
       } catch (err) {
         setError(err.message);
         console.error('Error fetching clients:', err);
@@ -158,7 +172,7 @@ function ClientTable() {
                 <td style={{ width:'6%' }}>{getPlanName(client.plan_id)}</td>
                 <td style={{ width:'10%' }}>{formatDate(client.inicio)}</td>
                 <td style={{ width:'10%' }}>{formatDate(client.vence)}</td>
-                <td style={{ width:'4%' }}>{calculateDays(client.inicio, client.vence)}</td>
+                <td style={{ width:'4%' }}>{visitasMap[client.id] || 0}</td>
                 <td style={{ width:'6%' }}>
                   <span style={{
                     backgroundColor: getEstadoColor(client.estado),
@@ -181,12 +195,13 @@ function ClientTable() {
                     borderRadius: '6px',
                     cursor:'pointer',
                     fontSize:'12px',
-                    transition: 'background-color 0.3s'
+                    transition: 'background-color 0.3s',
+                    marginRight:'0.7rem',
                   }}
                   onMouseEnter={(e) => e.target.style.backgroundColor = 'red'}
                   onMouseLeave={(e) => e.target.style.backgroundColor = '#d72727'}
                   onClick={() => handleDeleteClient(client.id, setClients, clients)}>
-                    Eliminar
+                    <TrashIcon size={18} />
                   </button>
 
                   <button style={{
@@ -202,7 +217,7 @@ function ClientTable() {
                   onMouseEnter={(e) => e.target.style.backgroundColor = '#2750F5'}
                   onMouseLeave={(e) => e.target.style.backgroundColor = '#3498db'}
                   onClick={() => handleEditClient(client, setClients, clients)}>
-                    Editar
+                    <EditIcon size={18} />
                   </button>
                 </td>
               </tr>

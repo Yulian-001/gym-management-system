@@ -3,6 +3,10 @@ import './moduleStyle.css';
 import ClientTable from '../components/Clients/ClientTable';
 import EntranceForm from '../components/Entrance/EntranceForm';
 import PlansForm from '../components/plans/PlansForm';
+import SalesTable from '../components/Sales/SalesTable';
+import DayEntryTable from '../components/DayEntry/DayEntryTable';
+import EstadoPanel from '../components/Estado/EstadoPanel';
+import ContabilidadPanel from '../components/Contabilidad/ContabilidadPanel';
 
 //? rutas de iconos
 import { 
@@ -11,16 +15,22 @@ import {
   MoneyIcon, 
   DollarIcon, 
   CounterIcon, 
-  ColdIcon 
+  ColdIcon,
+  ChartIcon,
+  InvoiceIcon,
+  CheckIcon,
+  UserAddIcon
 } from '../icons'; 
 
 function ModulesSystem() { 
   const [activeTab, setActiveTab] = useState('admin'); 
   const [activeAdminOption, setActiveAdminOption] = useState(null);
+  const [activeContabilidadOption, setActiveContabilidadOption] = useState(null);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
     setActiveAdminOption(null);
+    setActiveContabilidadOption(null);
   };
   
   //? funcion para manejar click en opcion
@@ -41,7 +51,7 @@ function ModulesSystem() {
         </div>
 
         <div className={`module-tab ${activeTab === 'contabilidad' ? 'active' : ''}`}
-          onClick={() => setActiveTab('contabilidad')}>
+          onClick={() => handleTabClick('contabilidad')}>
           <h2 className='module-title'>Contabilidad</h2>  
         </div>
 
@@ -153,8 +163,91 @@ function ModulesSystem() {
                         </div>
                       )}
 
+                      {/*//todo === Ventas ===*/}
+
+                      {activeAdminOption === 'ventas' && (
+                        <div className='access-ventas'>
+                          <SalesTable />
+                        </div>
+                      )}
+
+                      {/*//todo === Día ===*/}
+
+                      {activeAdminOption === 'dia' && (
+                        <div className='access-dia'>
+                          <DayEntryTable />
+                        </div>
+                      )}
+
+                      {/*//todo === Estado ===*/}
+
+                      {activeAdminOption === 'Estado' && (
+                        <div className='access-estado'>
+                          <EstadoPanel />
+                        </div>
+                      )}
+
               </div>
-    </div>  
+    </div>
+
+    {/*//? === Modulo Contabilidad  === */}
+    {activeTab === 'contabilidad' && (
+      <div className='Container-option'>
+        {/*//? === Resumen de Caja === */}
+        <div className={`container-icons ${activeContabilidadOption === 'resumen' ? 'active' : ''}`}
+          onClick={() => setActiveContabilidadOption('resumen')}>
+          <span> Caja</span>
+          <div className={`module-options-container`}>
+            <ChartIcon className='options-icon' size={40} style={{color: activeContabilidadOption === 'resumen' ? '#1a86a2' : 'whiteSmoke'}} />
+          </div>
+        </div>
+
+        {/*//? === Ventas del Día === */}
+        <div className={`container-icons ${activeContabilidadOption === 'ventas' ? 'active' : ''}`}
+          onClick={() => setActiveContabilidadOption('ventas')}>
+          <span>Ventas del Día</span>
+          <div className={`module-options-container`}>
+            <DollarIcon className='options-icon' size={40} style={{color: activeContabilidadOption === 'ventas' ? '#1a86a2' : 'whiteSmoke'}} />
+          </div>
+        </div>
+
+        {/*//? === Egresos === */}
+        <div className={`container-icons ${activeContabilidadOption === 'egresos' ? 'active' : ''}`}
+          onClick={() => setActiveContabilidadOption('egresos')}>
+          <span>Egresos</span>
+          <div className={`module-options-container`}>
+            <InvoiceIcon className='options-icon' size={40} style={{color: activeContabilidadOption === 'egresos' ? '#1a86a2' : 'whiteSmoke'}} />
+          </div>
+        </div>
+
+
+        {/*//? === Cierre de Caja === */}
+        <div className={`container-icons ${activeContabilidadOption === 'cierre' ? 'active' : ''}`}
+          onClick={() => setActiveContabilidadOption('cierre')}>
+          <span>Cierre de Caja</span>
+          <div className={`module-options-container`}>
+            <CheckIcon className='options-icon' size={40} style={{color: activeContabilidadOption === 'cierre' ? '#1a86a2' : 'whiteSmoke'}} />
+          </div>
+        </div>
+
+        {/*//? === Registrar Empleados === */}
+        <div className={`container-icons ${activeContabilidadOption === 'empleados' ? 'active' : ''}`}
+          onClick={() => setActiveContabilidadOption('empleados')}>
+          <span>Registrar Empleados</span>
+          <div className={`module-options-container`}>
+            <UserAddIcon className='options-icon' size={40} style={{color: activeContabilidadOption === 'empleados' ? '#1a86a2' : 'whiteSmoke'}} />
+          </div>
+        </div>
+      </div>
+    )}
+
+    {/* Contenedor para mostrar la opción seleccionada */}
+    {activeTab === 'contabilidad' && activeContabilidadOption && (
+      <div className='container-flex-option'>
+        <ContabilidadPanel option={activeContabilidadOption} />
+      </div>
+    )}
+    
   </main>
       
 

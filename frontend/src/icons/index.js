@@ -4,11 +4,14 @@
 
 import { FaUsersLine } from "react-icons/fa6";
 import { CgEnter } from "react-icons/cg";
-import { FaMoneyCheck, FaDollarSign } from "react-icons/fa6";
+import { FaMoneyCheck, FaDollarSign, FaChartPie, FaFileInvoiceDollar, FaCircleCheck, FaUserPlus } from "react-icons/fa6";
 import { TbBrandDaysCounter } from "react-icons/tb";
 import { MdSevereCold } from "react-icons/md";
 import { IoMdFingerPrint, IoIosSave  } from "react-icons/io";
 import { FaUserAlt } from "react-icons/fa";
+import { MdEdit } from "react-icons/md";
+import { FaRegTrashAlt } from "react-icons/fa";
+
 
 
 //? Export de variable con identificador
@@ -21,7 +24,12 @@ export const ColdIcon = MdSevereCold;
 export const FingerPrintIcon  = IoMdFingerPrint;
 export const UserIcon = FaUserAlt;
 export const saveIcon = IoIosSave ;
-
+export const EditIcon = MdEdit;
+export const TrashIcon = FaRegTrashAlt;
+export const ChartIcon = FaChartPie;
+export const InvoiceIcon = FaFileInvoiceDollar;
+export const CheckIcon = FaCircleCheck;
+export const UserAddIcon = FaUserPlus;
 
 //? Export como objeto 
 export const AdminIcons = {
@@ -33,5 +41,7 @@ export const AdminIcons = {
   ColdIcon,
   FingerPrintIcon,
   UserIcon,
-  saveIcon
+  saveIcon,
+  EditIcon,
+  TrashIcon
 };

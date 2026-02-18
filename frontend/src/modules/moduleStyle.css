@@ -159,11 +159,13 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px,1fr));
     gap:20px;
-    
     justify-content: center;
     width: 100%;
     max-width: 1400px;
     margin: 0 auto;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid rgba(38, 131, 255, 0.15);
+    margin-bottom: 2rem;
 }
 
 

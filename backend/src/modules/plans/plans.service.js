@@ -12,5 +12,13 @@ module.exports = {
       [name, duration_days, price]
     );
     return result.rows[0];
+  },
+
+  deletePlan: async (id) => {
+    const result = await db.query(
+      'DELETE FROM plans WHERE id = $1 RETURNING *',
+      [id]
+    );
+    return result.rows[0];
   }
 };
