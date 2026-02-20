@@ -37,7 +37,7 @@ const createEntrada = async (req, res) => {
   try {
     const { nombre_cliente, fecha, hora, metodo_pago, estado, evento, evento_precio, empleado_id } = req.body;
     
-    // Validaciones
+    //? Validaciones de campos requeridos
     if (!nombre_cliente || !fecha || !hora || !metodo_pago) {
       return res.status(400).json({ error: 'Faltan campos requeridos: nombre_cliente, fecha, hora, metodo_pago' });
     }
@@ -74,7 +74,7 @@ const updateEntrada = async (req, res) => {
     const { id } = req.params;
     const { nombre_cliente, fecha, hora, metodo_pago, estado, evento, evento_precio } = req.body;
     
-    // Validaciones
+    //? Validaciones de campos para actualizacion
     if (!nombre_cliente || !fecha || !hora || !metodo_pago) {
       return res.status(400).json({ error: 'Faltan campos requeridos: nombre_cliente, fecha, hora, metodo_pago' });
     }

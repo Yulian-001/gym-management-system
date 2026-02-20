@@ -124,7 +124,7 @@ function ClientTable() {
         <div className='searchClient'>
           <input type='text'
             className='searchC' 
-            placeholder='🔍  Buscar cliente...' 
+            placeholder='Buscar cliente...' 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />

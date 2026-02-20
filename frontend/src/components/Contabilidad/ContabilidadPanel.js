@@ -46,19 +46,19 @@ const ContabilidadPanel = ({ option }) => {
     setError(null);
     try {
       const fechaParam = fechaSeleccionada || fecha;
-      console.log(`📡 Cargando ventas para: ${fechaParam}`);
+      console.log(`Cargando ventas para: ${fechaParam}`);
       const response = await fetch(`http://localhost:3001/Api/contabilidad/ventas-dia?fecha=${fechaParam}`);
       const result = await response.json();
 
       if (result.success) {
-        console.log(`✅ ${result.data?.length || 0} ventas encontradas`);
+        console.log(`${result.data?.length || 0} ventas encontradas`);
         setVentasData(result.data || []);
       } else {
-        console.warn('⚠️ Sin ventas para esta fecha');
+        console.warn('Sin ventas para esta fecha');
         setVentasData([]);
       }
     } catch (err) {
-      console.error('❌ Error cargando ventas:', err);
+      console.error('Error cargando ventas:', err);
       setError('Error al cargar ventas del día');
     }
     setLoading(false);
@@ -334,14 +334,14 @@ const ContabilidadPanel = ({ option }) => {
         }
       },
       onCancel: () => {
-        console.log('Eliminación cancelada');
+          console.log('Eliminacion cancelada');
       }
     });
   };
 
   //? Efecto inicial - Cargar datos cuando cambia la opción o fecha
   useEffect(() => {
-    console.log(`📋 Opción: ${option}, Fecha: ${fecha}`);
+    console.log(`Opcion: ${option}, Fecha: ${fecha}`);
     if (option === 'resumen') {
       cargarResumen();
       cargarVentas();

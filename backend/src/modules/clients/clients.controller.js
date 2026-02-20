@@ -51,13 +51,13 @@ module.exports = {
       // Manejo de errores específicos
       if (err.code === 'CEDULA_DUPLICATE') {
         return res.status(409).json({ 
-          error: '❌ La cédula ya está registrada en el sistema',
+          error: 'La cedula ya esta registrada en el sistema',
           code: 'CEDULA_DUPLICATE'
         });
       }
       if (err.code === 'EMAIL_DUPLICATE') {
         return res.status(409).json({ 
-          error: '❌ El email ya está registrado',
+          error: 'El email ya esta registrado',
           code: 'EMAIL_DUPLICATE'
         });
       }

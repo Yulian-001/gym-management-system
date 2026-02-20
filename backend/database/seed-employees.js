@@ -5,19 +5,19 @@ const db = require('../src/config/db');
 
 async function seedEmployees() {
   try {
-    console.log('🔧 Iniciando inserción de datos de prueba...\n');
+    console.log('Iniciando insercion de datos de prueba...\n');
 
     // Primero, verificar si existen las columnas necesarias
-    console.log('✓ Verificando estructura de tabla empleados...');
+    console.log('Verificando estructura de tabla empleados...');
     
     try {
       await db.query(`
         ALTER TABLE empleados 
         ADD COLUMN IF NOT EXISTS password VARCHAR(255)
       `);
-      console.log('  ✓ Columna password verificada');
+      console.log('  OK Columna password verificada');
     } catch (e) {
-      console.log('  ⚠️ Columna password ya existe');
+      console.log('  AVISO Columna password ya existe');
     }
 
     try {
@@ -27,21 +27,21 @@ async function seedEmployees() {
         DEFAULT 'recepcionista' 
         CHECK (rol IN ('administrador', 'gerente', 'recepcionista', 'vendedor'))
       `);
-      console.log('  ✓ Columna rol verificada');
+      console.log('  OK Columna rol verificada');
     } catch (e) {
-      console.log('  ⚠️ Columna rol ya existe');
+      console.log('  AVISO Columna rol ya existe');
     }
 
     // Eliminar empleados de prueba existentes
-    console.log('\n🗑️  Eliminando empleados de prueba existentes...');
+    console.log('\nEliminando empleados de prueba existentes...');
     await db.query(
       `DELETE FROM empleados WHERE cedula IN ($1, $2, $3)`,
       ['1000000001', '1000000002', '1000000003']
     );
-    console.log('✓ Limpieza completada');
+    console.log('OK Limpieza completada');
 
     // Insertar empleados de prueba
-    console.log('\n📝 Insertando empleados de prueba...\n');
+    console.log('Insertando empleados de prueba...\n');
 
     const empleados = [
       {
@@ -85,12 +85,12 @@ async function seedEmployees() {
       );
       
       if (result.rows[0]) {
-        console.log(`✓ ${emp.rol.toUpperCase()}: ${emp.nombre} (${emp.cedula})`);
+        console.log(`OK ${emp.rol.toUpperCase()}: ${emp.nombre} (${emp.cedula})`);
       }
     }
 
     // Verificar inserción
-    console.log('\n✅ Verificando datos insertados...\n');
+    console.log('\nVerificando datos insertados...\n');
     const verification = await db.query(
       `SELECT id, nombre, cedula, cargo, rol, estado 
        FROM empleados 
@@ -100,15 +100,15 @@ async function seedEmployees() {
     );
 
     console.table(verification.rows);
-    console.log('\n✅ ¡Datos de prueba insertados exitosamente!\n');
-    console.log('📌 Puedes usar estas credenciales para iniciar sesión:\n');
+    console.log('\nDatos de prueba insertados correctamente!\n');
+    console.log('Credenciales para iniciar sesion:\n');
     console.log('   Admin:        1000000001 / admin123');
     console.log('   Gerente:      1000000002 / gerente123');
     console.log('   Recepcionista: 1000000003 / recepcionista123\n');
 
     process.exit(0);
   } catch (error) {
-    console.error('❌ Error al insertar datos:', error.message);
+    console.error('Error al insertar datos:', error.message);
     console.error('\nDetalles:', error);
     process.exit(1);
   }

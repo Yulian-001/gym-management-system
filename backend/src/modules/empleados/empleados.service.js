@@ -2,12 +2,12 @@
 const db = require('../../config/db');
 
 class EmpleadosService {
-  /**
-   * Validar login con cedula y contraseña
+  /**?
+   *? Validar login con cedula y contrasena
    */
   static async login(cedula, password) {
     try {
-      // Buscar empleado por cédula (sin filtrar por estado)
+      //? Buscar empleado por cedula (sin filtrar por estado)
       const query = `
         SELECT id, nombre, cedula, email, telefono, cargo, rol, estado, created_at, respuesta_1
         FROM empleados
@@ -25,7 +25,7 @@ class EmpleadosService {
 
       const empleado = result.rows[0];
 
-      // Verificar que el empleado esté activo
+      //? Verificar que el empleado esté activo
       if (empleado.estado !== 'activo') {
         return {
           success: false,
@@ -33,8 +33,8 @@ class EmpleadosService {
         };
       }
 
-      // NOTA: En producción, usar bcrypt para comparar contraseñas
-      // Por ahora, comparación simple (cambiar en producción)
+      //? NOTA: En produccion, usar bcrypt para comparar contrasenas
+      //? Por ahora comparacion simple (cambiar en produccion)
       const passwordQuery = `
         SELECT password FROM empleados WHERE id = $1
       `;
@@ -42,7 +42,7 @@ class EmpleadosService {
       const passwordResult = await db.query(passwordQuery, [empleado.id]);
       const storedPassword = passwordResult.rows[0]?.password;
 
-      // Comparación simple de contraseña (CAMBIAR EN PRODUCCIÓN)
+      //? Comparación simple de contraseña (CAMBIAR EN PRODUCCIÓN)
       if (storedPassword !== password) {
         return {
           success: false,
@@ -50,10 +50,10 @@ class EmpleadosService {
         };
       }
 
-      // Verificar si ha respondido las preguntas de seguridad
+      //? Verificar si ha respondido las preguntas de seguridad
       const hasAnsweredQuestions = empleado.respuesta_1 !== null;
 
-      // Retornar datos del empleado sin la contraseña
+      //? Retornar datos del empleado sin la contraseña
       return {
         success: true,
         data: {
@@ -78,8 +78,8 @@ class EmpleadosService {
     }
   }
 
-  /**
-   * Obtener todos los empleados
+  /**?
+   *? Obtener todos los empleados
    */
   static async getAllEmpleados() {
     try {
@@ -97,8 +97,8 @@ class EmpleadosService {
     }
   }
 
-  /**
-   * Obtener empleado por ID
+  /**?
+   *? Obtener empleado por ID
    */
   static async getEmpleadoById(id) {
     try {
@@ -116,8 +116,8 @@ class EmpleadosService {
     }
   }
 
-  /**
-   * Crear empleado
+  /**?
+   *? Crear empleado
    */
   static async createEmpleado(data) {
     try {
@@ -148,14 +148,14 @@ class EmpleadosService {
     }
   }
 
-  /**
-   * Actualizar empleado
+  /**?
+   *? Actualizar empleado
    */
   static async updateEmpleado(id, data) {
     try {
       const { nombre, email, telefono, cargo, salario, password, rol, estado } = data;
 
-      // Construir query dinámicamente solo con los campos proporcionados
+      //? Construir query dinamicamente con los campos proporcionados
       let query = 'UPDATE empleados SET ';
       const values = [];
       let index = 1;
@@ -209,8 +209,8 @@ class EmpleadosService {
     }
   }
 
-  /**
-   * Eliminar empleado
+  /**?
+   *? Eliminar empleado
    */
   static async deleteEmpleado(id) {
     try {
@@ -228,8 +228,8 @@ class EmpleadosService {
     }
   }
 
-  /**
-   * Obtener preguntas de seguridad para recuperación de contraseña
+  /**?
+   *? Obtener preguntas de seguridad para recuperacion de contrasena
    */
   static async getRecoveryQuestions(cedula) {
     try {
@@ -246,8 +246,8 @@ class EmpleadosService {
     }
   }
 
-  /**
-   * Validar respuestas de seguridad
+  /**?
+   *? Validar respuestas de seguridad
    */
   static async validateSecurityAnswers(empleadoId, respuesta_1, respuesta_2, respuesta_3) {
     try {
@@ -266,8 +266,8 @@ class EmpleadosService {
     }
   }
 
-  /**
-   * Resetear contraseña
+  /**?
+   *? Resetear contrasena
    */
   static async resetPassword(empleadoId, newPassword) {
     try {
@@ -285,8 +285,8 @@ class EmpleadosService {
     }
   }
 
-  /**
-   * Guardar preguntas de seguridad (respuestas)
+  /**?
+   *? Guardar preguntas de seguridad (respuestas)
    */
   static async saveSecurityQuestions(empleadoId, respuesta_1, respuesta_2, respuesta_3) {
     try {
@@ -304,8 +304,8 @@ class EmpleadosService {
     }
   }
 
-  /**
-   * Cambiar contraseña
+  /**?
+   *? Cambiar contrasena
    */
   static async changePassword(empleadoId, newPassword) {
     try {

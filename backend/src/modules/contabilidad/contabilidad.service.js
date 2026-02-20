@@ -314,9 +314,9 @@ const obtenerResumenCierreCaja = async (fecha = null, empleado_id = null) => {
     const planesSinPlanData = planesSinPlan.rows[0];
     const planes = planesResult.rows;
 
-    //todo Nota: no incluimos aquí una fila sintética 'Sin Plan (Producto)'.
-    // todo Las ventas sin plan quedan fuera del listado de Planes Vendidos
-    //todo para evitar mezclar ventas de productos con tipos de plan.
+    //? NOTA: no incluimos aqui una fila sintetica Sin-Plan (Producto)
+    //? Las ventas sin plan quedan fuera del listado de Planes Vendidos
+    //? para evitar mezclar ventas de productos con tipos de plan.
 
     //? Obtener egresos por categoría
     const egresosQuery = `

@@ -1,6 +1,6 @@
 const contabilidadService = require('./contabilidad.service');
 
-// === RESUMEN DE CAJA ===
+//? === RESUMEN DE CAJA ===
 
 const getResumenCajaHoy = async (req, res) => {
   try {
@@ -48,14 +48,14 @@ const crearResumenCaja = async (req, res) => {
   }
 };
 
-// === VENTAS DEL DÍA ===
+//? === VENTAS DEL DÍA ===
 
 const getVentasDelDia = async (req, res) => {
   try {
     const { fecha } = req.query;
     const ventas = await contabilidadService.getVentasDelDia(fecha);
     
-    // Traer detalles de clientes para enriquecer los datos
+    //? Traer detalles de clientes para enriquecer los datos
     const pool = require('../../config/db');
     const ventasConDetalles = await Promise.all(
       ventas.map(async (venta) => {
@@ -107,7 +107,7 @@ const getTotalVentasPorMetodo = async (req, res) => {
   }
 };
 
-// === EGRESOS ===
+//? === EGRESOS ===
 
 const getEgresosDelDia = async (req, res) => {
   try {
@@ -132,7 +132,7 @@ const crearEgreso = async (req, res) => {
   try {
     const { concepto, monto, categoria, descripcion, metodo_pago, autorizado_por } = req.body;
 
-    // Validar campos requeridos
+    //? Validar campos requeridos del egreso
     if (!concepto || !monto || !categoria || !metodo_pago || !autorizado_por) {
       return res.status(400).json({
         success: false,
@@ -171,7 +171,7 @@ const crearEgreso = async (req, res) => {
   }
 };
 
-// === RESUMEN GENERAL ===
+//? === RESUMEN GENERAL ===
 
 const calcularResumenDelDia = async (req, res) => {
   try {
@@ -206,7 +206,7 @@ const calcularResumenDelDia = async (req, res) => {
   }
 };
 
-// === EMPLEADOS ===
+//? === EMPLEADOS ===
 
 const getEmpleadosActivos = async (req, res) => {
   try {
@@ -229,7 +229,7 @@ const crearEmpleado = async (req, res) => {
   try {
     const { nombre, cedula, email, telefono, cargo, salario, estado } = req.body;
 
-    // Validaciones
+    //? Validaciones de campos del empleado
     if (!nombre || !nombre.trim()) {
       return res.status(400).json({
         success: false,
@@ -276,7 +276,7 @@ const crearEmpleado = async (req, res) => {
   } catch (error) {
     console.error('Error al crear empleado:', error);
     
-    // Manejar errores de cédula duplicada
+    //? Manejar error de cedula duplicada
     if (error.message && error.message.includes('cedula')) {
       return res.status(400).json({
         success: false,
@@ -321,7 +321,7 @@ const eliminarEmpleado = async (req, res) => {
   }
 };
 
-// === CIERRE DE CAJA ===
+//? === CIERRE DE CAJA ===
 
 const obtenerResumenCierreCaja = async (req, res) => {
   try {
@@ -370,7 +370,7 @@ const crearCierreCaja = async (req, res) => {
   }
 };
 
-// Obtener venditas archivadas (histórico de cierres)
+//? === Obtener ventas archivadas (historico de cierres) ===
 const getVentasArchivadas = async (req, res) => {
   try {
     const { fechaInicio, fechaFin } = req.query;
@@ -398,7 +398,7 @@ const getVentasArchivadas = async (req, res) => {
   }
 };
 
-// Obtener histórico de cierres de caja
+//? === Obtener histórico de cierres de caja ===
 const getCierresCajaHistorico = async (req, res) => {
   try {
     const { fechaInicio, fechaFin } = req.query;

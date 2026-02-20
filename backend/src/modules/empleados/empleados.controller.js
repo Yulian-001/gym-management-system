@@ -1,12 +1,12 @@
-// backend/src/modules/empleados/empleados.controller.js
+
 const empleadosService = require('./empleados.service');
 
-// Login - Validar cedula y contraseña
+//? Login - Validar cedula y contraseña
 exports.login = async (req, res) => {
   try {
     const { cedula, password } = req.body;
 
-    // Validar campos
+    //? Validar campos
     if (!cedula || !password) {
       return res.status(400).json({
         success: false,
@@ -14,7 +14,7 @@ exports.login = async (req, res) => {
       });
     }
 
-    // Llamar al servicio de login
+    //? Llamar al servicio de login
     const result = await empleadosService.login(cedula, password);
 
     if (!result.success) {
@@ -31,7 +31,7 @@ exports.login = async (req, res) => {
   }
 };
 
-// Obtener todos los empleados
+//? Obtener todos los empleados
 exports.getAllEmpleados = async (req, res) => {
   try {
     const result = await empleadosService.getAllEmpleados();
@@ -45,7 +45,7 @@ exports.getAllEmpleados = async (req, res) => {
   }
 };
 
-// Obtener empleado por ID
+//? Obtener empleado por ID
 exports.getEmpleadoById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -68,12 +68,12 @@ exports.getEmpleadoById = async (req, res) => {
   }
 };
 
-// Crear empleado
+//? Crear empleado
 exports.createEmpleado = async (req, res) => {
   try {
     const { nombre, cedula, email, telefono, cargo, salario, password, rol, estado } = req.body;
 
-    // Validar campos requeridos
+    //? Validar campos requeridos para creacion
     if (!nombre || !cedula || !cargo) {
       return res.status(400).json({
         success: false,
@@ -88,7 +88,7 @@ exports.createEmpleado = async (req, res) => {
       telefono,
       cargo,
       salario,
-      password: password || cedula, // Contraseña por defecto es la cédula
+      password: password || cedula, //? Contraseña por defecto es la cédula
       rol: rol || 'recepcionista',
       estado: estado || 'activo'
     });
@@ -103,7 +103,7 @@ exports.createEmpleado = async (req, res) => {
   }
 };
 
-// Actualizar empleado
+//? Actualizar empleado
 exports.updateEmpleado = async (req, res) => {
   try {
     const { id } = req.params;
@@ -137,7 +137,7 @@ exports.updateEmpleado = async (req, res) => {
   }
 };
 
-// Eliminar empleado
+//? Eliminar empleado
 exports.deleteEmpleado = async (req, res) => {
   try {
     const { id } = req.params;
@@ -161,7 +161,7 @@ exports.deleteEmpleado = async (req, res) => {
   }
 };
 
-// Recuperación de contraseña: obtener preguntas de seguridad
+//? Recuperación de contraseña: obtener preguntas de seguridad
 exports.getRecoveryQuestions = async (req, res) => {
   try {
     const { cedula } = req.body;
@@ -182,7 +182,7 @@ exports.getRecoveryQuestions = async (req, res) => {
       });
     }
 
-    // Las preguntas son las mismas para todos
+    //? Las preguntas son las mismas para todos
     const questions = {
       pregunta_1: '¿Cuál fue el nombre de su primer mascota?',
       pregunta_2: '¿Cuál es su número favorito entre 450 y 1500?',
@@ -207,7 +207,7 @@ exports.getRecoveryQuestions = async (req, res) => {
   }
 };
 
-// Validar respuestas de seguridad
+//? Validar respuestas de seguridad
 exports.validateSecurityAnswers = async (req, res) => {
   try {
     const { empleadoId, respuesta_1, respuesta_2, respuesta_3 } = req.body;
@@ -246,7 +246,7 @@ exports.validateSecurityAnswers = async (req, res) => {
   }
 };
 
-// Resetear contraseña
+//? Resetear contraseña
 exports.resetPassword = async (req, res) => {
   try {
     const { empleadoId, newPassword } = req.body;
@@ -287,7 +287,7 @@ exports.resetPassword = async (req, res) => {
   }
 };
 
-// Guardar preguntas de seguridad
+//? Guardar preguntas de seguridad
 exports.saveSecurityQuestions = async (req, res) => {
   try {
     const { id } = req.params;
@@ -328,7 +328,7 @@ exports.saveSecurityQuestions = async (req, res) => {
   }
 };
 
-// Cambiar contraseña
+//? Cambiar contrasena
 exports.changePassword = async (req, res) => {
   try {
     const { id } = req.params;

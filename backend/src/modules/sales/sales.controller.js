@@ -26,12 +26,12 @@ module.exports = {
 
   createSale: async (req, res) => {
     try {
-      console.log('📨 POST /Api/sales recibido con body:', req.body);
+      console.log('POST /Api/sales - body recibido:', req.body);
       
       const { cliente_id, plan_id, empleado_id, fecha_venta, descripcion, 
               monto, cantidad, precio_unitario, metodo_pago, estado, evento, evento_precio } = req.body;
 
-      // Validaciones
+      //? Validaciones de campos requeridos
       if (!fecha_venta) {
         return res.status(400).json({ error: 'La fecha es obligatoria' });
       }
@@ -39,7 +39,7 @@ module.exports = {
         return res.status(400).json({ error: 'La descripción es obligatoria' });
       }
 
-      // Calcular monto: puede venir directo o calcularse de cantidad * precio_unitario
+      //? Calcular monto: puede venir directo o calcularse de cantidad * precio_unitario
       let montoFinal = null;
       if (monto && parseFloat(monto) > 0) {
         montoFinal = parseFloat(monto);
@@ -54,7 +54,7 @@ module.exports = {
       const cantidadFinal = parseInt(cantidad) || 1;
       const precioFinal = parseFloat(precio_unitario) || montoFinal;
 
-      // Validar estado
+      //? Validar que el estado sea uno de los permitidos
       const estadosValidos = ['pendiente', 'pagado', 'cancelado', 'completada', 'archivada', 'cancelada'];
       const estadoFinal = estado && estadosValidos.includes(estado) ? estado : 'completada';
 
@@ -73,15 +73,15 @@ module.exports = {
         evento_precio: evento_precio ? parseFloat(evento_precio) : null
       });
 
-      console.log('✅ Venta creada exitosamente:', newSale.id);
+      console.log('Venta creada correctamente, ID:', newSale.id);
 
       res.status(201).json({
         success: true,
-        message: '✅ Venta creada exitosamente',
+        message: 'Venta creada correctamente',
         data: newSale
       });
     } catch (err) {
-      console.error('❌ Error en createSale:', err.message);
+      console.error('Error en createSale:', err.message);
       res.status(500).json({ 
         success: false,
         error: err.message 

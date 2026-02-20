@@ -10,7 +10,7 @@ module.exports = {
       `, [empleado_id]);
       return result.rows;
     }
-    // Admins y gerentes ven todas las no archivadas
+      //? Admins y gerentes ven todas las no archivadas
     const result = await db.query(`
       SELECT * FROM ventas 
       WHERE estado NOT IN ('archivada')
@@ -54,10 +54,10 @@ module.exports = {
       );
       
       const venta = result.rows[0];
-      console.log('✅ Venta insertada (ID:', venta.id, ')');
+      console.log('Venta insertada correctamente, ID:', venta.id);
       return venta;
     } catch (error) {
-      console.error('❌ Error en createSale:', error.message);
+      console.error('Error en createSale:', error.message);
       throw error;
     }
   },

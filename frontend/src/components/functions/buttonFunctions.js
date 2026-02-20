@@ -474,7 +474,7 @@ export const handleAddClient = (setClients, currentClients, user) => {
                 try {
                   const errorObj = JSON.parse(error);
                   if (errorObj.code === 'CEDULA_DUPLICATE') {
-                    alert('⚠️ La cédula ya está registrada en el sistema');
+                    alert('La cedula ya esta registrada en el sistema');
                     return;
                   }
                 } catch (e) {}

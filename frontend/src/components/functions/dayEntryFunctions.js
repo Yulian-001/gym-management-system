@@ -121,11 +121,11 @@ export const DayEntryFormContent = ({ entry, refreshCallback, closeModalFn, curr
       }
 
       const result = await response.json();
-      console.log('✅ Entrada guardada:', result);
+      console.log('Entrada guardada correctamente:', result);
 
       // Si hay evento, registrar automáticamente como venta en Contabilidad
       if (dataToSend.evento && dataToSend.evento_precio) {
-        console.log('📋 Evento detectado, registrando venta...');
+        console.log('Evento detectado, registrando venta...');
         try {
           const eventoData = EVENTOS[dataToSend.evento];
           const ventaPrecio = parseFloat(dataToSend.evento_precio);
@@ -143,7 +143,7 @@ export const DayEntryFormContent = ({ entry, refreshCallback, closeModalFn, curr
             evento_precio: ventaPrecio
           };
 
-          console.log('📤 Payload final enviado:', ventaPayload);
+          console.log('Payload enviado a ventas:', ventaPayload);
 
           const ventaResponse = await fetch('http://localhost:3001/Api/sales', {
             method: 'POST',
@@ -154,31 +154,31 @@ export const DayEntryFormContent = ({ entry, refreshCallback, closeModalFn, curr
           });
 
           const ventaText = await ventaResponse.text();
-          console.log(`📥 Respuesta (${ventaResponse.status}):`, ventaText);
+          console.log(`Respuesta (${ventaResponse.status}):`, ventaText);
 
           if (ventaResponse.ok) {
             try {
               const ventaResult = JSON.parse(ventaText);
-              console.log('✅ Venta registrada exitosamente:', ventaResult);
+              console.log('Venta registrada correctamente:', ventaResult);
               
               // Disparar evento para listeners en otras partes de la aplicación
               const evento = new CustomEvent('entradaGuardadaConEvento', { 
                 detail: { entrada: result, venta: ventaResult }
               });
               window.dispatchEvent(evento);
-              console.log('🔔 Evento disparado: entradaGuardadaConEvento');
+              console.log('Evento disparado: entradaGuardadaConEvento');
               
-              alert('✅ Entrada y venta registradas correctamente');
+              alert('Entrada y venta registradas correctamente');
             } catch (parseErr) {
-              console.error('❌ Error parseando respuesta:', parseErr);
+              console.error('Error parseando respuesta:', parseErr);
             }
           } else {
-            console.error('❌ Error HTTP al registrar venta:', ventaResponse.status, ventaText);
-            alert('⚠️ Entrada guardada pero hubo error registrando venta: ' + ventaText);
+            console.error('Error HTTP al registrar venta:', ventaResponse.status, ventaText);
+            alert('Advertencia: Entrada guardada, error al registrar venta: ' + ventaText);
           }
         } catch (err) {
-          console.error('❌ Error en try-catch de venta:', err);
-          alert('⚠️ Entrada guardada pero error al registrar venta: ' + err.message);
+          console.error('Error en bloque venta:', err);
+          alert('Advertencia: Entrada guardada, error al registrar venta: ' + err.message);
         }
       }
 

@@ -12,7 +12,7 @@ function EstadoPanel() {
   const [error, setError] = useState(null);
   const [pestaña, setPestaña] = useState('congelados'); // congelados | descongelados | buscar
 
-  // Cargar congelados
+  //? Cargar congelados
   useEffect(() => {
     const fetchCongelados = async () => {
       try {
@@ -33,7 +33,7 @@ function EstadoPanel() {
     fetchCongelados();
   }, []);
 
-  // Cargar descongelados
+  //? Cargar descongelados
   useEffect(() => {
     const fetchDescongelados = async () => {
       try {
@@ -50,7 +50,7 @@ function EstadoPanel() {
     fetchDescongelados();
   }, []);
 
-  // Cargar total de congelados
+  //? Cargar total de congelados
   useEffect(() => {
     const fetchTotal = async () => {
       try {
@@ -67,7 +67,7 @@ function EstadoPanel() {
     fetchTotal();
   }, []);
 
-  // Buscar cliente
+  //? Buscar cliente
   const handleBuscar = async (valor) => {
     setBusqueda(valor);
 
@@ -87,7 +87,7 @@ function EstadoPanel() {
     }
   };
 
-  // Refrescar datos
+  //? Refrescar datos
   const refrescar = async () => {
     try {
       const response = await fetch('http://localhost:3001/Api/estado/congelados');
@@ -238,7 +238,7 @@ function EstadoPanel() {
                           color: cliente.congelado_id ? '#ff9800' : '#4CAF50',
                           fontWeight: 'bold'
                         }}>
-                          {cliente.congelado_id ? '❄️ Congelado' : '✓ Activo'}
+                          {cliente.congelado_id ? 'Congelado' : 'Activo'}
                         </span>
                       </td>
                       <td>{new Date(cliente.fecha_inicio_plan).toLocaleDateString()}</td>
@@ -249,14 +249,14 @@ function EstadoPanel() {
                             className="btn-descongelar"
                             onClick={() => handleDescongelar(cliente.congelado_id, refrescar)}
                           >
-                            ✓ Descongelar
+                            Descongelar
                           </button>
                         ) : (
                           <button
                             className="btn-congelar"
                             onClick={() => handleCongelar(cliente.id, refrescar)}
                           >
-                            ❄️ Congelar
+                            Congelar
                           </button>
                         )}
                       </td>

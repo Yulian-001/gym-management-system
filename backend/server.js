@@ -3,13 +3,13 @@ const cors = require('cors');
 const app = express();
 require('dotenv').config();
 
-// IMPORTAR BASE DE DATOS
+//* === Importar base de datos ===
 const db = require('./src/config/db');
 
 app.use(cors());
 app.use(express.json());
 
-// ======= LAS RUTAS VAN AQUÍ =======
+//* === Configuracion de rutas ===
 app.get('/', (req, res) => {
   res.json({
     message: 'Api del Gym funcionando',
@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
   });
 });
 
-// ------- AÑADIR AQUÍ EL TEST --------
+//* === Ruta de prueba de conexion DB ===
 app.get('/Api/test-db', async (req, res) => {
   try {
     const result = await db.query('SELECT NOW()');
@@ -33,7 +33,7 @@ app.get('/Api/test-db', async (req, res) => {
     });
   }
 });
-// ----------- FIN TEST ---------------
+//* === Fin ruta de prueba ===
 
 const plansRoutes = require('./src/modules/plans/plans.routes');
 app.use('/Api/plans', plansRoutes);
@@ -53,21 +53,21 @@ app.use('/Api/estado', estadoRoutes);
 const contabilidadRoutes = require('./src/modules/contabilidad/contabilidad.routes');
 app.use('/Api/contabilidad', contabilidadRoutes);
 
-// Asistencia (registro de entradas de clientes)
+//? Asistencia - registro de entradas de clientes
 const asistenciaRoutes = require('./src/modules/asistencia/asistencia.routes');
 app.use('/Api/asistencia', asistenciaRoutes);
 
-// Empleados (Login y gestión de empleados)
+//? Empleados - login y gestion de empleados
 const empleadosRoutes = require('./src/modules/empleados/empleados.routes');
 app.use('/Api/empleados', empleadosRoutes);
 
 
-// ❌ Esto DEBE quedar al final: manejador de rutas inexistentes
+//* === Manejador de rutas inexistentes - debe quedar al final ===
 app.use((req, res) => {
   res.status(404).json({ error: 'Ruta no encontrada' });
 });
 
-// Servidor
+//* === Inicio del servidor ===
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor backend corriendo en puerto: ${PORT}`);

@@ -2,7 +2,7 @@ import React, { useState, useEffect} from 'react';
 import  './EntranceStyle.css';
 import { FingerPrintIcon, UserIcon } from '../../icons/index.js';
 
-// Simulación de base de datos de entradas en memoria
+//? Simulación de base de datos de entradas en memoria
 let entranceHistoryDB = [];
 
 function EntranceForm(){
@@ -61,16 +61,15 @@ function EntranceForm(){
     }
 
     //? === Verificar si existe en la API ===
-    // Nota: En un futuro, conectar con: 
-    // const response = await fetch('http://localhost:3000/Api/clients');
-    // Por ahora usamos datos de ejemplo para mantener consistencia
+    //? NOTA: pendiente conectar con fetch http://localhost:3000/Api/clients
+    //? Por ahora usamos datos de ejemplo para mantener consistencia
     const foundClient = {
       id: parseInt(partNum),
       cedula: partNum,
       nombre: `Cliente ${partNum}`
     };
 
-    // Validación de prueba: si cédula empieza con 0 no existe
+    //? Validación de prueba: si cédula empieza con 0 no existe
     if(partNum.charAt(0) === '0'){
       setError(`Usuario no encontrado: ${partNum}`);
       setShowMessage(true);
@@ -102,7 +101,7 @@ function EntranceForm(){
       return;
     }
 
-    // Intentar obtener el cliente real desde el backend por cédula
+    //? Intentar obtener el cliente real desde el backend por cédula
     let found = null;
     try {
       const clientsResp = await fetch('http://localhost:3001/Api/clients');
@@ -118,7 +117,7 @@ function EntranceForm(){
     }
 
     if (!found) {
-      // Mostrar error con la cédula si no existe el usuario
+      //? Mostrar error con la cédula si no existe el usuario
       setError(`Usuario no encontrado: ${result.cedula || result.Cédula}`);
       setShowMessage(true);
       setPassword('');
@@ -127,7 +126,7 @@ function EntranceForm(){
 
     const nameClient = found.nombre || found.Nombre || (result.nombre || result.Nombre) || found.cedula;
 
-    // Guardar registro de entrada
+    //? Guardar registro de entrada
     const entryRecord = {
       id: entranceHistoryDB.length + 1,
       clientId: found.id,
@@ -143,7 +142,7 @@ function EntranceForm(){
     setShowMessage(true);
     setPassword('');
 
-    // Registrar asistencia permanente en backend
+    //? Registrar asistencia permanente en backend
     try {
       const fecha = new Date().toISOString().split('T')[0];
       const hora = new Date().toTimeString().split(' ')[0];
@@ -198,14 +197,14 @@ function EntranceForm(){
                    {showMessage &&  error &&(
                         
                         <div className='entrance-input-error'> 
-                          ⚠️ {error}
+                          X {error}
                         </div>
                       )}
 
 
                       {showMessage &&  succes &&(
                         <div className='entrance-input-valid'>
-                             ✅ 
+                             Ok 
                               {succes}
                         </div>
                       )}
