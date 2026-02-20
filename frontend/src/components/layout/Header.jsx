@@ -1,10 +1,25 @@
 // src/components/layout/Header.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import './headerStyle.css'
 import { UserIcon } from '../../icons';
+import { useAuth } from '../../context/AuthContext';
 
 //? Módulos operativos - Administracion - Contabilidad - Reportes
 function Header() {
+  const { user, logout } = useAuth();
+  const [showUserMenu, setShowUserMenu] = useState(false);
+
+  const handleLogout = () => {
+    logout();
+    // El contexto actualiza isAuthenticated y AppContent muestra Login automáticamente
+  };
+
+  // Obtener iniciales del nombre
+  const getInitials = (nombre) => {
+    if (!nombre) return 'U';
+    return nombre.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+  };
+
   return (
     <header className='container-header-header' style={{
       backgroundColor: '#c9ced3',
@@ -67,26 +82,90 @@ function Header() {
           </p>
         </div>
 
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.5rem',
-          paddingLeft: '1rem',
-          borderLeft: '2px solid rgba(255,255,255,0.3)'
-        }}>
+        <div 
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            paddingLeft: '1rem',
+            borderLeft: '2px solid rgba(255,255,255,0.3)',
+            cursor: 'pointer',
+            position: 'relative'
+          }}
+          onClick={() => setShowUserMenu(!showUserMenu)}
+        >
           <div style={{
             width: '40px',
             height: '40px',
             borderRadius: '50%',
-            backgroundColor: 'rgba(255,255,255,0.2)',
+            backgroundColor: user?.rol === 'administrador' ? '#ff4757' : 
+                           user?.rol === 'gerente' ? '#f39c12' : 
+                           '#3498db',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontSize: '1.5rem'
+            fontSize: '1.2rem',
+            fontWeight: 'bold',
+            color: 'white'
           }}>
-            <UserIcon />
+            {getInitials(user?.nombre)}
           </div>
-          <span style={{ fontSize: '0.9rem' }}>Admin</span>
+          <div>
+            <span style={{ fontSize: '0.9rem', fontWeight: '500' }}>{user?.nombre || 'Usuario'}</span>
+            <p style={{ margin: '0.2rem 0', fontSize: '0.75rem', opacity: 0.8 }}>
+              {user?.rol?.charAt(0).toUpperCase() + user?.rol?.slice(1) || 'N/A'}
+            </p>
+          </div>
+
+          {/* Menú desplegable */}
+          {showUserMenu && (
+            <div style={{
+              position: 'absolute',
+              top: '100%',
+              right: 0,
+              marginTop: '0.5rem',
+              backgroundColor: 'white',
+              color: '#333',
+              borderRadius: '6px',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+              minWidth: '200px',
+              zIndex: 1000
+            }}>
+              <div style={{
+                padding: '0.75rem 1rem',
+                borderBottom: '1px solid #eee'
+              }}>
+                <p style={{ margin: 0, fontWeight: '600', fontSize: '0.9rem' }}>
+                  {user?.nombre}
+                </p>
+                <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.8rem', opacity: 0.7 }}>
+                  {user?.cedula}
+                </p>
+                <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.8rem', opacity: 0.7 }}>
+                  Cargo: {user?.cargo}
+                </p>
+              </div>
+              <button
+                onClick={handleLogout}
+                style={{
+                  width: '100%',
+                  padding: '0.75rem 1rem',
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: '0.9rem',
+                  color: '#ff4757',
+                  fontWeight: '600',
+                  textAlign: 'left',
+                  transition: 'background-color 0.2s'
+                }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = '#f5f5f5'}
+                onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+              >
+                Cerrar Sesión
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </header>

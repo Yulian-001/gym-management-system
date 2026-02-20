@@ -1,5 +1,7 @@
 
--- Tabla de Planes 
+-- =====================================================================
+-- TABLA 1: Planes
+-- =====================================================================
 CREATE TABLE IF NOT EXISTS plans (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL UNIQUE,
@@ -11,7 +13,43 @@ CREATE TABLE IF NOT EXISTS plans (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Tabla de Clientes 
+-- =====================================================================
+-- TABLA 2: Empleados (Sistema de Login)
+-- =====================================================================
+CREATE TABLE IF NOT EXISTS empleados (
+  id SERIAL PRIMARY KEY,
+  nombre VARCHAR(150) NOT NULL,
+  cedula VARCHAR(20) UNIQUE NOT NULL,
+  email VARCHAR(100) UNIQUE,
+  telefono VARCHAR(15),
+  cargo VARCHAR(100) NOT NULL,
+  salario DECIMAL(10,2),
+  password VARCHAR(255),
+  rol VARCHAR(50) DEFAULT 'recepcionista',
+  pregunta_1 VARCHAR(255),
+  respuesta_1 VARCHAR(255),
+  pregunta_2 VARCHAR(255),
+  respuesta_2 VARCHAR(255),
+  pregunta_3 VARCHAR(255),
+  respuesta_3 VARCHAR(255),
+  estado VARCHAR(20) DEFAULT 'activo' CHECK (estado IN ('activo', 'inactivo', 'suspendido')),
+  fecha_contratacion DATE NOT NULL DEFAULT CURRENT_DATE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Índices para empleados
+CREATE INDEX IF NOT EXISTS idx_empleados_cedula ON empleados(cedula);
+CREATE INDEX IF NOT EXISTS idx_empleados_estado ON empleados(estado);
+CREATE INDEX IF NOT EXISTS idx_empleados_cargo ON empleados(cargo);
+
+-- Insertar empleado predeterminado
+INSERT INTO empleados (nombre, cedula, cargo, rol, estado, password)
+VALUES ('Empleado Predeterminado', '0000000000', 'Vendedor', 'recepcionista', 'activo', '0000000000')
+ON CONFLICT (cedula) DO NOTHING;
+
+-- =====================================================================
+-- TABLA 3: Clientes 
 CREATE TABLE IF NOT EXISTS clientes (
   id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   
@@ -40,16 +78,46 @@ CREATE TABLE IF NOT EXISTS clientes (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Tabla de Entradas/Salidas (Administrativo)
-CREATE TABLE IF NOT EXISTS entradas (
+-- Tabla de Entradas/Salidas (Administrativo - ELIMINADA: usar entrada_dia)
+-- CREATE TABLE IF NOT EXISTS entradas - DEPRECATED -
+
+-- =====================================================================
+-- TABLA 5: Entrada del Día (para clientes ocasionales sin plan)
+-- =====================================================================
+CREATE TABLE IF NOT EXISTS entrada_dia (
+  id SERIAL PRIMARY KEY,
+  nombre_cliente VARCHAR(100) NOT NULL,
+  fecha DATE NOT NULL,
+  hora TIME NOT NULL,
+  metodo_pago VARCHAR(50) NOT NULL CHECK (metodo_pago IN ('efectivo', 'tarjeta', 'transferencia')),
+  estado VARCHAR(50) NOT NULL DEFAULT 'activa' CHECK (estado IN ('activa', 'cancelada', 'completada')),
+  evento VARCHAR(100),
+  evento_precio DECIMAL(10,2),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Índices para entrada_dia
+CREATE INDEX IF NOT EXISTS idx_entrada_fecha ON entrada_dia(fecha);
+CREATE INDEX IF NOT EXISTS idx_entrada_cliente ON entrada_dia(nombre_cliente);
+
+-- =====================================================================
+-- TABLA 6: Clientes Congelados (para bloqueos temporales de planes)
+-- =====================================================================
+CREATE TABLE IF NOT EXISTS cliente_congelados (
   id SERIAL PRIMARY KEY,
   cliente_id INT NOT NULL REFERENCES clientes(id) ON DELETE CASCADE,
-  hora_entrada TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  hora_salida TIMESTAMP,
-  tipo_entrada VARCHAR(20) DEFAULT 'entrada' CHECK (tipo_entrada IN ('entrada', 'salida')),
-  notas TEXT,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  fecha_congelacion DATE NOT NULL DEFAULT CURRENT_DATE,
+  fecha_descongelacion DATE,
+  estado VARCHAR(50) NOT NULL DEFAULT 'congelado' CHECK (estado IN ('congelado', 'descongelado')),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Índices para cliente_congelados
+CREATE INDEX IF NOT EXISTS idx_cliente_congelados_cliente_id ON cliente_congelados(cliente_id);
+CREATE INDEX IF NOT EXISTS idx_cliente_congelados_estado ON cliente_congelados(estado);
+CREATE INDEX IF NOT EXISTS idx_cliente_congelados_fecha ON cliente_congelados(fecha_congelacion);
 
 -- Tabla de Ventas
 CREATE TABLE IF NOT EXISTS ventas (
@@ -58,8 +126,13 @@ CREATE TABLE IF NOT EXISTS ventas (
   plan_id INTEGER NOT NULL REFERENCES plans(id),
   monto DECIMAL(10,2) NOT NULL,
   fecha_venta DATE NOT NULL DEFAULT CURRENT_DATE,
+  hora_venta TIME DEFAULT CURRENT_TIME,
   metodo_pago VARCHAR(50),
-  estado VARCHAR(20) DEFAULT 'pagado' CHECK (estado IN ('pendiente', 'pagado', 'cancelado')),
+  empleado_id INT REFERENCES empleados(id) ON DELETE SET NULL,
+  descripcion TEXT,
+  evento VARCHAR(100),
+  evento_precio DECIMAL(10,2),
+  estado VARCHAR(20) DEFAULT 'pagado' CHECK (estado IN ('pendiente', 'pagado', 'cancelado', 'completada', 'archivada')),
   notas TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -119,6 +192,56 @@ CREATE TABLE IF NOT EXISTS resumen_ingresos (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- =====================================================================
+-- TABLA 11: Egresos (Gastos/Costos)
+-- =====================================================================
+CREATE TABLE IF NOT EXISTS egresos (
+  id SERIAL PRIMARY KEY,
+  concepto VARCHAR(200) NOT NULL,
+  monto DECIMAL(10,2) NOT NULL,
+  categoria VARCHAR(100),
+  fecha_egreso DATE NOT NULL DEFAULT CURRENT_DATE,
+  descripcion TEXT,
+  metodo_pago VARCHAR(50) CHECK (metodo_pago IN ('efectivo', 'tarjeta', 'transferencia', 'cheque')),
+  estado VARCHAR(20) DEFAULT 'completado' CHECK (estado IN ('pendiente', 'completado', 'cancelado')),
+  autorizado_por INT REFERENCES empleados(id) ON DELETE SET NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Índices para egresos
+CREATE INDEX IF NOT EXISTS idx_egresos_fecha ON egresos(fecha_egreso);
+CREATE INDEX IF NOT EXISTS idx_egresos_categoria ON egresos(categoria);
+CREATE INDEX IF NOT EXISTS idx_egresos_estado ON egresos(estado);
+
+-- =====================================================================
+-- TABLA 12: Resumen de Caja (control financiero diario)
+-- =====================================================================
+CREATE TABLE IF NOT EXISTS resumen_caja (
+  id SERIAL PRIMARY KEY,
+  fecha_resumen DATE NOT NULL UNIQUE,
+  total_ventas_efectivo DECIMAL(10,2) DEFAULT 0,
+  total_ventas_tarjeta DECIMAL(10,2) DEFAULT 0,
+  total_ventas_transferencia DECIMAL(10,2) DEFAULT 0,
+  total_egresos_efectivo DECIMAL(10,2) DEFAULT 0,
+  total_egresos_tarjeta DECIMAL(10,2) DEFAULT 0,
+  total_egresos_transferencia DECIMAL(10,2) DEFAULT 0,
+  total_ingresos DECIMAL(10,2) DEFAULT 0,
+  total_egresos DECIMAL(10,2) DEFAULT 0,
+  saldo_neto DECIMAL(10,2) DEFAULT 0,
+  diferencia_caja DECIMAL(10,2) DEFAULT 0,
+  abierto_por INT REFERENCES empleados(id),
+  cerrado_por INT REFERENCES empleados(id),
+  estado VARCHAR(20) DEFAULT 'abierto' CHECK (estado IN ('abierto', 'cerrado')),
+  observaciones TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Índices para resumen_caja
+CREATE INDEX IF NOT EXISTS idx_resumen_caja_fecha ON resumen_caja(fecha_resumen);
+CREATE INDEX IF NOT EXISTS idx_resumen_caja_estado ON resumen_caja(estado);
+
 
 -- Índices en clientes
 CREATE INDEX IF NOT EXISTS idx_clientes_cedula ON clientes(cedula);
@@ -134,6 +257,8 @@ CREATE INDEX IF NOT EXISTS idx_entradas_hora ON entradas(hora_entrada);
 CREATE INDEX IF NOT EXISTS idx_ventas_cliente_id ON ventas(cliente_id);
 CREATE INDEX IF NOT EXISTS idx_ventas_fecha ON ventas(fecha_venta);
 CREATE INDEX IF NOT EXISTS idx_ventas_estado ON ventas(estado);
+CREATE INDEX IF NOT EXISTS idx_ventas_empleado_id ON ventas(empleado_id);
+CREATE INDEX IF NOT EXISTS idx_ventas_metodo_pago ON ventas(metodo_pago);
 
 -- Índices en pagos
 CREATE INDEX IF NOT EXISTS idx_pagos_cliente_id ON pagos(cliente_id);
@@ -168,14 +293,14 @@ INSERT INTO clientes (nombre, cedula, telefono, email, eps, rh, plan_id, inicio,
 ('Laura Pérez', '1098765432', '3109876543', 'laura@email.com', 'Coomeva', 'AB-', 4, '2025-11-01', '2026-11-01', 'activo', 'ADM002')
 ON CONFLICT DO NOTHING;
 
--- Insertar entradas de ejemplo
-INSERT INTO entradas (cliente_id, hora_entrada, hora_salida, tipo_entrada) VALUES
-(1, '2026-02-14 06:30:00', '2026-02-14 08:30:00', 'entrada'),
-(2, '2026-02-14 07:00:00', '2026-02-14 09:00:00', 'entrada'),
-(3, '2026-02-14 05:45:00', '2026-02-14 07:45:00', 'entrada'),
-(4, '2026-02-14 18:00:00', '2026-02-14 20:00:00', 'entrada'),
-(5, '2026-02-13 07:15:00', '2026-02-13 09:15:00', 'entrada'),
-(6, '2026-02-13 06:00:00', '2026-02-13 08:00:00', 'entrada');
+-- Insertar entradas diarias de ejemplo (para clientes ocasionales)
+INSERT INTO entrada_dia (nombre_cliente, fecha, hora, metodo_pago, estado) VALUES
+('Juan García', '2026-02-16', '08:00:00', 'efectivo', 'activa'),
+('María López', '2026-02-16', '09:30:00', 'tarjeta', 'completada'),
+('Carlos Rodríguez', '2026-02-16', '10:15:00', 'transferencia', 'activa');
+
+-- Insertar Clientes Congelados de ejemplo (histórico)
+-- (inicialmente vacío, se llena dinámicamente)
 
 -- Insertar ventas de ejemplo
 INSERT INTO ventas (cliente_id, plan_id, monto, fecha_venta, metodo_pago, estado) VALUES
@@ -228,6 +353,18 @@ INSERT INTO resumen_ingresos (fecha_resumen, total_ventas, total_pagos, total_eg
 ('2026-02-13', 0.00, 0.00, 0.00, 0.00, 6, 0),
 ('2026-02-01', 340000.00, 340000.00, 2000000.00, -1660000.00, 5, 2)
 ON CONFLICT DO NOTHING;
+
+-- Insertar egresos de ejemplo (gastos operacionales)
+INSERT INTO egresos (concepto, monto, categoria, fecha_egreso, descripcion, metodo_pago, estado, autorizado_por) VALUES
+('Pago Renta Gimnasio', 2000000.00, 'gastos-operacionales', '2026-02-01', 'Renta del mes de febrero', 'transferencia', 'completado', 1),
+('Pago Servicios Públicos', 150000.00, 'gastos-operacionales', '2026-02-05', 'Agua, luz, gas', 'transferencia', 'completado', 1),
+('Mantenimiento de Equipos', 300000.00, 'mantenimiento', '2026-02-10', 'Revisión y lubricación de máquinas', 'efectivo', 'completado', 1)
+ON CONFLICT DO NOTHING;
+
+-- Insertar resumen de caja del día (estado actual)
+INSERT INTO resumen_caja (fecha_resumen, total_ventas_efectivo, total_ventas_tarjeta, total_ventas_transferencia, total_egresos_efectivo, total_egresos_tarjeta, total_egresos_transferencia, total_ingresos, total_egresos, saldo_neto, abierto_por, estado) VALUES
+(CURRENT_DATE, 65000.00, 130000.00, 400000.00, 0.00, 0.00, 2000000.00, 595000.00, 2000000.00, -1405000.00, 1, 'abierto')
+ON CONFLICT (fecha_resumen) DO NOTHING;
 
 
 -- Vista: Clientes Activos (para reportes)

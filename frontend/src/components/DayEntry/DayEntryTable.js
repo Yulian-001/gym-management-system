@@ -2,19 +2,36 @@ import React, { useEffect, useState } from 'react';
 import './DayEntryStyle.css';
 import { handleAddEntry, handleEditEntry, handleDeleteEntry } from '../functions/dayEntryFunctions';
 import { EditIcon, TrashIcon } from '../../icons';
+import { useAuth } from '../../context/AuthContext';
+
 function DayEntryTable() {
   const [entries, setEntries] = useState([]);
   const [allEntries, setAllEntries] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { user } = useAuth();
+  const isRecepcionista = user?.rol === 'recepcionista';
 
-  // Cargar entradas
+  //? Cargar entradas
   useEffect(() => {
+    // Limpiar caché del navegador
+    if ('caches' in window) {
+      caches.keys().then(names => {
+        names.forEach(name => {
+          caches.delete(name);
+        });
+      });
+    }
+    localStorage.removeItem('dayEntries');
+    
     const fetchEntries = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:3001/Api/entrada-dia');
+        // Agregar timestamp para evitar caché del navegador
+        const response = await fetch(`http://localhost:3001/Api/entrada-dia?empleado_id=${user?.id || ''}&rol=${user?.rol || ''}&t=${Date.now()}`, {
+          cache: 'no-store'
+        });
         if (!response.ok) throw new Error('Error al cargar entradas');
         const data = await response.json();
         setAllEntries(data);
@@ -31,7 +48,7 @@ function DayEntryTable() {
     fetchEntries();
   }, []);
 
-  // Búsqueda en tiempo real
+  //? Búsqueda en tiempo real
   useEffect(() => {
     if (searchTerm.trim() === '') {
       setEntries(allEntries);
@@ -43,10 +60,12 @@ function DayEntryTable() {
     }
   }, [searchTerm, allEntries]);
 
-  // Refrescar tabla
+  //? Refrescar tabla
   const refreshEntries = async () => {
     try {
-      const response = await fetch('http://localhost:3001/Api/entrada-dia');
+      const response = await fetch(`http://localhost:3001/Api/entrada-dia?empleado_id=${user?.id || ''}&rol=${user?.rol || ''}&t=${Date.now()}`, {
+        cache: 'no-store'
+      });
       if (response.ok) {
         const data = await response.json();
         setAllEntries(data);
@@ -80,7 +99,7 @@ function DayEntryTable() {
         </button>
       </div>
 
-      <div className="day-table-wrapper">
+      <div className="day-table-wrapper" style={{ maxHeight: '400px', overflowY: 'auto' }}>
         <table className="day-table">
           <thead>
             <tr>
@@ -88,9 +107,11 @@ function DayEntryTable() {
               <th>Nombre Cliente</th>
               <th>Fecha</th>
               <th>Hora</th>
+              <th>Evento</th>
+              <th>Precio Evento</th>
               <th>Método Pago</th>
               <th>Estado</th>
-              <th>Acciones</th>
+              {!isRecepcionista && <th>Acciones</th>}
             </tr>
           </thead>
           <tbody>
@@ -101,8 +122,11 @@ function DayEntryTable() {
                   <td>{entry.nombre_cliente}</td>
                   <td>{new Date(entry.fecha).toLocaleDateString()}</td>
                   <td>{entry.hora}</td>
+                  <td style={{ textTransform: 'capitalize' }}>{entry.evento ? entry.evento.replace('_', ' ') : '-'}</td>
+                  <td>${entry.evento_precio ? entry.evento_precio.toLocaleString() : '0'}</td>
                   <td>{entry.metodo_pago}</td>
                   <td className={`estado-${entry.estado}`}>{entry.estado}</td>
+                  {!isRecepcionista && (
                   <td className="day-actions">
                     <button
                       className="btn-edit"
@@ -117,11 +141,12 @@ function DayEntryTable() {
                       <TrashIcon size={18} />
                     </button>
                   </td>
+                  )}
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="7" className="no-data">No hay entradas registradas</td>
+                <td colSpan={isRecepcionista ? "8" : "9"} className="no-data">No hay entradas registradas</td>
               </tr>
             )}
           </tbody>

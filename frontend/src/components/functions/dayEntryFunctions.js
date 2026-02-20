@@ -1,13 +1,65 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { showModal } from './modalFunctions';
 
-export const DayEntryFormContent = ({ entry, refreshCallback, closeModalFn }) => {
+// Eventos disponibles con sus precios
+const EVENTOS = {
+  zumba: { nombre: 'Zumba', precio: 10000 },
+  dia: { nombre: 'Día', precio: 8000 },
+  aerobicos: { nombre: 'Aeróbicos', precio: 7000 },
+  otro: { nombre: 'Otro', precio: null }
+};
+
+// Función para obtener el empleado_id del usuario logueado
+const obtenerEmpleadoId = async (usuario) => {
+  try {
+    if (!usuario) return 1;
+    
+    // Buscar empleado por email o cédula
+    const response = await fetch('http://localhost:3001/Api/contabilidad/empleados');
+    const result = await response.json();
+    
+    if (result.success && result.data) {
+      const empleados = result.data;
+      // Buscar por email o cédula del usuario
+      const empleado = empleados.find(e => 
+        e.email === usuario.email || 
+        e.cedula === usuario.cedula ||
+        e.id === usuario.id
+      );
+      return empleado ? empleado.id : 1;
+    }
+  } catch (err) {
+    console.error('Error obteniendo empleado:', err);
+  }
+  return 1;
+};
+
+export const DayEntryFormContent = ({ entry, refreshCallback, closeModalFn, currentUser }) => {
+  // Obtener el usuario del localStorage si no se proporciona
+  const user = currentUser || (() => {
+    try {
+      const userData = localStorage.getItem('user');
+      return userData ? JSON.parse(userData) : { id: 1 };
+    } catch (e) {
+      return { id: 1 };
+    }
+  })();
+
+  const [empleadoId, setEmpleadoId] = useState(1);
+
+  // Cargar el empleado_id correcto al montar el componente
+  useEffect(() => {
+    obtenerEmpleadoId(user).then(id => setEmpleadoId(id));
+  }, [user]);
+
   const [formData, setFormData] = useState(entry || {
     nombre_cliente: '',
     fecha: new Date().toISOString().split('T')[0],
     hora: new Date().toTimeString().slice(0, 5),
     metodo_pago: 'efectivo',
-    estado: 'activa'
+    estado: 'activa',
+    evento: '',
+    evento_precio_otro: ''
   });
 
   const handleChange = (e) => {
@@ -40,7 +92,10 @@ export const DayEntryFormContent = ({ entry, refreshCallback, closeModalFn }) =>
       fecha: formData.fecha,
       hora: formData.hora,
       metodo_pago: formData.metodo_pago,
-      estado: formData.estado
+      estado: formData.estado,
+      evento: formData.evento || null,
+      evento_precio: formData.evento === 'otro' ? parseFloat(formData.evento_precio_otro) : (EVENTOS[formData.evento]?.precio || null),
+      empleado_id: user?.id || empleadoId || 1
     };
 
     try {
@@ -66,7 +121,66 @@ export const DayEntryFormContent = ({ entry, refreshCallback, closeModalFn }) =>
       }
 
       const result = await response.json();
-      console.log('Entrada guardada:', result);
+      console.log('✅ Entrada guardada:', result);
+
+      // Si hay evento, registrar automáticamente como venta en Contabilidad
+      if (dataToSend.evento && dataToSend.evento_precio) {
+        console.log('📋 Evento detectado, registrando venta...');
+        try {
+          const eventoData = EVENTOS[dataToSend.evento];
+          const ventaPrecio = parseFloat(dataToSend.evento_precio);
+          
+          const ventaPayload = {
+            cliente_id: null,
+            plan_id: null,
+            empleado_id: empleadoId || 1,
+            fecha_venta: dataToSend.fecha,
+            descripcion: eventoData?.nombre || dataToSend.evento.toUpperCase(),
+            monto: ventaPrecio,
+            metodo_pago: dataToSend.metodo_pago || 'efectivo',
+            estado: 'completada',
+            evento: dataToSend.evento,
+            evento_precio: ventaPrecio
+          };
+
+          console.log('📤 Payload final enviado:', ventaPayload);
+
+          const ventaResponse = await fetch('http://localhost:3001/Api/sales', {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(ventaPayload)
+          });
+
+          const ventaText = await ventaResponse.text();
+          console.log(`📥 Respuesta (${ventaResponse.status}):`, ventaText);
+
+          if (ventaResponse.ok) {
+            try {
+              const ventaResult = JSON.parse(ventaText);
+              console.log('✅ Venta registrada exitosamente:', ventaResult);
+              
+              // Disparar evento para listeners en otras partes de la aplicación
+              const evento = new CustomEvent('entradaGuardadaConEvento', { 
+                detail: { entrada: result, venta: ventaResult }
+              });
+              window.dispatchEvent(evento);
+              console.log('🔔 Evento disparado: entradaGuardadaConEvento');
+              
+              alert('✅ Entrada y venta registradas correctamente');
+            } catch (parseErr) {
+              console.error('❌ Error parseando respuesta:', parseErr);
+            }
+          } else {
+            console.error('❌ Error HTTP al registrar venta:', ventaResponse.status, ventaText);
+            alert('⚠️ Entrada guardada pero hubo error registrando venta: ' + ventaText);
+          }
+        } catch (err) {
+          console.error('❌ Error en try-catch de venta:', err);
+          alert('⚠️ Entrada guardada pero error al registrar venta: ' + err.message);
+        }
+      }
 
       closeModalFn();
       refreshCallback();
@@ -140,6 +254,61 @@ export const DayEntryFormContent = ({ entry, refreshCallback, closeModalFn }) =>
           />
         </div>
       </div>
+
+      <div className="form-group" style={{ marginTop: '15px' }}>
+        <label>Evento</label>
+        <select
+          value={formData.evento || ''}
+          onChange={(e) => {
+            setFormData({
+              ...formData,
+              evento: e.target.value,
+              evento_precio_otro: e.target.value !== 'otro' ? '' : formData.evento_precio_otro
+            });
+          }}
+          style={{
+            width: '100%',
+            padding: '8px',
+            marginTop: '5px',
+            border: '1px solid #ddd',
+            borderRadius: '5px',
+            fontSize: '14px',
+            boxSizing: 'border-box'
+          }}
+        >
+          <option value="">-- Selecciona un evento --</option>
+          <option value="zumba">Zumba ($10,000)</option>
+          <option value="dia">Día ($8,000)</option>
+          <option value="aerobicos">Aeróbicos ($7,000)</option>
+          <option value="otro">Otro (precio personalizado)</option>
+        </select>
+      </div>
+
+      {formData.evento === 'otro' && (
+        <div className="form-group" style={{ marginTop: '15px' }}>
+          <label>Precio del Evento *</label>
+          <input
+            type="number"
+            value={formData.evento_precio_otro || ''}
+            onChange={(e) => setFormData({
+              ...formData,
+              evento_precio_otro: e.target.value
+            })}
+            min="0"
+            step="100"
+            placeholder="Ingresa el precio"
+            style={{
+              width: '100%',
+              padding: '8px',
+              marginTop: '5px',
+              border: '1px solid #ddd',
+              borderRadius: '5px',
+              fontSize: '14px',
+              boxSizing: 'border-box'
+            }}
+          />
+        </div>
+      )}
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginTop: '15px' }}>
         <div className="form-group">

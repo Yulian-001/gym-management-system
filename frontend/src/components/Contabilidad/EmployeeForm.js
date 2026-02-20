@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './EmployeeFormStyle.css';
+import SetupSecurityQuestions from '../Auth/SetupSecurityQuestions';
 
 const EmployeeForm = ({ onSuccess }) => {
   const [formData, setFormData] = useState({
@@ -17,6 +18,8 @@ const EmployeeForm = ({ onSuccess }) => {
   const [registering, setRegistering] = useState(false);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const [newEmpleado, setNewEmpleado] = useState(null);
+  const [showSecurityQuestions, setShowSecurityQuestions] = useState(false);
 
   const cargos = ['Vendedor', 'Recepcionista', 'Gerente', 'Administrador', 'Otro'];
   const estados = ['activo', 'inactivo', 'suspendido'];
@@ -97,6 +100,13 @@ const EmployeeForm = ({ onSuccess }) => {
       if (!response.ok) {
         throw new Error(result.message || 'Error al registrar empleado');
       }
+
+      // Guardar datos del empleado para el modal de preguntas de seguridad
+      setNewEmpleado(result.data || result);
+      
+      // Solo mostrar modal de preguntas para ciertos cargos
+      const requierePreguntas = ['Recepcionista', 'Gerente', 'Administrador'].includes(formData.cargo);
+      setShowSecurityQuestions(requierePreguntas);
 
       setSuccessMessage('Empleado registrado exitosamente');
       setFormData({
@@ -285,6 +295,22 @@ const EmployeeForm = ({ onSuccess }) => {
           <div className="no-data-message">No hay empleados registrados</div>
         )}
       </div>
+
+      {showSecurityQuestions && newEmpleado && (
+        <SetupSecurityQuestions
+          empleado={newEmpleado}
+          onSuccess={() => {
+            setShowSecurityQuestions(false);
+            setNewEmpleado(null);
+            if (onSuccess) onSuccess();
+          }}
+          onSkip={() => {
+            setShowSecurityQuestions(false);
+            setNewEmpleado(null);
+            if (onSuccess) onSuccess();
+          }}
+        />
+      )}
     </div>
   );
 };

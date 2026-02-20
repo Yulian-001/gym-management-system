@@ -1,56 +1,40 @@
 import React, { useState, useEffect } from 'react';
-import { createRoot } from 'react-dom/client';
 import './PlanStyle.css';
-import PlanModal from './PlanModal';
 import { EditIcon, TrashIcon } from '../../icons';
-import { handleSellPlan } from '../functions/salesFunctions';
+import { handleEditPlan, handleDeletePlan } from '../functions/planFunctions';
+import { useAuth } from '../../context/AuthContext';
 
 function PlansForm(){
 
-    const [plans, setPlans] = useState([]);
     const [allPlans, setAllPlans] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [refreshTrigger, setRefreshTrigger] = useState(0);
+    const { user, canManagePlans } = useAuth();
+    const isRecepcionista = user?.rol === 'recepcionista';
 
     // Cargar planes de la API
     useEffect(() => {
         const fetchPlans = async () => {
                 try {
                     setLoading(true);
-                    // Obtener resumen de cierre del día para ver planes vendidos
-                    const today = new Date().toISOString().split('T')[0];
-                    const response = await fetch(`http://localhost:3001/Api/contabilidad/cierre-resumen?fecha=${today}`);
-                    if (!response.ok) throw new Error('Error al cargar planes vendidos');
-                    const resJson = await response.json();
-                    const data = resJson.data?.planes || [];
-                    // Excluir entradas sin plan (productos u otros) y el plan 'Día'
+                    // Obtener todos los planes disponibles
+                    const response = await fetch('http://localhost:3001/Api/plans');
+                    if (!response.ok) throw new Error('Error al cargar planes');
+                    const data = await response.json();
+                    
+                    // Excluir el plan 'Día'
                     const filtered = data.filter(p => {
-                        if (!p) return false;
-                        // si no hay id de plan, corresponde a venta sin plan -> excluir
-                        if (!p.id) return false;
-                        if (!p.plan_nombre) return false;
-                        const nameNorm = p.plan_nombre.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase();
-                        return nameNorm !== 'dia' && nameNorm !== 'día' && !nameNorm.includes('sin plan');
+                        if (!p || !p.name) return false;
+                        const nameNorm = p.name.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase();
+                        return nameNorm !== 'dia' && nameNorm !== 'día';
                     });
-                    // Mapear para mantener compatibilidad con la tabla
-                    const mapped = filtered.map(p => ({
-                        id: p.id,
-                        name: p.plan_nombre,
-                        duration_days: null,
-                        price: p.precio,
-                        description: '',
-                        status: 'vendido',
-                        cantidad_vendida: p.cantidad_vendida || 0,
-                        total_generado: p.total_generado || 0
-                    }));
-                    setAllPlans(mapped);
-                    setPlans(mapped);
+                    
+                    setAllPlans(filtered);
                     setError(null);
                 } catch (err) {
                     setError(err.message);
-                    console.error('Error fetching planes vendidos:', err);
+                    console.error('Error fetching planes:', err);
                 } finally {
                     setLoading(false);
                 }
@@ -65,51 +49,6 @@ function PlansForm(){
         window.addEventListener('saleCreated', handler);
         return () => window.removeEventListener('saleCreated', handler);
     }, []);
-
-    // Filtrar planes en tiempo real
-    useEffect(() => {
-        if(searchTerm.trim() === ''){
-            setPlans(allPlans);
-        } else {
-            const results = allPlans.filter(plan => 
-                plan.name.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-            setPlans(results);
-        }
-    }, [searchTerm, allPlans]);
-
-    const handleAddPlan = () => {
-        alert('Esta vista es de observación de planes vendidos. Para crear nuevos tipos de plan, usa la sección de administración de planes (si aplica).');
-    };
-
-    const handleEditPlan = (planId) => {
-        alert(`Editar plan ID: ${planId} - Próximamente`);
-    };
-
-    const handleDeletePlan = async (planId) => {
-        if (!window.confirm('¿Estás seguro de que deseas eliminar este plan?')) {
-            return;
-        }
-
-        try {
-            const response = await fetch(`http://localhost:3001/Api/plans/${planId}`, {
-                method: 'DELETE'
-            });
-
-            if (!response.ok) {
-                throw new Error('Error al eliminar el plan');
-            }
-
-            // Actualizar la lista de planes
-            const updatedAllPlans = allPlans.filter(plan => plan.id !== planId);
-            setAllPlans(updatedAllPlans);
-            setPlans(updatedAllPlans);
-            alert('Plan eliminado exitosamente');
-        } catch (err) {
-            alert('Error al eliminar el plan: ' + err.message);
-            console.error('Error:', err);
-        }
-    };
 
     if (loading) return <div style={{ padding: '2rem', textAlign: 'center' }}>Cargando planes...</div>;
     if (error) return <div style={{ padding: '2rem', color: 'red' }}>Error: {error}</div>;
@@ -149,34 +88,60 @@ function PlansForm(){
                             <th>Nombre Plan</th>
                                 <th> Días</th>
                                     <th>Precio  </th>
-                                    <th>Vendidos</th>
-                                    <th>Total Generado</th>
-                                    <th style={{ textAlign: 'center' }}>Acción</th>
+                                    {!isRecepcionista && <th style={{ textAlign: 'center' }}>Acción</th>}
                         </tr>
                     </thead>
                     <tbody>
-                        {plans.length > 0 ? plans.map((plan) => (
+                        {allPlans.length > 0 ? allPlans.map((plan) => (
                             <tr key={plan.id} className='table-row'>
                                 <td>{plan.id}</td>
                                 <td>{plan.name}</td>
                                 <td>{plan.duration_days}</td>
                                 <td>{isFinite(parseFloat(plan.price)) ? `$${parseFloat(plan.price).toLocaleString('es-CO')}` : '-'}</td>
-                                <td>{plan.cantidad_vendida || 0}</td>
-                                <td>{isFinite(parseFloat(plan.total_generado)) ? `$${parseFloat(plan.total_generado).toLocaleString('es-CO')}` : '$0'}</td>
-                                <td>
-                                        <div className='action-buttons-plans'>
-                                        <button 
-                                            className='btn-view'
-                                            onClick={() => alert('Esta vista muestra planes vendidos del día. Para más detalles, abre Contabilidad → Cierre de Caja.')}
-                                        >
-                                            Ver
-                                        </button>
-                                    </div>
+                                {!isRecepcionista && (
+                                <td style={{ display: 'flex', gap: '6px', justifyContent: 'center' }}>
+                                        {canManagePlans && (
+                                            <>
+                                                <button style={{ 
+                                                    backgroundColor:'#d72727',
+                                                    color: 'white',
+                                                    border: 'none',
+                                                    padding: '0.45rem 0.66rem',
+                                                    borderRadius: '6px',
+                                                    cursor:'pointer',
+                                                    fontSize:'12px',
+                                                    transition: 'background-color 0.3s',
+                                                    marginRight:'0.7rem',
+                                                }}
+                                                onMouseEnter={(e) => e.target.style.backgroundColor = 'red'}
+                                                onMouseLeave={(e) => e.target.style.backgroundColor = '#d72727'}
+                                                onClick={() => handleDeletePlan(plan.id, setAllPlans, allPlans)}>
+                                                    <TrashIcon size={18} />
+                                                </button>
+
+                                                <button style={{
+                                                    backgroundColor: '#3498db',
+                                                    color: 'white',
+                                                    border: 'none',
+                                                    padding:'0.45rem 0.66rem',
+                                                    borderRadius: '6px',
+                                                    cursor: 'pointer',
+                                                    fontSize: '12px',
+                                                    transition: 'background-color 0.3s' 
+                                                }}
+                                                onMouseEnter={(e) => e.target.style.backgroundColor = '#2750F5'}
+                                                onMouseLeave={(e) => e.target.style.backgroundColor = '#3498db'}
+                                                onClick={() => handleEditPlan(plan, setAllPlans, allPlans)}>
+                                                    <EditIcon size={18} />
+                                                </button>
+                                            </>
+                                        )}
                                 </td>
+                                )}
                             </tr>
                         )) : (
                             <tr>
-                                <td colSpan="7" style={{ textAlign: 'center', padding: '2rem' }}>
+                                <td colSpan={isRecepcionista ? "6" : "7"} style={{ textAlign: 'center', padding: '2rem' }}>
                                     No hay planes registrados
                                 </td>
                             </tr>

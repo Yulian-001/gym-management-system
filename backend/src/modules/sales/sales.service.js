@@ -1,8 +1,21 @@
 const db = require('../../config/db');
 
 module.exports = {
-  getAllSales: async () => {
-    const result = await db.query('SELECT * FROM ventas ORDER BY id ASC');
+  getAllSales: async (empleado_id = null, rol = null) => {
+    if (rol === 'recepcionista' && empleado_id) {
+      const result = await db.query(`
+        SELECT * FROM ventas 
+        WHERE empleado_id = $1 AND estado NOT IN ('archivada')
+        ORDER BY id ASC
+      `, [empleado_id]);
+      return result.rows;
+    }
+    // Admins y gerentes ven todas las no archivadas
+    const result = await db.query(`
+      SELECT * FROM ventas 
+      WHERE estado NOT IN ('archivada')
+      ORDER BY id ASC
+    `);
     return result.rows;
   },
 
@@ -11,14 +24,42 @@ module.exports = {
     return result.rows[0];
   },
 
-  createSale: async ({ cliente_id, plan_id, empleado_id, fecha_venta, descripcion, cantidad, precio_unitario, monto, metodo_pago, estado }) => {
-    const result = await db.query(
-      `INSERT INTO ventas (cliente_id, plan_id, empleado_id, fecha_venta, descripcion, cantidad, precio_unitario, monto, total, metodo_pago, estado, hora_venta) 
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $8, $9, $10, CURRENT_TIME)
-       RETURNING *`,
-      [cliente_id, plan_id, empleado_id, fecha_venta, descripcion, cantidad, precio_unitario, monto, metodo_pago, estado]
-    );
-    return result.rows[0];
+  createSale: async ({ cliente_id, plan_id, empleado_id, fecha_venta, descripcion, cantidad, precio_unitario, monto, metodo_pago, estado, evento, evento_precio }) => {
+    try {
+      const montoFinal = parseFloat(monto) || (parseFloat(cantidad || 1) * parseFloat(precio_unitario || 0));
+      const cantidadFinal = parseInt(cantidad) || 1;
+      const precioFinal = parseFloat(precio_unitario) || montoFinal;
+
+      const result = await db.query(
+        `INSERT INTO ventas 
+          (cliente_id, plan_id, empleado_id, fecha_venta, descripcion, 
+           cantidad, precio_unitario, total, monto, 
+           metodo_pago, estado, hora_venta, evento, evento_precio) 
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $8, $9, $10, CURRENT_TIME, $11, $12)
+         RETURNING *`,
+        [
+          cliente_id || null,
+          plan_id || null,
+          empleado_id || 1,
+          fecha_venta,
+          descripcion,
+          cantidadFinal,
+          precioFinal,
+          montoFinal,
+          metodo_pago || 'efectivo',
+          estado || 'completada',
+          evento || null,
+          evento_precio || null
+        ]
+      );
+      
+      const venta = result.rows[0];
+      console.log('✅ Venta insertada (ID:', venta.id, ')');
+      return venta;
+    } catch (error) {
+      console.error('❌ Error en createSale:', error.message);
+      throw error;
+    }
   },
 
   updateSale: async (id, fields) => {

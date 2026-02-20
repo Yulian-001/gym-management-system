@@ -28,4 +28,8 @@ router.delete('/empleados/:id', contabilidadController.eliminarEmpleado);
 router.get('/cierre-resumen', contabilidadController.obtenerResumenCierreCaja);
 router.post('/cierre', contabilidadController.crearCierreCaja);
 
+// === HISTÓRICO DE CIERRES Y VENTAS ARCHIVADAS ===
+router.get('/ventas-archivadas', contabilidadController.getVentasArchivadas);
+router.get('/cierres-historico', contabilidadController.getCierresCajaHistorico);
+
 module.exports = router;

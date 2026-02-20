@@ -11,18 +11,33 @@ module.exports = {
     return result.rows[0];
   },
 
-  createClient: async ({ nombre, cedula, email, telefono, eps, rh, plan_id, vence, estado }) => {
-    const result = await db.query(
-      `INSERT INTO clientes (cedula, nombre, email, telefono, eps, rh, plan_id, vence, estado) 
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-       RETURNING *`,
-      [cedula, nombre, email, telefono, eps, rh, plan_id, vence, estado]
-    );
-    return result.rows[0];
+  createClient: async ({ nombre, cedula, email, telefono, eps, rh, plan_id, inicio, vence, estado }) => {
+    try {
+      const result = await db.query(
+        `INSERT INTO clientes (cedula, nombre, email, telefono, eps, rh, plan_id, inicio, vence, estado) 
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+         RETURNING *`,
+        [cedula, nombre, email || null, telefono, eps, rh, plan_id, inicio, vence, estado]
+      );
+      return result.rows[0];
+    } catch (error) {
+      // Detectar si es error de cédula duplicada
+      if (error.constraint === 'clientes_cedula_key') {
+        const err = new Error('La cédula ya está registrada');
+        err.code = 'CEDULA_DUPLICATE';
+        throw err;
+      }
+      // Detectar si es error de email duplicado
+      if (error.constraint === 'clientes_email_key') {
+        const err = new Error('El email ya está registrado');
+        err.code = 'EMAIL_DUPLICATE';
+        throw err;
+      }
+      throw error;
+    }
   },
 
   updateClient: async (id, fields) => {
-    // Permitir actualización de campos específicos
     const allowedFields = ['nombre', 'cedula', 'email', 'telefono', 'eps', 'rh', 'plan_id', 'vence', 'inicio', 'estado'];
     const keys = Object.keys(fields).filter(key => allowedFields.includes(key));
     

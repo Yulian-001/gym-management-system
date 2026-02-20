@@ -1,9 +1,13 @@
 const entradaService = require('./entradaDia.service');
 
-// Obtener todas las entradas
+//? Obtener todas las entradas
 const getAllEntradas = async (req, res) => {
   try {
-    const entradas = await entradaService.getAllEntradas();
+    const { empleado_id, rol } = req.query;
+    const entradas = await entradaService.getAllEntradas(
+      empleado_id ? parseInt(empleado_id) : null,
+      rol || null
+    );
     res.status(200).json(entradas);
   } catch (error) {
     console.error('Error fetching entradas:', error);
@@ -11,7 +15,7 @@ const getAllEntradas = async (req, res) => {
   }
 };
 
-// Obtener entrada por ID
+//? Obtener entrada por ID
 const getEntradaById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -28,10 +32,10 @@ const getEntradaById = async (req, res) => {
   }
 };
 
-// Crear nueva entrada
+//? Crear nueva entrada
 const createEntrada = async (req, res) => {
   try {
-    const { nombre_cliente, fecha, hora, metodo_pago, estado } = req.body;
+    const { nombre_cliente, fecha, hora, metodo_pago, estado, evento, evento_precio, empleado_id } = req.body;
     
     // Validaciones
     if (!nombre_cliente || !fecha || !hora || !metodo_pago) {
@@ -51,7 +55,10 @@ const createEntrada = async (req, res) => {
       fecha,
       hora,
       metodo_pago,
-      estadoFinal
+      estadoFinal,
+      evento || null,
+      evento_precio || null,
+      empleado_id ? parseInt(empleado_id) : null
     );
     
     res.status(201).json(entrada);
@@ -61,11 +68,11 @@ const createEntrada = async (req, res) => {
   }
 };
 
-// Actualizar entrada
+//? Actualizar entrada
 const updateEntrada = async (req, res) => {
   try {
     const { id } = req.params;
-    const { nombre_cliente, fecha, hora, metodo_pago, estado } = req.body;
+    const { nombre_cliente, fecha, hora, metodo_pago, estado, evento, evento_precio } = req.body;
     
     // Validaciones
     if (!nombre_cliente || !fecha || !hora || !metodo_pago) {
@@ -86,7 +93,9 @@ const updateEntrada = async (req, res) => {
       fecha,
       hora,
       metodo_pago,
-      estadoFinal
+      estadoFinal,
+      evento || null,
+      evento_precio || null
     );
     
     if (!entrada) {
@@ -100,7 +109,7 @@ const updateEntrada = async (req, res) => {
   }
 };
 
-// Eliminar entrada
+//? Eliminar entrada
 const deleteEntrada = async (req, res) => {
   try {
     const { id } = req.params;

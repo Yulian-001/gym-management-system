@@ -1,6 +1,5 @@
 // src/components/functions/buttonFunctions.js - VERSIÓN SIMPLIFICADA
 import React, {  useEffect, useState } from 'react';
-import { clientFunctions } from './clientFunctions';
 import { showModal, showConfirmModal } from './modalFunctions';
 
 /**
@@ -399,23 +398,23 @@ const ClientForm = ({ client, onSubmit, onCancel }) => {
 /**
  * Función para manejar el botón "Añadir Cliente"
  */
-export const handleAddClient = (setClients, currentClients) => {
+export const handleAddClient = (setClients, currentClients, user) => {
   showModal({
     title: 'Añadir Nuevo Cliente',
     content: (
       <ClientForm
         onSubmit={async (formData) => {
           try {
-            // Función auxiliar para convertir fecha correctamente
+            //? Función auxiliar para convertir fecha correctamente
             const formatDate = (dateString) => {
               if (!dateString) return null;
               
-              // Si ya está en formato YYYY-MM-DD, devolverlo así
+              //? Si ya está en formato YYYY-MM-DD, devolverlo así
               if (dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
                 return dateString;
               }
               
-              // Intentar parsear la fecha
+              //? Intentar parsear la fecha
               try {
                 const date = new Date(dateString);
                 if (isNaN(date.getTime())) {
@@ -429,7 +428,7 @@ export const handleAddClient = (setClients, currentClients) => {
               }
             };
 
-            // Validar campos obligatorios
+            //? Validar campos obligatorios
             if (!formData.cedula || !formData.cedula.trim()) {
               alert('La cédula es obligatoria');
               return;
@@ -443,7 +442,7 @@ export const handleAddClient = (setClients, currentClients) => {
               return;
             }
 
-            // Mapear datos del formulario para enviar a la API
+            //? Mapear datos del formulario para enviar a la API
             const dataToSend = {
               cedula: formData.cedula.trim(),
               nombre: formData.nombre.trim(),
@@ -457,9 +456,7 @@ export const handleAddClient = (setClients, currentClients) => {
               estado: formData.estado || 'activo'
             };
 
-            console.log('Creando cliente con datos:', dataToSend);
-
-            // Hacer llamada POST a la API para crear cliente
+            //? Hacer llamada POST a la API para crear cliente
             const response = await fetch('http://localhost:3001/Api/clients', {
               method: 'POST',
               headers: {
@@ -471,24 +468,36 @@ export const handleAddClient = (setClients, currentClients) => {
             if (!response.ok) {
               const error = await response.text();
               console.error('Error response:', error);
+              
+              // Detectar error de cédula duplicada
+              if (response.status === 409) {
+                try {
+                  const errorObj = JSON.parse(error);
+                  if (errorObj.code === 'CEDULA_DUPLICATE') {
+                    alert('⚠️ La cédula ya está registrada en el sistema');
+                    return;
+                  }
+                } catch (e) {}
+              }
+              
               throw new Error(`Error ${response.status}: ${error}`);
             }
 
             const newClient = await response.json();
             
-            // Actualizar la lista con el nuevo cliente retornado por la API
+            //? Actualizar la lista con el nuevo cliente retornado por la API
             setClients([...currentClients, newClient]);
             
-            // Cerrar modal
+            //? Cerrar modal
             const modal = document.querySelector('[id^="dynamic-modal-"]');
             if(modal) modal.remove();
             
             alert('Cliente creado exitosamente!');
-            // Si se seleccionó un plan, preguntar si registrar la venta ahora
+            //? Si se seleccionó un plan, preguntar si registrar la venta ahora
             try {
               const planId = parseInt(dataToSend.plan_id);
               if (planId) {
-                // Registrar la venta automáticamente usando el precio del plan cuando esté disponible.
+                //? Registrar la venta automáticamente usando el precio del plan cuando esté disponible.
                 let planPrice = null;
                 try {
                   const plansRes = await fetch('http://localhost:3001/Api/plans');
@@ -506,13 +515,16 @@ export const handleAddClient = (setClients, currentClients) => {
                   const saleBody = {
                     cliente_id: newClient.id,
                     plan_id: planId,
-                    empleado_id: 1,
+                    empleado_id: user?.id || 1,
                     fecha_venta: new Date().toISOString().split('T')[0],
                     descripcion: `Compra plan ${planId}`,
                     cantidad: 1,
                     precio_unitario: monto,
+                    monto: monto,
                     metodo_pago: 'efectivo',
-                    estado: 'completada'
+                    estado: 'completada',
+                    evento: null,
+                    evento_precio: null
                   };
 
                   try {
@@ -529,7 +541,6 @@ export const handleAddClient = (setClients, currentClients) => {
                     } else {
                       const created = await saleResp.json();
                       alert('Venta del plan registrada correctamente');
-                      // Emitir evento global para que otras vistas (Plans, Contabilidad) se refresquen
                       try {
                         window.dispatchEvent(new CustomEvent('saleCreated', { detail: created }));
                       } catch (e) {
@@ -564,7 +575,7 @@ export const handleAddClient = (setClients, currentClients) => {
 };
 
 /**
- * Función para manejar el botón "Editar Cliente"
+ *? Función para manejar el botón "Editar Cliente"
  */
 export const handleEditClient = (client, setClients, currentClients) => {
   if (!client || !client.id) {
@@ -579,7 +590,7 @@ export const handleEditClient = (client, setClients, currentClients) => {
         client={client}
         onSubmit={async (formData) => {
           try {
-            // Función auxiliar para convertir fecha correctamente
+            //? Función auxiliar para convertir fecha correctamente
             const formatDate = (dateString) => {
               if (!dateString) return null;
               
@@ -600,7 +611,7 @@ export const handleEditClient = (client, setClients, currentClients) => {
               }
             };
 
-            // Validar campos obligatorios
+            //? Validar campos obligatorios
             if (!formData.cedula || !formData.cedula.trim()) {
               alert('La cédula es obligatoria');
               return;
@@ -614,7 +625,7 @@ export const handleEditClient = (client, setClients, currentClients) => {
               return;
             }
 
-            // Los datos ya vienen correctamente mapeados del formulario
+            //? Los datos ya vienen correctamente mapeados del formulario
             const dataToSend = {
               cedula: formData.cedula.trim(),
               nombre: formData.nombre.trim(),
@@ -630,7 +641,7 @@ export const handleEditClient = (client, setClients, currentClients) => {
 
             console.log('Actualizando cliente con datos:', dataToSend);
 
-            // Hacer llamada a la API para actualizar
+            //? Hacer llamada a la API para actualizar
             const response = await fetch(`http://localhost:3001/Api/clients/${client.id}`, {
               method: 'PUT',
               headers: {
@@ -647,12 +658,12 @@ export const handleEditClient = (client, setClients, currentClients) => {
 
             const updated = await response.json();
             
-            // Actualizar la lista con los datos retornados por la API
+            //? Actualizar la lista con los datos retornados por la API
             const updatedClients = currentClients.map(c => 
               c.id === client.id ? updated : c);
             setClients(updatedClients);
             
-            // Cerrar modal
+            //? Cerrar modal
             const modal = document.querySelector('[id^="dynamic-modal-"]');
             if(modal) modal.remove();
             
@@ -674,7 +685,7 @@ export const handleEditClient = (client, setClients, currentClients) => {
 };
 
 /**
- * Función para manejar el botón "Eliminar Cliente"
+ *? Función para manejar el botón "Eliminar Cliente"
  */
 export const handleDeleteClient = (clientId, setClients, currentClients) => {
   if (!clientId) {
@@ -684,35 +695,28 @@ export const handleDeleteClient = (clientId, setClients, currentClients) => {
   
   showConfirmModal({
     message: '¿Estás seguro de eliminar este cliente? Esta acción no se puede deshacer.',
-    onConfirm: () => {
-      // Eliminar cliente
-      const deleted = clientFunctions.deleteClient(clientId);
-      if (deleted) {
-        // Actualizar lista
-        const updatedClients = currentClients.filter(c => c.id !== clientId);
-        setClients(updatedClients);
-        
-        alert(' Cliente eliminado exitosamente!');
-      } else {
-        alert(' No se pudo eliminar el cliente');
+    onConfirm: async () => {
+      try {
+        const response = await fetch(`http://localhost:3001/Api/clients/${clientId}`, {
+          method: 'DELETE'
+        });
+        if (!response.ok) throw new Error('Error al eliminar cliente');
+        setClients(currentClients.filter(c => c.id !== clientId));
+        alert('Cliente eliminado exitosamente!');
+      } catch (err) {
+        console.error('Error eliminando cliente:', err);
+        alert('No se pudo eliminar el cliente: ' + err.message);
       }
     },
-    onCancel: () => {
-      console.log('Eliminación cancelada');
-    }
+    onCancel: () => {}
   });
 };
 
 /**
- * Función para manejar la búsqueda
+ *?Función para manejar la búsqueda
  */
-export const handleSearch = (searchTerm, setClients) => {
+export const handleSearch = (searchTerm, clients, setClients) => {
   if (!searchTerm || searchTerm.trim() === '') {
-    // Si no hay término, mostrar todos
-    setClients(clientFunctions.getAllClients());
-  } else {
-    // Buscar clientes
-    const results = clientFunctions.searchClients(searchTerm);
-    setClients(results);
+    setClients(clients);
   }
 };

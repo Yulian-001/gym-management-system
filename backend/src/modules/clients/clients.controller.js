@@ -30,11 +30,11 @@ module.exports = {
       if (!cedula) return res.status(400).json({ error: 'La cédula es obligatoria' });
       if (!telefono) return res.status(400).json({ error: 'El teléfono es obligatorio' });
 
-      // Crear cliente con los datos completos
+      // Crear cliente con todos los datos
       const newClient = await ClientsService.createClient({
         nombre,
         cedula,
-        email: email || '',
+        email: email || null,
         telefono,
         eps: eps || 'Capital Salud',
         rh: rh || 'O+',
@@ -47,6 +47,21 @@ module.exports = {
       res.status(201).json(newClient);
     } catch (err) {
       console.error('Error creating client:', err);
+      
+      // Manejo de errores específicos
+      if (err.code === 'CEDULA_DUPLICATE') {
+        return res.status(409).json({ 
+          error: '❌ La cédula ya está registrada en el sistema',
+          code: 'CEDULA_DUPLICATE'
+        });
+      }
+      if (err.code === 'EMAIL_DUPLICATE') {
+        return res.status(409).json({ 
+          error: '❌ El email ya está registrado',
+          code: 'EMAIL_DUPLICATE'
+        });
+      }
+      
       res.status(500).json({ error: err.message });
     }
   },

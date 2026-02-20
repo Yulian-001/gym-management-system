@@ -57,6 +57,10 @@ app.use('/Api/contabilidad', contabilidadRoutes);
 const asistenciaRoutes = require('./src/modules/asistencia/asistencia.routes');
 app.use('/Api/asistencia', asistenciaRoutes);
 
+// Empleados (Login y gestión de empleados)
+const empleadosRoutes = require('./src/modules/empleados/empleados.routes');
+app.use('/Api/empleados', empleadosRoutes);
+
 
 // ❌ Esto DEBE quedar al final: manejador de rutas inexistentes
 app.use((req, res) => {

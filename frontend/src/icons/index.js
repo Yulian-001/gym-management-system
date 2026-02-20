@@ -6,7 +6,7 @@ import { FaUsersLine } from "react-icons/fa6";
 import { CgEnter } from "react-icons/cg";
 import { FaMoneyCheck, FaDollarSign, FaChartPie, FaFileInvoiceDollar, FaCircleCheck, FaUserPlus } from "react-icons/fa6";
 import { TbBrandDaysCounter } from "react-icons/tb";
-import { MdSevereCold } from "react-icons/md";
+import { MdSevereCold, MdHeadsetMic } from "react-icons/md";
 import { IoMdFingerPrint, IoIosSave  } from "react-icons/io";
 import { FaUserAlt } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
@@ -30,6 +30,7 @@ export const ChartIcon = FaChartPie;
 export const InvoiceIcon = FaFileInvoiceDollar;
 export const CheckIcon = FaCircleCheck;
 export const UserAddIcon = FaUserPlus;
+export const SupportIcon = MdHeadsetMic;
 
 //? Export como objeto 
 export const AdminIcons = {

@@ -7,6 +7,8 @@ import SalesTable from '../components/Sales/SalesTable';
 import DayEntryTable from '../components/DayEntry/DayEntryTable';
 import EstadoPanel from '../components/Estado/EstadoPanel';
 import ContabilidadPanel from '../components/Contabilidad/ContabilidadPanel';
+import ReportsPanel from '../components/Reports/ReportsPanel';
+import { useAuth } from '../context/AuthContext';
 
 //? rutas de iconos
 import { 
@@ -26,11 +28,14 @@ function ModulesSystem() {
   const [activeTab, setActiveTab] = useState('admin'); 
   const [activeAdminOption, setActiveAdminOption] = useState(null);
   const [activeContabilidadOption, setActiveContabilidadOption] = useState(null);
+  const [activeReportOption, setActiveReportOption] = useState(null);
+  const { user, canManagePlans, canDelete, canEdit } = useAuth();
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
     setActiveAdminOption(null);
     setActiveContabilidadOption(null);
+    setActiveReportOption(null);
   };
   
   //? funcion para manejar click en opcion
@@ -56,7 +61,7 @@ function ModulesSystem() {
         </div>
 
         <div className={`module-tab ${activeTab === 'reportes' ? 'active' : ''}`}
-          onClick={() => setActiveTab('reportes')}>
+          onClick={() => handleTabClick('reportes')}>
           <h2 className='module-title'>Reportes</h2>
         </div>
       </div>
@@ -64,7 +69,6 @@ function ModulesSystem() {
       {/*//? === Inicio de opciones de Modulos ===*/}
 
       <main className="modules-container-father">
-  <div className='wrapper-option'>    
     <div className='modules-content'>
         {/*//? ===  Modulo Administracion  === */}
         {activeTab === 'admin' && (
@@ -87,7 +91,7 @@ function ModulesSystem() {
                   <div className={`module-options-container`}>
                     <UsersIcon className='options-icon' size={40} style={{color: activeAdminOption === 'clientes' ? '#1a86a2' : 'whiteSmoke'}} />
                   </div>
-                </div> 
+                </div>
 
                 {/*//? === planes === */}
                 <div className={`container-icons ${activeAdminOption === 'planes' ? 'active' : ''}`}
@@ -132,7 +136,48 @@ function ModulesSystem() {
                 
 
     </div>
-     <div className='container-flex-option'>
+
+        {/*//? === Modulo Reportes  === */}
+
+        {activeTab === 'reportes' && (
+          <div className='Container-option'>
+            <div className={`container-icons ${activeReportOption === 'historico' ? 'active' : ''}`} onClick={() => setActiveReportOption('historico')}>
+              <span>Histórico de Cierres</span>
+              <div className={`module-options-container`}>
+                <ChartIcon className='options-icon' size={40} style={{color: activeReportOption === 'historico' ? '#1a86a2' : 'whiteSmoke'}} />
+              </div>
+            </div>
+
+            <div className={`container-icons ${activeReportOption === 'egresos' ? 'active' : ''}`} onClick={() => setActiveReportOption('egresos')}>
+              <span>Egresos</span>
+              <div className={`module-options-container`}>
+                <InvoiceIcon className='options-icon' size={40} style={{color: activeReportOption === 'egresos' ? '#1a86a2' : 'whiteSmoke'}} />
+              </div>
+            </div>
+
+            <div className={`container-icons ${activeReportOption === 'clientes' ? 'active' : ''}`} onClick={() => setActiveReportOption('clientes')}>
+              <span>Clientes Destacados</span>
+              <div className={`module-options-container`}>
+                <ChartIcon className='options-icon' size={40} style={{color: activeReportOption === 'clientes' ? '#1a86a2' : 'whiteSmoke'}} />
+              </div>
+            </div>
+
+            <div className={`container-icons ${activeReportOption === 'eventos' ? 'active' : ''}`} onClick={() => setActiveReportOption('eventos')}>
+              <span>Eventos</span>
+              <div className={`module-options-container`}>
+                <ChartIcon className='options-icon' size={40} style={{color: activeReportOption === 'eventos' ? '#1a86a2' : 'whiteSmoke'}} />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'reportes' && activeReportOption && (
+          <div className='container-flex-option'>
+            <ReportsPanel option={activeReportOption} />
+          </div>
+        )}
+     {activeTab === 'admin' && <div className='container-flex-option'>
+      
               {/*//? Mostrar contenido según la opción seleccionada */}
                           {/*//todo === Clientes ===*/}
                       {activeAdminOption === 'clientes' && (
@@ -187,8 +232,7 @@ function ModulesSystem() {
                         </div>
                       )}
 
-              </div>
-    </div>
+              </div>}
 
     {/*//? === Modulo Contabilidad  === */}
     {activeTab === 'contabilidad' && (
@@ -231,13 +275,15 @@ function ModulesSystem() {
         </div>
 
         {/*//? === Registrar Empleados === */}
-        <div className={`container-icons ${activeContabilidadOption === 'empleados' ? 'active' : ''}`}
-          onClick={() => setActiveContabilidadOption('empleados')}>
-          <span>Registrar Empleados</span>
-          <div className={`module-options-container`}>
-            <UserAddIcon className='options-icon' size={40} style={{color: activeContabilidadOption === 'empleados' ? '#1a86a2' : 'whiteSmoke'}} />
+        {user?.rol !== 'recepcionista' && (
+          <div className={`container-icons ${activeContabilidadOption === 'empleados' ? 'active' : ''}`}
+            onClick={() => setActiveContabilidadOption('empleados')}>
+            <span>Registrar Empleados</span>
+            <div className={`module-options-container`}>
+              <UserAddIcon className='options-icon' size={40} style={{color: activeContabilidadOption === 'empleados' ? '#1a86a2' : 'whiteSmoke'}} />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     )}
 

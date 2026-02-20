@@ -3,6 +3,8 @@ import './ContabilidadStyle.css';
 import EmployeeRegistrationForm from './EmployeeRegistrationForm';
 import EmployeeListPanel from './EmployeeListPanel';
 import { createRoot } from 'react-dom/client';
+import { showConfirmModal } from '../functions/modalFunctions';
+import { useAuth } from '../../context/AuthContext';
 
 const ContabilidadPanel = ({ option }) => {
   const [resumenData, setResumenData] = useState(null);
@@ -14,8 +16,10 @@ const ContabilidadPanel = ({ option }) => {
   const [fecha, setFecha] = useState(new Date().toISOString().split('T')[0]);
   const [cierreProcesando, setCierreProcesando] = useState(false);
   const [employeeRefresh, setEmployeeRefresh] = useState(0);
+  const { user } = useAuth();
 
-  // Cargar resumen de caja
+  //? Actualizar estado de la venta
+  //? Cargar resumen de caja
   const cargarResumen = async (fechaSeleccionada = null) => {
     setLoading(true);
     setError(null);
@@ -36,28 +40,31 @@ const ContabilidadPanel = ({ option }) => {
     setLoading(false);
   };
 
-  // Cargar ventas del día
+  //? Cargar ventas del día
   const cargarVentas = async (fechaSeleccionada = null) => {
     setLoading(true);
     setError(null);
     try {
-      const endpointFecha = fechaSeleccionada || fecha;
-      const response = await fetch(`http://localhost:3001/Api/contabilidad/ventas-dia?fecha=${endpointFecha}`);
+      const fechaParam = fechaSeleccionada || fecha;
+      console.log(`📡 Cargando ventas para: ${fechaParam}`);
+      const response = await fetch(`http://localhost:3001/Api/contabilidad/ventas-dia?fecha=${fechaParam}`);
       const result = await response.json();
 
       if (result.success) {
+        console.log(`✅ ${result.data?.length || 0} ventas encontradas`);
         setVentasData(result.data || []);
       } else {
+        console.warn('⚠️ Sin ventas para esta fecha');
         setVentasData([]);
       }
     } catch (err) {
-      console.error('Error al cargar ventas:', err);
+      console.error('❌ Error cargando ventas:', err);
       setError('Error al cargar ventas del día');
     }
     setLoading(false);
   };
 
-  // Cargar egresos del día
+  //? Cargar egresos del día
   const cargarEgresos = async (fechaSeleccionada = null) => {
     setLoading(true);
     setError(null);
@@ -78,7 +85,7 @@ const ContabilidadPanel = ({ option }) => {
     setLoading(false);
   };
 
-  // Cargar resumen de cierre de caja
+  //? Cargar resumen de cierre de caja
   const cargarCierreCaja = async (fechaSeleccionada = null) => {
     setLoading(true);
     setError(null);
@@ -99,7 +106,7 @@ const ContabilidadPanel = ({ option }) => {
     setLoading(false);
   };
 
-  // Registrar cierre de caja
+  //? Registrar cierre de caja
   const registrarCierreCaja = async () => {
     setCierreProcesando(true);
     setError(null);
@@ -110,7 +117,7 @@ const ContabilidadPanel = ({ option }) => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          empleado_id: 1, // Temporal - será reemplazado con el usuario logueado
+          empleado_id: user?.id || 1,
           observaciones: 'Cierre diario'
         })
       });
@@ -131,7 +138,7 @@ const ContabilidadPanel = ({ option }) => {
     setCierreProcesando(false);
   };
 
-  // Abrir modal para registrar empleado
+  //? Abrir modal para registrar empleado
   const abrirModalRegistroEmpleado = () => {
     const modalContainer = document.createElement('div');
     modalContainer.id = 'modal-register-employee-' + Date.now();
@@ -218,7 +225,7 @@ const ContabilidadPanel = ({ option }) => {
     );
   };
 
-  // Abrir modal para editar empleado
+  //? Abrir modal para editar empleado
   const abrirModalEditarEmpleado = (employee) => {
     const modalContainer = document.createElement('div');
     modalContainer.id = 'modal-edit-employee-' + Date.now();
@@ -305,29 +312,36 @@ const ContabilidadPanel = ({ option }) => {
     );
   };
 
-  // Eliminar empleado
-  const handleDeleteEmpleado = async (id) => {
-    const confirmar = window.confirm('¿Eliminar empleado? Esta acción no se puede deshacer.');
-    if (!confirmar) return;
-    try {
-      const resp = await fetch(`http://localhost:3001/Api/contabilidad/empleados/${id}`, {
-        method: 'DELETE'
-      });
-      const result = await resp.json();
-      if (result.success) {
-        setEmployeeRefresh(prev => prev + 1);
-        alert('Empleado eliminado');
-      } else {
-        alert(result.message || 'Error al eliminar empleado');
+  //? Eliminar empleado
+  const handleDeleteEmpleado = (id) => {
+    showConfirmModal({
+      message: '¿Eliminar empleado? Esta acción no se puede deshacer.',
+      onConfirm: async () => {
+        try {
+          const resp = await fetch(`http://localhost:3001/Api/contabilidad/empleados/${id}`, {
+            method: 'DELETE'
+          });
+          const result = await resp.json();
+          if (result.success) {
+            setEmployeeRefresh(prev => prev + 1);
+            alert('Empleado eliminado exitosamente');
+          } else {
+            alert(result.message || 'Error al eliminar empleado');
+          }
+        } catch (err) {
+          console.error('Error eliminar empleado:', err);
+          alert('Error al eliminar empleado');
+        }
+      },
+      onCancel: () => {
+        console.log('Eliminación cancelada');
       }
-    } catch (err) {
-      console.error('Error eliminar empleado:', err);
-      alert('Error al eliminar empleado');
-    }
+    });
   };
 
-  // Efecto inicial
+  //? Efecto inicial - Cargar datos cuando cambia la opción o fecha
   useEffect(() => {
+    console.log(`📋 Opción: ${option}, Fecha: ${fecha}`);
     if (option === 'resumen') {
       cargarResumen();
       cargarVentas();
@@ -338,42 +352,27 @@ const ContabilidadPanel = ({ option }) => {
     } else if (option === 'cierre') {
       cargarCierreCaja();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [option, fecha]);
 
-  // Manejar cambio de fecha
-  const handleFechaChange = (e) => {
-    const nuevaFecha = e.target.value;
-    setFecha(nuevaFecha);
-    if (option === 'resumen') {
-      cargarResumen(nuevaFecha);
-      cargarVentas(nuevaFecha);
-    } else if (option === 'ventas') {
-      cargarVentas(nuevaFecha);
-    } else if (option === 'egresos') {
-      cargarEgresos(nuevaFecha);
-    } else if (option === 'cierre') {
-      cargarCierreCaja(nuevaFecha);
-    }
-  };
-
-  // Escuchar evento global 'saleCreated' para refrescar datos relevantes
+  //? Listener para cualquier venta creada (desde Entradas o desde Administración→Ventas)
   useEffect(() => {
-    const onSaleCreated = () => {
-      if (option === 'resumen') {
-        cargarResumen();
+    const refrescarSiEsNecesario = () => {
+      if (option === 'ventas' || option === 'resumen') {
         cargarVentas();
-      } else if (option === 'ventas') {
-        cargarVentas();
-      } else if (option === 'cierre') {
-        cargarCierreCaja();
       }
     };
 
-    window.addEventListener('saleCreated', onSaleCreated);
-    return () => window.removeEventListener('saleCreated', onSaleCreated);
-  }, [option, fecha]);
+    window.addEventListener('entradaGuardadaConEvento', refrescarSiEsNecesario);
+    window.addEventListener('saleCreated', refrescarSiEsNecesario);
+    return () => {
+      window.removeEventListener('entradaGuardadaConEvento', refrescarSiEsNecesario);
+      window.removeEventListener('saleCreated', refrescarSiEsNecesario);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [option]);
 
-  // Formatear moneda
+  //? Formatear moneda
   const formatearMoneda = (valor) => {
     return parseFloat(valor || 0).toFixed(2);
   };
@@ -505,30 +504,28 @@ const ContabilidadPanel = ({ option }) => {
                 <table className="ventas-table">
                   <thead>
                     <tr>
-                      <th>Hora</th>
-                      <th>Cliente</th>
-                      <th>Plan</th>
-                      <th>Vendedor</th>
-                      <th>Cantidad</th>
-                      <th>Total</th>
-                      <th>Método Pago</th>
-                      <th>Estado</th>
+                      <th style={{ width:'6%' }}>ID</th>
+                      <th style={{ width:'20%' }}>Cliente</th>
+                      <th style={{ width:'15%' }}>Fecha</th>
+                      <th style={{ width:'25%' }}>Descripción</th>
+                      <th style={{ width:'8%' }}>Cant</th>
+                      <th style={{ width:'12%' }}>Precio Unit.</th>
+                      <th style={{ width:'12%' }}>Total</th>
+                      <th style={{ width:'15%' }}>Método Pago</th>
                     </tr>
                   </thead>
                   <tbody>
                     {ventasData.map((venta) => (
                       <tr key={venta.id}>
-                        <td>{venta.hora_venta ? venta.hora_venta.substring(0, 5) : '-'}</td>
+                        <td>{venta.id}</td>
                         <td>{venta.cliente_nombre || 'Sin cliente'}</td>
-                        <td>{venta.plan_nombre || '-'}</td>
-                        <td>{venta.vendedor_nombre || '-'}</td>
+                        <td style={{ whiteSpace:'nowrap' }}>{venta.fecha_venta ? new Date(venta.fecha_venta).toLocaleDateString() : '-'}</td>
+                        <td>{venta.descripcion || venta.plan_nombre || '-'}</td>
                         <td>{venta.cantidad || 1}</td>
+                        <td>${venta.precio_unitario ? parseFloat(venta.precio_unitario).toLocaleString('es-CO', {minimumFractionDigits: 2}) : '0.00'}</td>
                         <td>${formatearMoneda(venta.monto)}</td>
                         <td className={`metodo-${venta.metodo_pago}`}>
                           {venta.metodo_pago}
-                        </td>
-                        <td className={`estado-${venta.estado}`}>
-                          {venta.estado}
                         </td>
                       </tr>
                     ))}
@@ -553,7 +550,7 @@ const ContabilidadPanel = ({ option }) => {
               </div>
             </>
           ) : (
-            <div className="no-data-message">No hay ventas registradas para esta fecha</div>
+            <div className="no-data-message">No hay ventas registradas</div>
           )}
         </div>
       )}
@@ -695,7 +692,7 @@ const ContabilidadPanel = ({ option }) => {
                     </thead>
                     <tbody>
                       {cierreCajaData.planes
-                        .filter(plan => plan && plan.id) // excluir ventas sin plan (productos)
+                        .filter(plan => plan && plan.id) //? excluir ventas sin plan (productos)
                         .map((plan) => (
                         <tr key={plan.id}>
                           <td>{plan.plan_nombre}</td>
@@ -711,7 +708,7 @@ const ContabilidadPanel = ({ option }) => {
                 )}
               </div>
 
-              {/* Egresos por Categoría eliminado - mantenemos espacio si se necesita en el futuro */}
+              {/*? Egresos por Categoría eliminado - mantenemos espacio si se necesita en el futuro */}
 
               {/* Botón para registrar cierre */}
               <div className="cierre-actions">
@@ -738,7 +735,7 @@ const ContabilidadPanel = ({ option }) => {
               className="btn-nuevo-empleado"
               onClick={abrirModalRegistroEmpleado}
             >
-              + Registrar Nuevo Empleado
+              +  Nuevo Empleado
             </button>
           </div>
           <EmployeeListPanel refreshTrigger={employeeRefresh} onEdit={abrirModalEditarEmpleado} onDelete={handleDeleteEmpleado} />

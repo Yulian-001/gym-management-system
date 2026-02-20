@@ -54,10 +54,30 @@ const getVentasDelDia = async (req, res) => {
   try {
     const { fecha } = req.query;
     const ventas = await contabilidadService.getVentasDelDia(fecha);
+    
+    // Traer detalles de clientes para enriquecer los datos
+    const pool = require('../../config/db');
+    const ventasConDetalles = await Promise.all(
+      ventas.map(async (venta) => {
+        let clienteNombre = 'Sin cliente';
+        if (venta.cliente_id) {
+          try {
+            const clienteResult = await pool.query('SELECT nombre FROM clientes WHERE id = $1', [venta.cliente_id]);
+            if (clienteResult.rows.length > 0) {
+              clienteNombre = clienteResult.rows[0].nombre;
+            }
+          } catch (e) {
+            console.warn('Error fetching cliente details:', e);
+          }
+        }
+        return { ...venta, cliente_nombre: clienteNombre };
+      })
+    );
+    
     res.status(200).json({
       success: true,
-      data: ventas,
-      total: ventas.length
+      data: ventasConDetalles,
+      total: ventasConDetalles.length
     });
   } catch (error) {
     console.error('Error al obtener ventas del día:', error);
@@ -350,6 +370,62 @@ const crearCierreCaja = async (req, res) => {
   }
 };
 
+// Obtener venditas archivadas (histórico de cierres)
+const getVentasArchivadas = async (req, res) => {
+  try {
+    const { fechaInicio, fechaFin } = req.query;
+    const ventas = await contabilidadService.getVentasArchivadas(fechaInicio, fechaFin);
+    const ventasConFormato = ventas.map(venta => ({
+      ...venta,
+      monto_formateado: parseFloat(venta.monto || 0).toLocaleString('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0
+      })
+    }));
+    res.status(200).json({
+      success: true,
+      message: 'Ventas archivadas obtenidas exitosamente',
+      data: ventasConFormato
+    });
+  } catch (error) {
+    console.error('Error al obtener ventas archivadas:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al obtener ventas archivadas',
+      error: error.message
+    });
+  }
+};
+
+// Obtener histórico de cierres de caja
+const getCierresCajaHistorico = async (req, res) => {
+  try {
+    const { fechaInicio, fechaFin } = req.query;
+    const cierres = await contabilidadService.getCierresCajaHistorico(fechaInicio, fechaFin);
+    const cierresConFormato = cierres.map(cierre => ({
+      ...cierre,
+      total_formateado: parseFloat(cierre.total || 0).toLocaleString('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0
+      })
+    }));
+    res.status(200).json({
+      success: true,
+      message: 'Histórico de cierres obtenido exitosamente',
+      data: cierresConFormato
+    });
+  } catch (error) {
+    console.error('Error al obtener histórico de cierres:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al obtener histórico de cierres',
+      error: error.message
+    });
+  }
+};
+
 module.exports = {
   getResumenCajaHoy,
   crearResumenCaja,
@@ -363,5 +439,7 @@ module.exports = {
   actualizarEmpleado,
   eliminarEmpleado,
   obtenerResumenCierreCaja,
-  crearCierreCaja
+  crearCierreCaja,
+  getVentasArchivadas,
+  getCierresCajaHistorico
 };

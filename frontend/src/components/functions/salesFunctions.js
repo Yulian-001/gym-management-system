@@ -22,7 +22,7 @@ const SalesForm = ({ sale, clients, onSubmit, onCancel }) => {
     return {
       cliente_id: saleData.cliente_id || '',
       clienteSearch: client ? `${client.nombre} (${client.cedula})` : '',
-      fecha: saleData.fecha ? new Date(saleData.fecha).toISOString().split('T')[0] : '',
+      fecha: (saleData.fecha_venta || saleData.fecha) ? new Date(saleData.fecha_venta || saleData.fecha).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
       descripcion: saleData.descripcion || '',
       cantidad: saleData.cantidad || 1,
       precio_unitario: saleData.precio_unitario || 0,
@@ -37,6 +37,7 @@ const SalesForm = ({ sale, clients, onSubmit, onCancel }) => {
 
   useEffect(() => {
     setFormData(mapSaleToForm(sale));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sale, clients]);
 
   const handleClienteSearch = (valor) => {
@@ -353,7 +354,7 @@ const SalesForm = ({ sale, clients, onSubmit, onCancel }) => {
 /**
  * Función para manejar agregar venta
  */
-export const handleAddSale = (refreshCallback, clients) => {
+export const handleAddSale = (refreshCallback, clients, user) => {
   showModal({
     title: 'Nueva Venta',
     content: (
@@ -364,7 +365,7 @@ export const handleAddSale = (refreshCallback, clients) => {
             const dataToSend = {
               cliente_id: formData.cliente_id ? parseInt(formData.cliente_id) : null,
               plan_id: formData.plan_id ? parseInt(formData.plan_id) : null,
-              empleado_id: 1, // Temporal - será el usuario logueado
+              empleado_id: user?.id || 1,
               fecha_venta: formData.fecha,
               descripcion: formData.descripcion.trim(),
               cantidad: parseInt(formData.cantidad),
@@ -422,7 +423,7 @@ export const handleAddSale = (refreshCallback, clients) => {
 /**
  * Vender un plan: abre modal con formulario prellenado para el plan seleccionado
  */
-export const handleSellPlan = (plan, refreshCallback, clients) => {
+export const handleSellPlan = (plan, refreshCallback, clients, user) => {
   showModal({
     title: `Vender plan: ${plan.name}`,
     content: (
@@ -444,7 +445,7 @@ export const handleSellPlan = (plan, refreshCallback, clients) => {
             const dataToSend = {
               cliente_id: formData.cliente_id ? parseInt(formData.cliente_id) : null,
               plan_id: plan.id,
-              empleado_id: 1,
+              empleado_id: user?.id || 1,
               fecha_venta: formData.fecha,
               descripcion: formData.descripcion.trim(),
               cantidad: parseInt(formData.cantidad),

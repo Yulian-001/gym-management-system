@@ -100,19 +100,34 @@
 }
 
 /* Estados */
+.estado-activa,
+.estado-cancelada,
+.estado-completada {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  text-align: center;
+}
+
 .estado-activa {
-  color: #4CAF50;
-  font-weight: bold;
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #22c55e;
 }
 
 .estado-cancelada {
-  color: #f44336;
-  font-weight: bold;
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #ef4444;
 }
 
 .estado-completada {
-  color: #2683ff;
-  font-weight: bold;
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #22c55e;
 }
 
 /* Botones de acciones */
